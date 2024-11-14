@@ -5,44 +5,55 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Student Survey</title>
   <link rel="stylesheet" href="/resources/css/student-survey.css">
+  <link rel="stylesheet" href="/resources/css/style.css">
 </head>
 <body>
 <!-- Navbar -->
-<div class="student-answer-page">
-  <div class="navbar">
-    <div class="navbar-left">
-      <img src="/resources/images/male_user.png" alt="Profile Icon" class="icon profile-icon">
-      <span class="welcome-text">Welcome, User!</span>
-    </div>
+<nav>
+  <div class="flex-container v-align-center">
+    <img src="/resources/images/male_user.png" alt="" class="img-2-per">
+    <p class="color-white txt-l bold">Hello, username</p>
   </div>
-
-  <div class="main-content">
-    <h1>Sample Title</h1>
-    <div class="survey-template-container">
-      <!-- Answer Input Section -->
-      <div class="survey-template">
-
+</nav>
+<main>
+  <div class="flex-container h-align-center" id="survey-form">
+    <form action="" method="post" id="form">
+      <div class="flex-container h-align-center" id="title">
+        <label for="" class="txt-xxl bold">Title</label>
       </div>
 
-      <!-- Rating Section -->
-      <div class="survey-template">
 
+      <div class="question">
+        <div class="question-header">
+          <p class="bold">2. Which fruits do you like? (Select all that apply)</p>
+        </div>
+
+        <div class="options">
+          <div class="option">
+            <input type="checkbox" id="apple" name="fruits" value="apple">
+            <label for="apple">Apple</label>
+          </div>
+          
+          <div class="option">
+            <input type="checkbox" id="banana" name="fruits" value="banana">
+            <label for="banana">Banana</label>
+          </div>
+          
+          <div class="option">
+            <input type="checkbox" id="orange" name="fruits" value="orange">
+            <label for="orange">Orange</label>
+          </div>
+        </div>
       </div>
 
-      <!-- Checklist Section -->
-      <div class="survey-template">
-
-    </div>
-
-    <!-- Back and Submit Buttons -->
-      <div class="button-container">
-        <button id="backButton" class="button">Back</button>
-        <button id="submitButton" class="button">Submit</button>
+      <div class="flex-container" id="button-container">
+        <button class="btn-primary-m">Back</button>
+        <div class="spacer"></div>
+        <button class="btn-primary-m">Submit</button>
       </div>
-    </div>
+    </form>
   </div>
-</div>
-
+</main>
 <!-- Link to External JavaScript -->
 <script src="/resources/js/student-survey.js"></script>
 
