@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Respondents</title>
+        <link rel="stylesheet" href="../css/style.css">
+        <link rel="stylesheet" href="../css/nav_bar.css">
+        <link rel="stylesheet" href="../css/respondents.css">
+        <link rel="stylesheet" href="../css/side_bar.css">
+      </head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <nav class="sidebar" id="sidebar">
+            <a href="#"><img src="../resource/images/home_icon.png" alt="Home Icon"> Home</a>
+            <a href="#"><img src="../resource/images/create_icon.png" alt="Create Icon"> Create</a>
+            <a href="#"><img src="../resource/images/view_icon.png" alt="View Icon"> View</a>
+            <a href="#"class="active"><img src="../resource/images/respondents_icon.png" alt="Respondents Icon"> Respondents</a>
+            <a href="#"><img src="../resource/images/male_user.png" alt="Profile Icon"> Profile</a>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Search Bar -->
+        <div class="search-bar">
+            <input type="text" placeholder="Search" />
+            <button class="search-button"><img src="../resource/images/"></button>
+        </div>
+
+        <!-- Respondents Section -->
+        <div class="respondents-section">
+            <h2>Respondents</h2>
+            <div class="respondents-table">
+                <div class="table-header">
+                    <span>ID Number</span>
+                    <span>Name</span>
+                    <span>Surveys responded to</span>
+                </div>
+                <div id="respondent-list" class="table-body"></div>
+            </div>
+        </div>
+
+        <!-- Response Analytics Section -->
+        <div class="response-analytics">
+            <h2>Response Analytics</h2>
+            <div id="response-container" class="scrollable-section"></div>
+        </div>
+    </div>
+
+    <script src="respondents.js"></script>
+</body>
+</html>
