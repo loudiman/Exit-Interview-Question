@@ -4,8 +4,11 @@ use Core\Session;
 use Core\ValidationException;
 use Core\Router;
 
-/* This file is the entry point for all incoming request */
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
+/* This file is the entry point for all incoming request */
 const BASE_PATH = __DIR__ . '/../'; // Points to the root of the project
 
 require BASE_PATH . 'Core/functions.php';

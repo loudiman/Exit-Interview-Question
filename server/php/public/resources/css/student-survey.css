@@ -1,0 +1,42 @@
+#button-container{
+    margin-top: 10px;
+}
+
+body{
+    margin:0;
+}
+nav{
+    background-color: #223C6B;
+    padding:10px;
+}
+
+nav>div>p{
+    padding:0;
+    margin:0;
+}
+
+
+form{
+    margin-top:20px;
+    width: 80%;
+}
+
+.question{
+    background-color:#223C6B70;
+    border-radius: 10px;
+}
+
+.question>.question-header>p{
+    margin:0px;
+    color:white;
+}
+
+.question-header{
+    background-color: #223C6B;
+    border-radius:10px 10px 0 0;
+    padding: 10px;
+}
+
+.options{
+    display:flex;
+}

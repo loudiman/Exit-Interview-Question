@@ -55,9 +55,8 @@ function logout()
 function login($user)
 {
     $_SESSION['user'] = [
-        'userId' => $user['userId'],
         'userType' => $user['userType'],
-        'email' => $user['email']
+        'username' => $user['username']
     ];
 
     session_regenerate_id(true);
