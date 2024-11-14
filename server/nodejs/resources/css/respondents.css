@@ -1,0 +1,116 @@
+/* General styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #F5F5F5;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.sidebar {
+    width: 200px;
+    background-color: #2D3E50;
+    color: white;
+    padding-top: 20px;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+}
+
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    padding-left: 20px;
+}
+
+.menu-item {
+    padding: 15px 0;
+    color: #FFF;
+    cursor: pointer;
+}
+
+.menu-item:hover, .menu-item.active {
+    background-color: #1A2B3C;
+    padding-left: 20px;
+}
+
+.main-content {
+    margin-left: 200px;
+    padding: 20px;
+    width: calc(100% - 200px);
+    overflow-y: auto;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.search-bar input[type="text"] {
+    padding: 8px;
+    font-size: 16px;
+    width: 100%;
+    max-width: 300px;
+    border: 1px solid #CCC;
+    border-radius: 4px;
+}
+
+.search-bar .search-button {
+    margin-left: 8px;
+    padding: 8px;
+    cursor: pointer;
+}
+
+.respondents-section, .response-analytics {
+    background-color: #FFF;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.respondents-section h2, .response-analytics h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.respondents-table, .table-header, .table-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.table-header, .table-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #E0E0E0;
+}
+
+.table-header {
+    font-weight: bold;
+}
+
+.table-row:nth-child(odd) {
+    background-color: #F5F5F5;
+}
+
+.dropdown {
+    width: 100%;
+    max-width: 150px;
+}
+
+.scrollable-section {
+    overflow-y: auto;
+    max-height: 300px;
+    padding: 10px;
+    background-color: #FFF;
+    border-radius: 8px;
+}
+
+.response-card {
+    background-color: #3A506B;
+    color: #FFF;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
