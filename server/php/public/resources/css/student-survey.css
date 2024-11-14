@@ -24,6 +24,7 @@ form{
 .question{
     background-color:#223C6B70;
     border-radius: 10px;
+    margin-bottom:20px;
 }
 
 .question>.question-header>p{
@@ -38,5 +39,5 @@ form{
 }
 
 .options{
-    display:flex;
+
 }
