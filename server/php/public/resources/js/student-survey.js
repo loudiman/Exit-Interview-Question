@@ -38,54 +38,80 @@ async function getQuestions(id){
 function generateQuestionDoms(){
     const storedSurveyData = sessionStorage.getItem('questionnaireData');
 
-    if (storedSurveyData) {
-        console.log("Using survey data from sessionStorage");
+    //Guard clause to check if sessionStorage is empty or not
+    if(!storedSurveyData){
+        console.error("NO survey data found in sessionStorage")
+        return
+    }
 
-        // Parse the stored data
-        const data = JSON.parse(storedSurveyData);
-        console.log("generating doms")
-        console.log(data)
+    console.log("Using survey data from sessionStorage");
 
-        // Check if data.questions exists and is an array
-        if (data.questions && Array.isArray(data.questions)) {
-            // Populate survey questions dynamically based on the stored data
-            data.questions.forEach((question, index) => {
-                switch (question.question_type) {
-                    case 'multiple_choice':
-                        questionHTML = generateMultipleChoice(question.question_json);
-                        break;
-                    case 'rating':
-                        questionHTML = generateRating(question.question_json);
-                        break;
-                    case 'text_input':
-                        questionHTML = generateTextInput(question.question_json);
-                        break;
-                    default:
-                        console.warn("Unknown question type:", question.question_type);
-                        break;
-                }
+    // Parse the stored data
+    const data = JSON.parse(storedSurveyData);
 
-                // Insert the generated question HTML into the corresponding div
-                const surveyDiv = document.querySelectorAll('.survey-template')[index];
-                if (surveyDiv) {
-                    surveyDiv.innerHTML = questionHTML;
-                } else {
-                    console.error(`Survey div not found for question index: ${index}`);
-                }
-            });
+    // Check if data.questions exists and is an array
+    if(!data.questions && Array.isArray(data.questions)){
+        console.error("Data does not contain valid questions")
+        return
+    }
 
-            // Bind event listeners only after elements are dynamically created
-            bindDynamicEventListeners();
-        } else {
-            console.error("Data does not contain a valid 'questions' array.");
+    // Populate survey questions dynamically based on the stored data
+    data.questions.forEach((question, index) => {
+        switch (question.question_type) {
+            case 'multiple_choice':
+                generateMultipleChoice(question.question_json);
+                break;
+            case 'rating':
+                generateRating(question.question_json);
+                break;
+            case 'text_input':
+                generateTextInput(question.question_json);
+                break;
+            default:
+                console.warn("Unknown question type:", question.question_type);
+                break;
         }
-    } else {
-        console.error("No survey data found in sessionStorage");
-    } 
+    });
+
+    // Bind event listeners only after elements are dynamically created
+    bindDynamicEventListeners();
 }
 
 // Function to generate HTML for multiple choice questions
 function generateMultipleChoice(questionData) {
-    var form = document.getElementById("form")
+    var question
+
+    var form = document.getElementById('form')
+    
+    var questionDiv = document.createElement("div")
+    questionDiv.setAttribute("class","question")
     
 }
+
+function generateButtonNav(){
+    var mainContainer = document.createElement("div")
+    mainContainer.setAttribute("class","flex-container h-align-center row")
+    mainContainer.setAttribute("id","button-container")
+
+    var backButton = document.createElement("button")
+    backButton.setAttribute("class","btn-primary-m")
+    backButton.innerText = "Back"
+
+    var submitButton = document.createElement("button")
+    submitButton.setAttribute("class","btn-primary-m")
+    submitButton.innerText = "Submit"
+
+    var spacer = document.createElement("div")
+    spacer.setAttribute("class","spacer")
+
+    mainContainer.appendChild(backButton)
+    mainContainer.appendChild(spacer)
+    mainContainer.appendChild(submitButton)
+    
+    document.getElementById("form").appendChild(mainContainer)
+}
+
+var newDiv = document.createElement("div")
+newDiv.innerText = "halo"
+
+generateButtonNav()
