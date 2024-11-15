@@ -40,7 +40,16 @@ class UserDAL {
 }
 
 class SurveyDAL{
-
+    static async getAllPublishedSurvey(username){
+        try{
+            console.log("username: "+username)
+            var query = 'SELECT s.survey_id, s.survey_title FROM survey as s LEFT JOIN student as stud ON s.program_id = stud.program_id WHERE stud.username = ? AND s.status = "published"'
+            const [result] = await pool.query(query,[username])
+            return result
+        }catch(error){
+            throw new Error(error.message)
+        }
+    }
 }
 
 module.exports = {UserDAL, SurveyDAL};
