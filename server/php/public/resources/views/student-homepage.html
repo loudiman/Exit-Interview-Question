@@ -4,35 +4,38 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Survey Dashboard</title>
-  <link rel="stylesheet" href="/resources/css/student-homepage.css">
+  <link rel="stylesheet" href="../css/student-homepage.css">
 </head>
 <body>
-<!-- Navbar -->
-<div class="navbar">
-  <div class="navbar-left">
-    <img src="/resources/images/male_user.png" alt="Profile Icon" class="icon profile-icon">
-    <span class="welcome-text">Welcome, User!</span>
+<header>
+  <div class="header-container">
+    <div class="user-info">
+      <span class="user-icon"><img src="../images/male_user.png" class="user-icon-image"></span>
+      <span class="welcome-text">Welcome, User!</span>
+    </div>
+    <button class="logout-button">Logout</button>
   </div>
-  <div class="navbar-right">
-    <input type="text" id="search-input" placeholder="Search surveys" class="search-input">
-    <img src="/resources/images/Search.png" alt="Search Icon" class="icon" id="search-icon">
-  </div>
-</div>
+</header>
 
-<!-- Main Content -->
-<div class="main-content">
-  <!-- Open Surveys Section -->
-  <h2>Open Surveys</h2>
-  <div class="survey-templates" id="open-surveys">
-  <!--Empty div for insertion-->
-  </div>
-  <!-- Completed Surveys Section -->
-  <h2>Completed Surveys <span class="hide-link">Hide</span></h2>
-  <div class="recent-surveys">
-  <!--Empty div for insertion-->
-  </div>
-</div>
+<main>
+  <div class="controls">
+    <label for="survey-filter"></label>
+    <select id="survey-filter" class="styled-dropdown">
+      <option value="all">All Surveys</option>
+      <option value="completed">Completed Surveys</option>
+      <option value="missed">Missed Surveys</option>
+      <option value="hidden">Hidden Surveys</option>
+    </select>
 
-<script src="/resources/js/student-homepage.js"></script> <!-- Link to the JavaScript file -->
+    <input type="text" id="search-input" class="search-bar" placeholder="Search">
+    <button id="search-button" class="search-button"><img src="../images/Search.png" class="search-icon-img"></button>
+  </div>
+
+  <div class="survey-list" id="survey-list">
+    <!-- Surveys will be dynamically loaded here -->
+  </div>
+</main>
+
+<script src="../js/student-homepage.js"></script>
 </body>
 </html>
