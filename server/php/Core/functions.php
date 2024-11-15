@@ -59,7 +59,7 @@ function login($user)
         'username' => $user['username']
     ];
 
-    session_regenerate_id(true);
+    // session_regenerate_id(true);
 }
 
 function redirect($path)

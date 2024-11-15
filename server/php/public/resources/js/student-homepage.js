@@ -90,7 +90,7 @@ function createSurveyElements(data, containerId, isOpenSurvey) {
 
 
                     // Redirect to the survey page
-                    window.location.href = `http://localhost:8888/student/survey/questionnaire?id=${surveyData.question_id}`; // NOTE: THIS IS TEMPORARY URI IF U FIND THIS NOTIFY ME DAGUL
+                    window.location.href = `http://localhost:8888/student/survey/questionnaires?id=${surveyData.question_id}`; // NOTE: THIS IS TEMPORARY URI IF U FIND THIS NOTIFY ME DAGUL
                 })
                 .catch(error => {
                     console.error('There was a problem with the fetch operation:', error);
@@ -101,6 +101,8 @@ function createSurveyElements(data, containerId, isOpenSurvey) {
         container.appendChild(surveyElement);
     });
 }
+
+// TODO: json array parsing
 
 document.addEventListener("DOMContentLoaded", function() {
     const storedSurveysData = sessionStorage.getItem('surveysData');
