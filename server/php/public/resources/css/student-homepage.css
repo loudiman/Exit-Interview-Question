@@ -1,160 +1,174 @@
-* {
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
 }
 
-.navbar {
+header {
+    background-color: #223C6B;
+    color: #fff;
+    padding: 10px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #223C6B;
-    padding: 10px 20px;
-    color: #fff;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
     width: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 50px;
 }
 
-.navbar-left {
+.user-info {
     display: flex;
     align-items: center;
 }
 
-.navbar-right {
-    display: flex;
-    align-items: center;
-}
-
-.icon {
-    width: 34px;
-    height: 34px;
-    margin-left: 15px;
-}
-
-.profile-icon {
+.user-icon {
+    font-size: 24px;
     margin-right: 10px;
-    width: 34px;
-    height: 34px;
+}
+.user-icon-image{
+    width: 40px;
+    height: auto;
 }
 
 .welcome-text {
-    font-family: "Arial", sans-serif;
     font-size: 18px;
 }
 
-.main-content {
-    padding: 70px 20px 20px;
-    background-color: #FFFFFF;
-    min-height: 100vh;
-}
-
-h2 {
-    color: #000;
-    font-family: "Arial", sans-serif;
-    font-size: 24px;
-    margin-top: 20px;
-}
-
-h2 + .survey-templates {
-    margin-bottom: 40px;
-}
-
-.hide-link {
-    color: #888;
-    font-size: 14px;
+.logout-button {
+    background-color: #3F5989;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
     cursor: pointer;
-    margin-left: 10px;
+    border-radius: 5px;
 }
 
-.survey-templates, .recent-surveys {
-    display: flex;
-    gap: 20px;
-    flex-wrap: nowrap;
-    margin-top: 10px;
-    overflow-x: auto;
-    padding-bottom: 10px;
-    width: 100%;
-    min-width: 100%;
-    scrollbar-width: thin;
-    min-height: 200px;
+.logout-button:hover {
+    background-color: #2980b9;
 }
 
-.survey-template, .recent-item {
-    background-color: #9EA9BE;
-    width: 350px;
-    height: 200px;
-    border-radius: 10px;
+.controls {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
     align-items: center;
-    font-family: "Arial", sans-serif;
-    flex-shrink: 0;
-    visibility: visible;
+    padding: 15px 20px;
+    background-color: #4E6389;
+    gap: 10px;
 }
 
-.survey-template.hidden, .recent-item.hidden {
-    visibility: hidden;
+/* Style the select dropdown */
+.styled-dropdown {
+    background-color: #3F5989;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    appearance: none; /* Removes default arrow in most browsers */
+    -webkit-appearance: none; /* Removes default arrow in Safari */
+    -moz-appearance: none; /* Removes default arrow in Firefox */
+    width: 180px; /* Adjust width as needed */
 }
 
-.survey-templates::-webkit-scrollbar, .recent-surveys::-webkit-scrollbar {
-    height: 8px;
-    background-color: rgba(0, 0, 0, 0);
+/* Add a custom arrow using a background image */
+.styled-dropdown {
+    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 14px;
 }
 
-.survey-templates::-webkit-scrollbar-thumb, .recent-surveys::-webkit-scrollbar-thumb {
-    background-color: #2f4f6f;
-    border-radius: 10px;
+/* Hover effect for the entire select dropdown */
+.styled-dropdown:hover {
+    background-color: #2980b9; /* Darker shade on hover */
+    color: #ddd; /* Lighter text color on hover */
 }
 
-.survey-templates::-webkit-scrollbar-track, .recent-surveys::-webkit-scrollbar-track {
+/* Option hover effect */
+.styled-dropdown option:hover {
+    background-color: #2980b9; /* Option background on hover */
+    color: #fff; /* Option text color on hover */
+}
+
+
+/* Optional: Style options on open (most styling here is limited in browsers) */
+.styled-dropdown option {
+    color: #2c3e50;
     background-color: #f1f1f1;
 }
 
-.survey-templates:hover::-webkit-scrollbar, .recent-surveys:hover::-webkit-scrollbar {
-    background-color: rgba(0, 0, 0, 0.1);
+
+.search-bar {
+    flex-grow: 1;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
 }
 
-.survey-templates:hover::-webkit-scrollbar-thumb, .recent-surveys:hover::-webkit-scrollbar-thumb {
-    background-color: #2f4f6f;
-}
-
-.survey-template p, .recent-item p {
-    font-size: 18px;
-    font-weight: bold;
-    color: #000;
-    margin: 0;
-    text-align: center;
-}
-
-.survey-template button, .recent-item button {
-    background-color: #2f4f6f;
+.search-button {
+    background-color: #3F5989;
     color: #fff;
     border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-family: "Arial", sans-serif;
+    padding: 10px 15px;
     cursor: pointer;
-    margin-top: 10px;
-    font-size: 14px;
-}
-
-.survey-template button:hover, .recent-item button:hover {
-    background-color: #1e3b5b;
-}
-
-.search-input {
-    padding: 5px 10px;
     border-radius: 5px;
-    border: 1px solid #ccc;
-    font-size: 14px;
-    width: 200px;
-    margin-right: 15px;
 }
 
-.hidden {
-    display: none
+.survey-list {
+    padding: 20px;
+}
+
+.survey-item {
+    background-color: #223C6B;
+    margin-bottom: 10px;
+    padding: 15px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-left: 10px solid;
+}
+
+.survey-info{
+    color: white;
+}
+
+.yellow {
+    border-color: #f1c40f;
+}
+
+.green {
+    border-color: #2ecc71;
+}
+
+.red {
+    border-color: #e74c3c;
+}
+
+.survey-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+}
+
+.hide-button, .action-button {
+    background-color: #3F5989;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.search-icon-img {
+    width: 18px;
+    height: auto;
+}
+
+.hidden-survey{
+    display: none;
 }

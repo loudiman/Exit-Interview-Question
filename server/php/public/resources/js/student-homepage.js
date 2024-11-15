@@ -1,277 +1,102 @@
-// Listen for the Enter key on the search input
-document.getElementById("search-input").addEventListener("keypress", function(event) {
-    if (event.key === "Enter") { // When Enter is pressed
-        const searchQuery = document.getElementById("search-input").value.toLowerCase();
+document.addEventListener('DOMContentLoaded', function () {
+    let surveyData = [];
+    // Fetch surveys data from the server
+    async function fetchSurveys() {
+        try {
+            const jsonString = {
+                "surveys": [
+                    {
+                        "survey-id": 1,
+                        "survey-title": "marven",
+                        "responded": false,
+                        "period-start": "2024-09-25",
+                        "period-end": "2024-09-26"
 
-        const surveyTemplates = document.querySelectorAll(".survey-template");
-        const recentItems = document.querySelectorAll(".recent-item");
-
-        let matchFound = false;
-
-        surveyTemplates.forEach((survey) => {
-            const title = survey.querySelector("p").textContent.toLowerCase();
-            if (title.includes(searchQuery)) {
-                survey.classList.remove("hidden");
-                matchFound = true;
-            } else {
-                survey.classList.add("hidden");
+                    },
+                    {
+                        "survey-id": 2,
+                        "survey-title": "sample-title",
+                        "responded": true,
+                        "period-start": "2024-09-27",
+                        "period-end": "2024-09-29"
+                    }
+                ]
             }
-        });
 
-        recentItems.forEach((item) => {
-            const title = item.querySelector("p").textContent.toLowerCase();
-            if (title.includes(searchQuery)) {
-                item.classList.remove("hidden");
-                matchFound = true;
-            } else {
-                item.classList.add("hidden");
-            }
-        });
-
-        if (!matchFound) {
-            alert("No matching surveys found!");
+            // const response = await fetch('http://localhost:8888/student/surveys');
+            // const jsonString = await response.text();
+            // const parsedData = JSON.parse(jsonString);
+            surveyData = jsonString.surveys;
+            renderSurveys(surveyData);
+        } catch (error) {
+            console.error('Error fetching surveys:', error);
         }
     }
-});
 
-document.querySelector('.hide-link').addEventListener('click', function() {
-    const completedSurveysContainer = document.querySelector('.recent-surveys');
+    // Render surveys on the page
+    function renderSurveys(data) {
+        const surveyList = document.getElementById('survey-list');
+        surveyList.innerHTML = ''; // Clear the list
 
-    completedSurveysContainer.classList.toggle('hidden');
+        data.forEach(survey => {
+            const surveyElement = document.createElement('div');
+            surveyElement.classList.add('survey-item');
 
-    if (completedSurveysContainer.classList.contains('hidden')) {
-        this.textContent = 'Show';
-    } else {
-        this.textContent = 'Hide';
-    }
-});
+            // Set different colors based on survey status
+            if (survey.responded) {
+                surveyElement.classList.add('green');
+            } else if (new Date() > new Date(survey['period-end'])) {
+                surveyElement.classList.add('red');
+            } else {
+                surveyElement.classList.add('yellow');
+            }
 
-// Toggle search input visibility when search icon is clicked
-document.getElementById("search-icon").addEventListener("click", function() {
-    const searchInput = document.getElementById("search-input");
-    searchInput.classList.toggle("hidden"); // Toggle visibility of the search input field
-});
+            surveyElement.innerHTML = `
+                <div>
+                    <div class="survey-title">${survey['survey-title']}</div>
+                    <div class="survey-info">
+                        ${survey.responded ? `Time Submitted: ${survey['period-end']}` : `Valid Until: ${survey['period-end']}`}
+                    </div>
+                </div>
+                <div class="survey-actions">
+                    <button class="hide-button">Hide Survey</button>
+                    <button class="action-button">
+                        ${survey.responded ? 'Check Details 📄' : 'Take The Survey ✎'}
+                    </button>
+                </div>
+            `;
 
-/*Here is the methods for the insertion of surveys*/
-// document.addEventListener("DOMContentLoaded", function() {
-//     // Fetch surveys from the PHP server
-//     async function fetchSurveys() {
-//         try {
-//             // Step 2: Make a GET request to the server
-//             const response = await fetch('http://localhost:8888/student/surveys');
-//             const jsonString = await response.text(); // Get the raw JSON string from the server
-
-//             console.log("Raw response:", jsonString);
-
-//             // Step 3: Parse the JSON string into a JavaScript object
-//             const parsedData = JSON.parse(jsonString);
-
-//             // Organize surveys based on completion status
-//             const openSurveysData = parsedData.surveys.filter(survey => !survey.isComplete);
-//             const completedSurveysData = parsedData.surveys.filter(survey => survey.isComplete);
-
-//             // Step 4: Add surveys to the page using createSurveyElements
-//             createSurveyElements(openSurveysData, 'open-surveys', true); // Open Surveys
-//             createSurveyElements(completedSurveysData, 'recent-surveys', false); // Completed Surveys
-
-//         } catch (error) {
-//             console.error('Error fetching surveys:', error);
-//         }
-//     }
-
-//     // Function to create survey elements dynamically
-//     function createSurveyElements(data, containerId, isOpenSurvey) {
-//         const container = document.getElementById(containerId);
-//         container.innerHTML = ''; // Clear existing elements
-
-//         data.forEach(survey => {
-//             const surveyElement = document.createElement('div');
-//             surveyElement.classList.add(isOpenSurvey ? 'survey-template' : 'recent-item');
-
-//             const surveyTitle = document.createElement('p');
-//             surveyTitle.textContent = survey.survey_title; // Use the survey title from JSON
-//             surveyElement.appendChild(surveyTitle);
-
-//             const button = document.createElement('button');
-//             // <a href="/student/surveys?=id="parsedData.surveyID></a>
-
-//             button.textContent = isOpenSurvey ? 'Take The Survey' : 'View Details';
-//             surveyElement.appendChild(button);
-
-//             container.appendChild(surveyElement);
-//         });
-//     }
-
-//     // Call fetchSurveys to load surveys on page load
-//     fetchSurveys();
-// });
-
-// Create survey elements as usual
-// function createSurveyElements(data, containerId, isOpenSurvey) {
-//     const container = document.getElementById(containerId);
-//     container.innerHTML = ''; // Clear existing elements
-  
-//     data.forEach(survey => {
-//       const surveyElement = document.createElement('div');
-//       surveyElement.classList.add(isOpenSurvey ? 'survey-template' : 'recent-item');
-  
-//       const surveyTitle = document.createElement('p');
-//       surveyTitle.textContent = survey.survey_title;
-//       surveyElement.appendChild(surveyTitle);
-  
-//       // Create an anchor tag instead of a button
-//       const link = document.createElement('a');
-//       link.href = `/student/survey?id=${survey.survey_id}`; // Set the href attribute
-//       link.textContent = isOpenSurvey ? 'Take The Survey' : 'View Details';
-//       link.classList.add('survey-link'); // Optional: add a class for styling if needed
-      
-//       surveyElement.appendChild(link);
-  
-//       container.appendChild(surveyElement);
-//     });
-// }
-
-function createSurveyElements(data, containerId, isOpenSurvey) {
-    const container = document.getElementById(containerId);
-    container.innerHTML = ''; // Clear existing elements
-  
-    data.forEach(survey => {
-        const surveyElement = document.createElement('div');
-        surveyElement.classList.add(isOpenSurvey ? 'survey-template' : 'recent-item');
-  
-        const surveyTitle = document.createElement('p');
-        surveyTitle.textContent = survey.survey_title;
-        surveyElement.appendChild(surveyTitle);
-  
-        // Create an anchor tag instead of a button
-        const link = document.createElement('a');
-        link.href = `/student/survey?id=${survey.survey_id}`; // Set the href attribute
-        link.textContent = isOpenSurvey ? 'Take The Survey' : 'View Details';
-        link.classList.add('survey-link'); // Optional: add a class for styling if needed
-
-        // Attach click event to the anchor tag
-        link.addEventListener('click', function(event) {
-            event.preventDefault(); // Prevent default anchor behavior
-
-            // Fetch survey data (replace the URL with your actual endpoint)
-            fetch(`/student/survey?id=${survey.survey_id}`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(surveyData => {
-                    console.log('(anchor) Raw response:', surveyData);
-
-                    // Store the survey data in sessionStorage
-                    sessionStorage.setItem('questionnaireData', JSON.stringify(surveyData));
-
-
-                    // Redirect to the survey page
-                    window.location.href = `http://localhost:8888/student/survey/questionnaire?id=${surveyData.question_id}`; // NOTE: THIS IS TEMPORARY URI IF U FIND THIS NOTIFY ME DAGUL
-                })
-                .catch(error => {
-                    console.error('There was a problem with the fetch operation:', error);
-                });
-        });
-
-        surveyElement.appendChild(link);
-        container.appendChild(surveyElement);
-    });
-}
-
-
-// document.addEventListener("DOMContentLoaded", function() {
-//     const storedSurveysData = sessionStorage.getItem('surveysData');
-//     if (storedSurveysData) {
-//         console.log("Using survey data from sessionStorage");
-
-//         // Parse the stored data and log it
-//         const parsedData = JSON.parse(storedSurveysData);
-//         console.log("Parsed Data: ", parsedData);  // Log the full parsed data
-
-//         // Check if there is survey data and access it properly
-//         if (parsedData.length > 0 && parsedData[0].survey_id) {
-//             console.log("Survey data found:", parsedData[0].survey_id);
-
-//             // Wrap parsedData in an array for consistency, as parsedData is already an array in this case
-//             const surveysArray = parsedData;
-
-//             // Now pass the surveysArray to the createSurveyElements function
-//             createSurveyElements(surveysArray, 'open-surveys', true); // Open Surveys
-//             createSurveyElements([], 'recent-surveys', false); // Completed Surveys (no surveys in this case)
-//         } else {
-//             console.error('No valid survey data found in sessionStorage:', parsedData);
-//         }
-
-//         // Optionally, clear session storage if you don't need it anymore
-//         sessionStorage.removeItem('surveysData');
-//     } else {
-//         // Fetch surveys from the PHP server if no data is stored
-//         fetchSurveys();
-//         console.log("No Data in sessionStorage");
-//     }
-// });
-
-document.addEventListener("DOMContentLoaded", function() {
-    const storedSurveysData = sessionStorage.getItem('surveysData');
-    if (storedSurveysData) {
-        console.log("Using survey data from sessionStorage");
-
-        // Parse the stored data and log it
-        const parsedData = JSON.parse(storedSurveysData);
-        console.log("Parsed Data: ", parsedData);  // Log the full parsed data
-
-        // Check if parsedData is an array and has at least one survey object
-        if (Array.isArray(parsedData) && parsedData.length > 0) {
-            console.log("Survey data found:", parsedData);
-
-            // Separate open surveys and completed surveys as needed
-            const openSurveys = [];
-            const completedSurveys = [];  // Add logic here if you later need to categorize surveys
-
-            // Populate openSurveys array with all survey objects from parsedData
-            parsedData.forEach(survey => {
-                // Example logic: Add to openSurveys if survey_id exists
-                if (survey.survey_id) {
-                    openSurveys.push(survey);
-                }
+            // Hide button functionality
+            surveyElement.querySelector('.hide-button').addEventListener('click', () => {
+                surveyElement.classList.add('hidden-survey');  // Subject for change
             });
 
-            // Pass arrays to the createSurveyElements function
-            createSurveyElements(openSurveys, 'open-surveys', true);  // Open Surveys
-            createSurveyElements(completedSurveys, 'recent-surveys', false); // Completed Surveys (none in this case)
-        } else {
-            console.error('No valid survey data found in sessionStorage:', parsedData);
+            surveyList.appendChild(surveyElement);
+        });
+    }
+
+    // Search functionality
+    document.getElementById('search-button').addEventListener('click', () => {
+        const searchQuery = document.getElementById('search-input').value.toLowerCase();
+        const filteredSurveys = surveyData.filter(survey =>
+            survey['survey-title'].toLowerCase().includes(searchQuery)
+        );
+        renderSurveys(filteredSurveys);
+    });
+
+    document.getElementById('survey-filter').addEventListener('change', (event) => {
+        const filterType = event.target.value;
+        let filteredSurveys = surveyData;
+        if (filterType === 'completed') {
+            filteredSurveys = surveyData.filter(survey => survey.responded);
+        } else if (filterType === 'missed') {
+            filteredSurveys = surveyData.filter(survey => !survey.responded && new Date() > new Date(survey['period-end']));
+        } else if (filterType === 'hidden') {
+            filteredSurveys = []; //subject for change
         }
+        renderSurveys(filteredSurveys);
+    });
 
-        // Optionally, clear session storage if you don't need it anymore
-        sessionStorage.removeItem('surveysData');
-    } else {
-        // Fetch surveys from the PHP server if no data is stored
-        fetchSurveys();
-        console.log("No Data in sessionStorage");
-    }
+    // Initial fetch
+    fetchSurveys();
 });
-
-  
-  async function fetchSurveys() {
-    try {
-      const response = await fetch('http://localhost:8888/student/surveys');
-      const jsonString = await response.text();
-  
-      console.log("Raw response:", jsonString);
-  
-      const parsedData = JSON.parse(jsonString);
-      const openSurveysData = parsedData.surveys.filter(survey => !survey.isComplete);
-      const completedSurveysData = parsedData.surveys.filter(survey => survey.isComplete);
-  
-      createSurveyElements(openSurveysData, 'open-surveys', true);
-      createSurveyElements(completedSurveysData, 'recent-surveys', false);
-    } catch (error) {
-      console.error('Error fetching surveys:', error);
-    }
-  }
-
-  
