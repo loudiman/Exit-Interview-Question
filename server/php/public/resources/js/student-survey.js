@@ -23,11 +23,21 @@
 //       }
 //     ]
 //   };
-  
-// sessionStorage.setItem('questionnaireData', JSON.stringify(surveyData));
 
-async function main(){
-    getQuestions(1)// change the parameter depending on the query
+// sessionStorage.setItem('questionnaireData', JSON.stringify(surveyData));
+async function main() {
+    const surveyId = getSurveyIdFromURL(); // Dynamically fetch the survey ID from the URL
+    if (surveyId) {
+        getQuestions(surveyId); // Call with the dynamic survey ID
+    } else {
+        console.error("Survey ID not found in URL.");
+    }
+}
+
+// Helper function to extract the survey ID from the URL
+function getSurveyIdFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("id"); //This is assuming the URL passed by student-homepage.js has a parameter id
 }
 
 async function getQuestions(id){
@@ -52,40 +62,44 @@ function generateQuestionDoms(){
     // Parse the stored data
     const data = JSON.parse(storedSurveyData);
 
+
     // Check if data.questions exists and is an array
-    if(!data.questions && Array.isArray(data.questions)){
-        console.error("Data does not contain valid questions")
-        return
+    if (!data.questions || !Array.isArray(data.questions)) {
+        console.error("Data does not contain valid questions");
+        return;
     }
 
+    var questionNo = 1;
+
     // Populate survey questions dynamically based on the stored data
-    data.questions.forEach((question, index) => {
-        let questionNo = 1
+    data.questions.forEach((question) => {
         switch (question.question_type) {
             case 'multiple_choice':
-                generateMultipleChoice(questionNo ,question.question_json, question.question_id);
+                generateMultipleChoice(questionNo, question, question.question_id);
+                questionNo++;
                 break;
             case 'rating':
-                //generateRating(question.question_json);
+                generateRatingQuestion(questionNo, question, question.question_id);
+                questionNo++;
                 break;
-            case 'text_input':
-                //generateTextInput(question.question_json);
+            case 'essay':
+                generateEssayQuestion(questionNo, question, question.question_id);
+                questionNo++;
                 break;
             default:
                 console.warn("Unknown question type:", question.question_type);
                 break;
         }
-        questionNo++
     });
 
     // Bind event listeners only after elements are dynamically created
-    console.log("Invoking generateNavs")
+    console.log("Invoking generateButtonNav");
     generateButtonNav();
 }
 
 // Function to generate HTML for multiple choice questions
 function generateMultipleChoice(questionNo,questionData, id) {
-    var question = questionData.question
+    var question = questionData.question_text
     var questionId = id
     console.log(question)
 
