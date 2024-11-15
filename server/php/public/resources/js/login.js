@@ -42,11 +42,11 @@
 
 // TODO: create a env file to store ip or localhost
 
-require('dotnev').config();
+import { config } from './config.js';
 
-function login() {
-  const STUDENT_URL = process.env.STUDENT_SERVER_URL;
-  const ADMIN_URL = process.env.ADMIN_SERVER_URL;
+export function login() {
+  const STUDENT_URL = config.STUDENT_SERVER_URL;
+  const ADMIN_URL = config.ADMIN_SERVER_URL;
 
   let credentials = {
     'username': document.getElementById('username').value,
@@ -84,3 +84,13 @@ function login() {
     window.location.href = `${STUDENT_URL}/student/surveys`;
   }).catch(error => console.log("Error:", error));
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  const loginBtn = document.getElementById('login-btn');
+  if (loginBtn) {
+    loginBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      login();
+    });
+  }
+});
