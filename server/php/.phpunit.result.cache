@@ -1,0 +1,1 @@
+{"version":1,"defects":{"Tests\\Unit\\RouterTest::testRouteRegistration":8,"Tests\\Unit\\RouterTest::testRouteMatching":8,"Tests\\Unit\\RouterTest::testRouteNotFound":7},"times":{"Tests\\Unit\\RouterTest::testRouteRegistration":0.005,"Tests\\Unit\\RouterTest::testRouteMatching":0.013,"Tests\\Unit\\RouterTest::testRouteNotFound":0.003,"Tests\\Unit\\RouterTest::testPreviousUrl":0}}
