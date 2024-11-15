@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/nav_bar.css">
+  <link rel="stylesheet" href="../css/survey_creation.css">
+  <link rel="stylesheet" href="../css/side_bar.css">
+</head>
+<body>
+<!-- Navbar -->
+<div class="navbar">
+  <button onclick="toggleSidebar()">☰</button>
+  <img src="../resource/images/male_user.png" alt="Profile" width="30" height="30">
+</div>
+
+<!-- Sidebar and main content container -->
+<div class="sidebar-container">
+  <!-- Sidebar -->
+  <nav class="sidebar" id="sidebar">
+    <a href="#"><img src="../resource/images/home_icon.png" alt="Home Icon"> Home</a>
+    <a href="#" class="active"><img src="../resource/images/create_icon.png" alt="Create Icon"> Create</a>
+    <a href="#"><img src="../resource/images/view_icon.png" alt="View Icon"> View</a>
+    <a href="#"><img src="../resource/images/respondents_icon.png" alt="Respondents Icon"> Respondents</a>
+    <a href="#"><img src="../resource/images/male_user.png" alt="Profile Icon"> Profile</a>
+  </nav>
+
+  <!-- Main content -->
+  <div class="main-content" id="mainContent">
+    <!-- Survey Container -->
+    <div class="survey-container">
+      <div class="survey-title">
+        <h2 id="formTitle" onclick="makeEditable('formTitle')">Sample Title</h2>
+        <p id="formDescription" onclick="makeEditable('formDescription')">Form Description</p>
+      </div>
+
+      <!-- Questions Container -->
+      <div id="questionsContainer">
+        <!-- Initial Question Container -->
+        <div class="question-container">
+          <div class="question-content">
+            <div class="question-header">
+              <input type="text" placeholder="Untitled Question">
+              <select onchange="updateQuestionContent(this)">
+                <option value="multiple-choice">Multiple Choice</option>
+                <option value="essay">Essay</option>
+                <option value="rating">Rating</option>
+                <option value="true-false">True or False</option>
+              </select>
+            </div>
+            <div class="options"></div>
+            <div class="button-container" style="display: none;">
+              <button class="option-button" onclick="addOption(this)">Add Option</button>
+              <span>or</span>
+              <button class="option-button" onclick="addOtherOption(this)">Add Other</button>
+            </div>
+          </div>
+
+          <!-- Side buttons for add question, add photo, add video -->
+          <div class="side-buttons">
+            <button class="side-button" id="addQuestionButton">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="review-button">Review Survey</button>
+    <button class="back-button" onclick="window.location.href='survey_templates.html';">Back</button>
+  </div>
+</div>
+
+<script src="../js/survey_creation_navbar.js"></script>
+<script src="../js/survey_creation_editable.js"></script>
+<script src="../js/survey_creation.js"></script>
+</body>
+</html>

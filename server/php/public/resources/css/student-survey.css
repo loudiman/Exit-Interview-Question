@@ -1,0 +1,268 @@
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Navbar Styling */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #2f4f6f;
+    padding: 10px 20px;
+    color: #fff;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 50px;
+}
+
+.navbar-left {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+}
+
+.icon {
+    width: 34px;
+    height: 34px;
+    margin-left: 15px;
+}
+
+.profile-icon {
+    margin-right: 10px;
+    width: 34px;
+    height: 34px;
+}
+
+.welcome-text {
+    font-family: "Arial", sans-serif;
+    font-size: 18px;
+}
+
+/* Main Content Styling */
+.main-content {
+    padding: 70px 20px 20px;
+    background-color: #f5f5f5;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+h1 {
+    color: #000;
+    font-family: "Arial", sans-serif;
+    font-size: 48px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+/* Survey Template Container */
+.survey-template-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    max-width: 1300px;
+    padding: 0 10px; /* Optional: adds some space on smaller screens */
+}
+
+/* Survey Template */
+.survey-template {
+    background-color: rgba(47, 79, 111, 0.1);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Adjust Survey Template Header */
+.survey-template-header {
+    width: 100%;
+    background-color: rgba(47, 79, 111);
+    color: #fff;
+    font-family: "Arial", sans-serif;
+    font-size: 18px;
+    padding: 10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    text-align: center;
+}
+
+/* Adjust Survey Template Content */
+.survey-template-content {
+    width: 100%;
+    background-color: rgba(47, 79, 111, 0.4);
+    padding: 20px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+/* Question Input Styling */
+.answer-input {
+    width: 100%;
+    height: auto;
+    border: none;
+    border-bottom: 1px solid #2f4f6f;
+    background-color: transparent;
+    padding: 5px 0;
+    font-family: "Arial", sans-serif;
+    font-size: 16px;
+    color: #000;
+    outline: none;
+    margin-bottom: 20px;
+}
+
+/* Rating and Checklist Containers - Make sure they adjust to the container size */
+.rating-container, .checklist-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin: 10px 0;
+    flex-wrap: wrap; /* Allow wrapping when necessary */
+    gap: 10px; /* Adjust spacing */
+}
+
+/* Checklist Item Styling */
+.checklist-item {
+    display: flex;
+    flex-direction: column-reverse; /* Label above checkbox */
+    align-items: center;
+    width: 80px; /* Adjust width based on container size */
+    height: auto;
+    cursor: pointer;
+    font-family: "Arial", sans-serif;
+    font-size: 14px;
+    text-align: center;
+    margin: 0 80px;
+}
+
+.checklist-item img.checkbox-icon {
+    width: 50%; /* Adjust size as needed */
+    height: 70%;
+    margin-top: 5px; /* Space between icon and text */
+}
+
+/* Rating Item Styling */
+.rating-item {
+    width: 70px; /* Adjust width for responsiveness */
+    height: 70px; /* Adjust size for responsiveness */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: "Arial", sans-serif;
+    font-size: 16px;
+    margin: 0 80px;
+    cursor: pointer;
+    border-radius: 50%;
+    position: relative;
+}
+
+/* Place rating number above the circle */
+.rating-item span {
+    margin-bottom: 5px; /* Space between the text and the circle */
+    font-size: 14px; /* Adjust text size as needed */
+}
+
+/* Rating Image to fit within the circle */
+.rating-item img {
+    width: 50%;
+    height: 50%;
+    object-fit: cover; /* Ensures image fits without distortion */
+}
+
+/* Button Container Styling */
+.button-container {
+    display: flex;
+    justify-content: flex-start; /* Align buttons to the left */
+    width: 100%;
+    max-width: 600px;
+    margin-top: 20px;
+    padding: 0 10px; /* Optional: adds space on smaller screens */
+}
+
+/* Button Styling */
+.button {
+    padding: 10px 20px;
+    font-size: 18px;
+    font-family: "Arial", sans-serif;
+    background-color: #2f4f6f;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 20px;
+}
+
+/* Button Hover */
+.button:hover {
+    background-color: #1e3b5b;
+}
+
+/* Media Queries for Smaller Screens */
+@media screen and (max-width: 768px) {
+    .survey-template-container {
+        padding: 0 15px;
+    }
+
+    .survey-template-header {
+        font-size: 16px;
+    }
+
+    .survey-template-content {
+        padding: 15px;
+    }
+
+    .checklist-item, .rating-item {
+        width: 60px; /* Adjust item width for smaller screens */
+        height: 60px;
+    }
+
+    .rating-item img {
+        width: 60px;
+        height: 60px;
+    }
+
+    .button-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .button {
+        margin-right: 0;
+        margin-bottom: 10px; /* Add spacing between buttons */
+    }
+}
+
+@media screen and (max-width: 480px) {
+    h1 {
+        font-size: 32px; /* Adjust font size for smaller screens */
+    }
+
+    .survey-template {
+        width: 100%;
+        margin: 0 10px;
+    }
+
+    .checklist-item, .rating-item {
+        width: 50px; /* Smaller checklist and rating items on mobile */
+        height: 50px;
+    }
+
+    .rating-item img {
+        width: 50px;
+        height: 50px;
+    }
+}

@@ -1,0 +1,273 @@
+@font-face {
+    font-family: "CustomFont";
+    src: url("../resource/fonts/Istok_Web/IstokWeb-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "CustomFont";
+    src: url("../resource/fonts/Istok_Web/IstokWeb-Bold.ttf") format("truetype");
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "CustomFont";
+    src: url("../resource/fonts/Istok_Web/IstokWeb-Italic.ttf") format("truetype");
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: "CustomFont";
+    src: url("../resource/fonts/Istok_Web/IstokWeb-BoldItalic.ttf") format("truetype");
+    font-weight: bold;
+    font-style: italic;
+}
+
+body {
+    margin: 0;
+}
+
+h2, p, a {
+    color: black;
+    font-family: "CustomFont", sans-serif;
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #FFFFFF;
+    transition: all 0.3s ease;
+    height: 100vh;
+    overflow-y: auto;
+    border: 2px solid #ccc;
+}
+
+.main-content.full-width {
+    width: 100%;
+}
+
+.survey-title {
+    padding: 15px;
+    border-radius: 10px;
+    border: 2px solid #999;
+    margin-bottom: 20px;
+}
+
+.survey-title h2[contenteditable="true"],
+.survey-title p[contenteditable="true"] {
+    outline: none;
+}
+
+/* Question container */
+.question-container {
+    display: flex;
+    align-items: flex-start;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+    border: 2px solid #aaa;
+    position: relative;
+}
+
+.question-content {
+    flex-grow: 1;
+}
+
+.question-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.question-header input[type="text"] {
+    flex-grow: 1;
+    margin-right: 10px;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.question-header select {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.options input[type="text"] {
+    display: block;
+    margin-bottom: 10px;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.option-button {
+    display: inline-block;
+    margin-right: 10px;
+    padding: 8px 12px;
+    background-color: #1a73e8;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.option-button:hover {
+    background-color: #0c5ac0;
+}
+
+.review-button, .back-button {
+    padding: 10px 15px;
+    font-size: 16px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #223C6B;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+.review-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    transition: background-color 0.3s;
+}
+
+.back-button {
+    position: fixed;
+    bottom: 20px;
+    left: calc(auto + var(--sidebar-width, 20px));
+    transition: left 0.3s, background-color 0.3s;
+}
+
+.review-button:hover, .back-button:hover {
+    background-color: #0c5ac0;
+}
+
+.option-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.option-input {
+    flex-grow: 1;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-right: 10px;
+}
+
+.remove-button {
+    position: inherit;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    width: 30%;
+    height: 10%;
+}
+
+.remove-button:hover {
+    background-color: #c0392b;
+}
+
+.button-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.side-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-left: 15px;
+}
+
+.side-button {
+    width: 40px;
+    height: 40px;
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    text-align: center;
+}
+
+.side-button:hover {
+    background-color: #e0e0e0;
+}
+
+.editable-input {
+    width: 100%;
+    font-size: inherit;
+    font-family: inherit;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 8px 10px;
+    box-sizing: border-box;
+}
+
+.option-input {
+    flex-grow: 1;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.option-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.remove-button {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 12px;
+    cursor: pointer;
+    margin-left: 10px;
+    width: 10%;
+}
+
+.remove-button:hover {
+    background-color: #c0392b;
+}
+
+.rating-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.true-false-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.disabled-input {
+    width: 86%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+}

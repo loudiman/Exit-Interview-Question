@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Log-In</title>
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/login.css">
+    <link rel="stylesheet" href="/resources/css/style.css">
+    <link rel="stylesheet" href="/resources/css/login.css">
 </head>
 <body class="bg-primary">
     <main>
@@ -21,27 +21,29 @@ Please log in to get started.
                 </p>
                 <div class="spacer"></div>
                 <div class="flex-container" id="icons">
-                    <a href="" class="icon-link"><img src="../resources/icons/facebook.png" alt=""></a>
-                    <a href="" class="icon-link"><img src="../resources/icons/ig.png" alt=""></a>
-                    <a href="" class="icon-link"><img src="../resources/icons/chrome.png" alt=""></a>
+                    <a href="" class="icon-link"><img src="/resources/icons/facebook.png" alt=""></a>
+                    <a href="" class="icon-link"><img src="/resources/icons/ig.png" alt=""></a>
+                    <a href="" class="icon-link"><img src="/resources/icons/chrome.png" alt=""></a>
                 </div>
             </div>
             <div class="flex-container round bg-grey flex-col" id="login-div">
                 <div class="row-centered">
-                    <img src="../resources/logo.png" alt="" id="slu-logo">
+                    <img src="/resources/images/logo.png" alt="" id="slu-logo">
                 </div>
-                <form action="" method="post">
+                <form>
                     <label for="username">Username</label>
-                    <input type="text" name="username" placeholder="username">
+                    <input type="text" name="username" placeholder="Username" id="username">
                     <label for="password">Password</label>
-                    <input type="password" name="password" placeholder="password">
+                    <input type="password" name="password" id="password" placeholder="Password">
                     <div class="row-right-align">
                         <a href="">Forgot Password</a>
-                        <button type="submit" class="btn-primary-l">Login</button>
+                        <button id="login-btn" class="btn-primary-l"
+                        onclick="handleLogin()">Login</button>
                     </div>
                 </form>
             </div>
         </div>  
     </main>
+    <script src="/resources/js/login.js"></script>
 </body>
 </html>

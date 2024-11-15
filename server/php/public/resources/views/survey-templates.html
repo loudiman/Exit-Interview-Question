@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create</title>
+  
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="../css/nav_bar.css">
+  <link rel="stylesheet" href="../css/survey_template.css">
+  <link rel="stylesheet" href="../css/side_bar.css">
+</head>
+
+<body>
+  <!-- Navbar-->
+  <div class="navbar">
+    <button onclick="toggleSidebar()">☰</button>
+    <img src="../resource/images/male_user.png" alt="Profile" width="30" height="30">
+  </div>
+
+  <!-- Sidebar and main content container -->
+  <div class="sidebar-container">
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+      <a href="#">
+        <img src="../resource/images/home_icon.png" alt="Home Icon"> Home
+      </a>
+      <a href="#" class="active">
+        <img src="../resource/images/create_icon.png" alt="Create Icon"> Create
+      </a>
+      <a href="#">
+        <img src="../resource/images/view_icon.png" alt="View Icon"> View
+      </a>
+      <a href="#">
+        <img src="../resource/images/respondents_icon.png" alt="Respondents Icon"> Respondents
+      </a>
+      <a href="#">
+        <img src="../resource/images/male_user.png" alt="Profile Icon"> Profile
+      </a>
+    </nav>
+
+    <!-- Main content -->
+    <div class="main-content" id="mainContent">
+      <!-- Survey templates section -->
+      <h2>Survey Templates</h2>
+      <div class="survey-templates">
+        <div class="survey-template">
+          <button onclick="window.location.href='survey_creation.html';">
+            <img src="../resource/images/blank_survey.png" alt="Blank Survey">
+          </button>          
+          <p>Blank Survey</p>
+        </div>
+        <div class="survey-template">
+          <button onclick="window.location.href='survey_creation.html';"><img src="../resource/images/form_template_1.png" alt="Survey Template"></button>
+          <p>Survey Template</p>
+        </div>
+        <div class="survey-template">
+          <button onclick="window.location.href='survey_creation.html';"><img src="../resource/images/form_template_2.png" alt="Survey Template"></button>
+          <p>Survey Template</p>
+        </div>
+        <div class="survey-template">
+          <button onclick="window.location.href='survey_creation.html';"><img src="../resource/images/form_template_3.png" alt="Survey Template"></button>
+          <p>Survey Template</p>
+        </div>
+      </div>
+
+      <!-- Recent surveys section -->
+      <h2>Recents</h2>
+      <div class="recent-surveys">
+        <div class="recent-item">
+          <button> <img src="../resource/images/recent_form_1.png" alt="Survey Title"></button>
+          <p class="bold">Survey Title</p>
+        </div>
+        <div class="recent-item">
+          <button><img src="../resource/images/recent_form_2.png" alt="Survey Title"></button>
+          <p>Survey Title</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/survey_creation_navbar.js"></script>
+</body>
+</html>

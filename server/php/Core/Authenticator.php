@@ -8,21 +8,21 @@ use Core\Database;
 class Authenticator 
 {
 
-    public function attempt($email, $password)
+    public function attempt($username, $password)
     {
-        $user = App::resolve(Database::class)->query("SELECT * from users WHERE email = :email",
+        $user = App::resolve(Database::class)->query("SELECT * from user WHERE username = :username",
         [
-            'email' => $email
+            'username' => $username
         ])->find();
 
         if ($user) 
         {
-            if (password_verify($password, $user['password']))
+            // if (password_verify($password, $user['hashed_password']))
+            if ($password == $user['hashed_password'])
             {
                 login([
-                    'userId' => $user['id'],
                     'userType' => $user['type'],
-                    'email' => $email
+                    'username' => $username
                 ]);
 
                 return true;

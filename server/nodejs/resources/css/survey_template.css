@@ -1,0 +1,84 @@
+
+@font-face {
+    font-family: "CustomFont";
+    src: url("../resource/fonts/Istok_Web/IstokWeb-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: "CustomFont";
+    src: url("../resource/fonts/Istok_Web/IstokWeb-Bold.ttf") format("truetype");
+    font-weight: bold;
+    font-style: normal;
+}
+@font-face {
+    font-family: "CustomFont";
+    src: url("../resource/fonts/Istok_Web/IstokWeb-Italic.ttf") format("truetype");
+    font-weight: normal;
+    font-style: italic;
+}
+@font-face {
+    font-family: "CustomFont";
+    src: url("../resource/fonts/Istok_Web/IstokWeb-BoldItalic.ttf") format("truetype");
+    font-weight: bold;
+    font-style: italic;
+}
+
+button{
+  border: none;
+  cursor: pointer;
+  appearance: none;
+  background-color: inherit;
+}
+
+body{
+    margin: 0;
+}
+
+h2, p, a {
+    color: black;
+    font-family: "CustomFont", sans-serif;
+}
+
+ /* Main content */
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #FFFFFF;
+    transition: all 0.3s ease;
+    height: 100vh;
+    overflow-y: auto;
+    
+}
+  
+  .main-content.full-width {
+    width: 100%;
+  
+  }
+  
+  .survey-templates {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .survey-template img,
+.recent-surveys .recent-item img  {
+    width: 250px;
+    height: 230px;
+    object-fit: cover; 
+    border-radius: 4px; 
+}
+
+
+
+  .recent-surveys {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  
+  
+  
+
+  
