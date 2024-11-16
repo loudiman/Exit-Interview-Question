@@ -3,3 +3,109 @@
     padding: 0;
     box-sizing: border-box;
 }
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f9f9f9;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.survey-edit {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.survey-edit label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+.survey-edit input[type="text"],
+.survey-edit input[type="date"],
+.survey-edit select,
+.survey-edit textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.survey-edit textarea {
+    height: 100px;
+    resize: none;
+}
+
+.survey-edit button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.survey-edit button:hover {
+    background-color: #0056b3;
+}
+
+.reset-btn {
+    background-color: #b0b0b0;
+    margin-right: 10px;
+}
+
+.reset-btn:hover {
+    background-color: #8c8c8c;
+}
+
+.cancel-btn {
+    background-color: red;
+}
+
+.cancel-btn:hover {
+    background-color: #cc0000;
+}
+
+.alert {
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.alert-error {
+    background-color: #ffcccc;
+    color: #cc0000;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+@media (max-width: 768px) {
+    .survey-edit {
+        padding: 15px;
+    }
+
+    .survey-edit button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}

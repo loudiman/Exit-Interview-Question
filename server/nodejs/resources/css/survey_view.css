@@ -3,3 +3,78 @@
     padding: 0;
     box-sizing: border-box;
 }
+
+.survey-list {
+    margin-top: 10px;
+}
+
+.survey-item {
+    display: flex;
+    justify-content: space-between;
+    background-color: #e0e0e0;
+    margin-bottom: 5px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.survey-item button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    width: 300px;
+}
+
+.cancel-btn {
+    background-color: #b0b0b0;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.delete-btn {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.cancel-btn:hover, .delete-btn:hover {
+    opacity: 0.9;
+}
+
+.close-btn {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.close-btn:hover {
+    opacity: 0.9;
+}
