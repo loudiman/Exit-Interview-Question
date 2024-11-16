@@ -17,7 +17,7 @@ require base_path('vendor/autoload.php');
 
 require base_path('bootstrap.php');
 
-session_start();
+// session_start();
 
 $router = new Core\Router;
 

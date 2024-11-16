@@ -29,14 +29,4 @@ if(!$signedIn)
         )->throw();
 }
 
-$surveys = App::resolve(Database::class)->query('SELECT s.survey_id, s.survey_title FROM survey as s LEFT JOIN student as stud ON s.program_id = stud.program_id WHERE stud.username = ? AND s.status = "published";', 
-[
-    $attributes['username']
-])->get();
-
-$_SESSION['user'] = array_merge($_SESSION['user'], [
-    'surveys' => $surveys
-]);
-
-
 echo json_encode($_SESSION['user']);
