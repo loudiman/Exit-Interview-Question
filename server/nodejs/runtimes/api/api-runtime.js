@@ -12,3 +12,5 @@ app.get('/',(req,res) => {
 app.listen(2019, () => {
     console.log("API Server is Running")
 })
+
+module.exports = app

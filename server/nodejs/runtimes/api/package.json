@@ -1,0 +1,18 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "This would serve as the internal API runtime",
+  "main": "api-runtime.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "API",
+    "runtimes"
+  ],
+  "author": "Mark Lestat Agustin",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.1"
+  }
+}
