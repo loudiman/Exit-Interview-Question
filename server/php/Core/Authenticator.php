@@ -22,7 +22,7 @@ class Authenticator
             {
                 login([
                     'userType' => $user['type'],
-                    'username' => $username
+                    'username' => $user['username']
                 ]);
 
                 return true;
