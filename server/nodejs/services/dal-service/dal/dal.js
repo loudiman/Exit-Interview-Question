@@ -51,7 +51,7 @@ class SurveyDAL{
         }
     }
 
-    static async insertSurveys(surveyDAO){
+    static async insertSurvey(surveyDAO){
         var surveyTitle = surveyDAO.survey_title
         var programID = surveyDAO.program_id
         var periodStart = surveyDAO.survey_start
@@ -92,11 +92,5 @@ class SurveyDAL{
             throw new Error(error.message)
         }
     }
-
-    static async insertQuestions(questions){
-        var idArray = []
-
-    }
 }
-
 module.exports = {UserDAL, SurveyDAL};
