@@ -50,6 +50,53 @@ class SurveyDAL{
             throw new Error(error.message)
         }
     }
+
+    static async insertSurveys(surveyDAO){
+        var surveyTitle = surveyDAO.survey_title
+        var programID = surveyDAO.program_id
+        var periodStart = surveyDAO.survey_start
+        var periodEnd = surveyDAO.survey_end
+        var status = surveyDAO.status
+
+        try{
+            var query = "INSERT INTO survey(survey_title, status, program_id, period_start, period_end) VALUES(?,?,?,?,?)"
+            const[result] = await pool.execute(query,[surveyTitle, status, programID, periodStart, periodEnd])
+            return result.insertId
+        }catch(error){
+            throw new Error(error.message)
+        }
+    }
+
+    static async updateSurveyStatus(surveyDAO){
+        var status = surveyDAO.status
+        var surveyID = survveyDAO.survey_id
+
+        try{
+            var query = "UPDATE survey SET status = ? WHERE survey_id = ?"
+            const [result] = await pool.execute(query,[status, surveyID])
+            return result
+        }catch(error){
+            throw new Error(error.message)
+        }
+    }
+
+    static async insertQuestion(question){
+        var questionType = question.question_type
+        var questionJSON = question.question_json
+
+        try{
+            var query = "INSERT INTO question (question_json, question_type) VALUES(?,?)"
+            const [result] = await pool.execute(query, [questionJSON, questionType])
+        return result.insertId
+        }catch(error){
+            throw new Error(error.message)
+        }
+    }
+
+    static async insertQuestions(questions){
+        var idArray = []
+
+    }
 }
 
 module.exports = {UserDAL, SurveyDAL};
