@@ -51,6 +51,55 @@ class SurveyDAL{
         }
     }
 
+    static async getQuestions(surveyID){
+        var query = "SELECT q.question_id, q.question_json, q.question_type FROM question AS q LEFT JOIN questionaire"+
+                    "ON q.question_id = questionaire.question_id"+
+                    "WHERE questionaire.survey_id = ?"
+
+        try{
+            const[result] = await pool.query(query,[surveyID])
+            return result
+        }catch(error){
+            throw new Error(error.message)
+        }
+    }
+
+    static async getRespondents(surveyID){
+        var query = "SELECT * FROM responders WHERE survey_id = ?"
+
+        try{
+            const[result] = await pool.query(query, surveyID)
+            return result
+        }catch(error){
+            throw new Error(error.message)
+        }
+    }
+
+
+    static async updateSurveyStatus(surveyDAO){
+        var status = surveyDAO.status
+        var surveyID = survveyDAO.survey_id
+
+        try{
+            var query = "UPDATE survey SET status = ? WHERE survey_id = ?"
+            const [result] = await pool.execute(query,[status, surveyID])
+            return result
+        }catch(error){
+            throw new Error(error.message)
+        }
+    }
+
+    static async updateResponder(username, responded){
+        var query = "UPDATE responders SET responded = ? WHERE username = ?"
+
+        try{
+            const[result] = await pool.query(query, [responded, username])
+            return result
+        }catch(error){
+            throw new Error(error.message)
+        }
+    }
+
     static async insertSurvey(surveyDAO){
         var surveyTitle = surveyDAO.survey_title
         var programID = surveyDAO.program_id
@@ -67,19 +116,6 @@ class SurveyDAL{
         }
     }
 
-    static async updateSurveyStatus(surveyDAO){
-        var status = surveyDAO.status
-        var surveyID = survveyDAO.survey_id
-
-        try{
-            var query = "UPDATE survey SET status = ? WHERE survey_id = ?"
-            const [result] = await pool.execute(query,[status, surveyID])
-            return result
-        }catch(error){
-            throw new Error(error.message)
-        }
-    }
-
     static async insertQuestion(question){
         var questionType = question.question_type
         var questionJSON = question.question_json
@@ -88,6 +124,45 @@ class SurveyDAL{
             var query = "INSERT INTO question (question_json, question_type) VALUES(?,?)"
             const [result] = await pool.execute(query, [questionJSON, questionType])
         return result.insertId
+        }catch(error){
+            throw new Error(error.message)
+        }
+    }
+    // This returns a stack of question ID's
+    static async insertQuestions(questions){
+        var idArray = []
+
+        for(question of questions){
+            var id = await this.insertQuestion(question)
+            idArray.push(id)
+        }
+
+        return id
+    }
+
+    static async insertQuesetionnaire(questionsID, surveyID){
+        const placeholders = questionsID.map(()=> "(?, ?)").join(",")
+        const values = questionsID.map((questionID)=>[questionID, surveyID])
+        
+        var query = `INSERT INTO questionaire (question_id, survey_id) VALUES ${placeholders}`
+
+        try{
+            const[result] = await pool.execute(query, values)
+            return true
+        }catch(error){
+            throw new Error(error.message)
+        }
+    }
+
+    static async insertResponders(responders, surveyID){
+        const placeholders = responders.map(() => "(?,?,?)")
+        const values = responders.map((responder)=>[responder.username, surveyID, 0])
+
+        var query = `INSERT INTO responders (username, survey_id, responded) VALUES ${placeholders}`
+
+        try{
+            const[result] = pool.execute(query, values)
+            return true
         }catch(error){
             throw new Error(error.message)
         }
