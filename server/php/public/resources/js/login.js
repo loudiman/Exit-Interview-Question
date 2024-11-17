@@ -1,47 +1,3 @@
-// function handleLogin() {
-//   let credentials = {
-//     'username': document.getElementById('username').value,
-//     'password': document.getElementById('password').value
-//   };
-
-//   console.log("Sending credentials:", credentials);
-
-//   fetch('http://localhost:8888/', {
-//     method: 'POST',
-//     headers: { 'Content-Type': 'application/json' },
-//     body: JSON.stringify(credentials)
-//   })
-//     .then(response => response.text())
-//     .then(text => {
-//       console.log("(login) Raw response:", text);
-//       const data = JSON.parse(text);
-
-//       if (data.errors) {
-//         console.log("Error message:", data.errors);
-//       }
-
-//       if (data.user.userType === 1) { // Student
-//         console.log("Student");
-
-//         if (data.surveys) {
-//           // Ensure surveys is always an array, even if it's a single object
-//           // Store surveys data in sessionStorage
-//           console.log("Storing surveys data in sessionStorage:", data.surveys.data);
-//           sessionStorage.setItem('surveysData', JSON.stringify(data.surveys.data));
-//         }
-        
-//         // Redirect to /student/surveys page
-//         window.location.href = 'http://localhost:8888/student/surveys';
-//       } else if (data.userType === 0) { // Admin
-//         console.log("Admin");
-//         window.location.href = 'http://localhost:8000/api/items'; // Initiate a request to nodejs server
-//       }
-//     })
-//     .catch(error => console.error("Error:", error));
-// }
-
-// TODO: create a env file to store ip or localhost
-
 import { config } from './config.js';
 
 export function login() {
@@ -53,16 +9,17 @@ export function login() {
     'password': document.getElementById('password').value
   };
 
-  console.log("Sending credentials:", credentials);
+  console.log("POST Sending credentials:", credentials);
 
   fetch(`${STUDENT_URL}/`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(credentials)
   })
-    .then(response => response.json())
+    .then(response => response.text())
     .then(data => {
       console.log("(login) Raw response:", data);
+      data = JSON.parse(data);
 
       if (data.errors) {
         console.log("Error message:", data.errors);
@@ -73,8 +30,14 @@ export function login() {
         window.location.href = `${ADMIN_URL}/api/items`; 
         return;
       }
-      console.log("Student");
-    }).catch(error => console.log("Error:", error))
+
+      if (data.userType === 1)  // Student
+        console.log("Student");
+    }).catch(error => {
+      console.log("POST Student Error:", error);
+    })
+  
+  console.log("GET Fetching surveys data");
 
   fetch(`${STUDENT_URL}/student`)
   .then(response => response.text())
