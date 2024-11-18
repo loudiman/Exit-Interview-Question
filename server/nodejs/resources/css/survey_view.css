@@ -14,23 +14,6 @@ body {
 /* Container for Sidebar and Content */
 .container {
     display: flex;
-    height: 100%;
-}
-
-/* Sidebar styles */
-.sidebar {
-    width: 250px;
-    position: fixed;
-}
-
-/* Hide the sidebar when it's toggled */
-.sidebar.hidden {
-    display: none;
-}
-
-/* Adjust the content area when sidebar is hidden */
-.content.full-width {
-    width: 100%;
 }
 
 /* Main content area */
@@ -39,6 +22,10 @@ body {
     padding: 20px;
     height: 100%;
     overflow-y: auto;
+}
+
+.sidebar {
+    flex: 0 0 250px;
 }
 
 /* Search Bar Styles */
