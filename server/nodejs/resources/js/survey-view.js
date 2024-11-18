@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const surveyData = [
         {
             survey_id: 1,
-            survey_title: 'Employee Satisfaction',
+            survey_title: 'Sample Survey 1',
             status: 'unpublished',
             program_id: 101,
             period_start: '2024-11-01',
@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         {
             survey_id: 2,
-            survey_title: 'Tech Conference Feedback',
+            survey_title: 'Sample Survey 2',
             status: 'unpublished',
             program_id: 102,
             period_start: '2024-11-10',
@@ -18,19 +18,35 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         {
             survey_id: 3,
-            survey_title: 'Workshop Evaluation',
-            status: 'published',
+            survey_title: 'Sample Survey 3',
+            status: 'unpublished',
             program_id: 103,
             period_start: '2024-10-01',
             period_end: '2024-10-31'
         },
         {
             survey_id: 4,
-            survey_title: 'Annual Review',
+            survey_title: 'Sample Survey 4',
+            status: 'published',
+            program_id: 103,
+            period_start: '2024-10-01',
+            period_end: '2024-10-31'
+        },
+        {
+            survey_id: 5,
+            survey_title: 'Sample Survey 5',
             status: 'published',
             program_id: 104,
             period_start: '2024-09-15',
             period_end: '2024-10-15'
+        },
+        {
+            survey_id: 6,
+            survey_title: 'Sample Survey 6',
+            status: 'published',
+            program_id: 104,
+            period_start: '2024-10-15',
+            period_end: '2024-23-15'
         },
     ];
 
@@ -46,12 +62,34 @@ document.addEventListener('DOMContentLoaded', () => {
             const container = survey.status === 'unpublished' ? unpublishedContainer : publishedContainer;
             const surveyItem = document.createElement('div');
             surveyItem.className = 'survey-item';
-            surveyItem.innerHTML = `
+
+            // Create the HTML content for each survey item
+            let buttonsHtml = '';
+
+            // Add the appropriate buttons based on the survey's status
+            if (survey.status === 'unpublished') {
+                buttonsHtml = `
                 <span>${survey.survey_title}</span>
-                <button data-id="${survey.survey_id}" class="view-btn">👁️</button>
-                <button data-id="${survey.survey_id}" class="edit-btn">✏️</button>
-                <button data-id="${survey.survey_id}" class="delete-btn">🗑️</button>
+                <button data-id="${survey.survey_id}" class="edit-btn">
+                    <img src="../../resources/images/Edit.png" alt="Edit" />
+                </button>
+                <button data-id="${survey.survey_id}" class="delete-btn">
+                    <img src="../../resources/images/Delete.png" alt="Delete" />
+                </button>
             `;
+            } else if (survey.status === 'published') {
+                buttonsHtml = `
+                <span>${survey.survey_title}</span>
+                <button data-id="${survey.survey_id}" class="view-btn">
+                    <img src="../../resources/images/Eye.png" alt="View" />
+                </button>
+                <button data-id="${survey.survey_id}" class="delete-btn">
+                    <img src="../../resources/images/Delete.png" alt="Delete" />
+                </button>
+            `;
+            }
+
+            surveyItem.innerHTML = buttonsHtml;
             container.appendChild(surveyItem);
         });
     }
@@ -72,7 +110,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (button.classList.contains('view-btn')) {
             showPreview(surveyId);
         } else if (button.classList.contains('edit-btn')) {
-            // TODO: Redirect to survey edit page
+            // Redirect to survey edit page
+            window.location.href = `survey-edit.html?survey_id=${surveyId}`;
         } else if (button.classList.contains('delete-btn')) {
             showDeleteModal(surveyId);
         }
@@ -86,70 +125,65 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
+    function showPreview(surveyId) {
+        const survey = surveyData.find(survey => survey.survey_id === parseInt(surveyId));
+        if (!survey) return console.error('Survey not found');
+
+        document.getElementById('previewSurveyTitle').textContent = survey.survey_title;
+        document.getElementById('previewSurveyStatus').textContent = survey.status;
+        document.getElementById('previewProgramId').textContent = survey.program_id;
+        document.getElementById('previewPeriodStart').textContent = survey.period_start;
+        document.getElementById('previewPeriodEnd').textContent = survey.period_end;
+
+        document.getElementById('previewModal').showModal();
+        document.getElementById('modalOverlay').style.display = 'block';
+    }
+
+    function showDeleteModal(surveyId) {
+        const survey = surveyData.find(survey => survey.survey_id === parseInt(surveyId));
+        if (!survey) return console.error('Survey not found');
+
+        document.getElementById('surveyTitle').textContent = survey.survey_title;
+        document.getElementById('deleteModal').showModal();
+        document.getElementById('modalOverlay').style.display = 'block';
+
+        document.getElementById('confirmDelete').onclick = () => {
+            deleteSurvey(surveyId);
+            document.getElementById('deleteModal').close();
+            document.getElementById('modalOverlay').style.display = 'none';
+        };
+    }
+
+    // Delete survey function
+    function deleteSurvey(surveyId) {
+        const index = surveyData.findIndex(survey => survey.survey_id === parseInt(surveyId));
+        if (index !== -1) {
+            surveyData.splice(index, 1); // Remove the survey from the array
+            renderSurveys(surveyData); // Re-render surveys to update the UI
+            console.log(`Survey with ID ${surveyId} deleted.`);
+        }
+    }
+
+    // Close Modals and Overlay
+    document.getElementById('closePreview').addEventListener('click', () => {
+        document.getElementById('previewModal').close();
+        document.getElementById('modalOverlay').style.display = 'none';
+    });
+
+    document.getElementById('cancelDelete').addEventListener('click', () => {
+        document.getElementById('deleteModal').close();
+        document.getElementById('modalOverlay').style.display = 'none';
+    });
+
+    // Sidebar toggle
+    document.getElementById('sidebarToggle').addEventListener('click', toggleSidebar);
+
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('mainContent');
+        sidebar.classList.toggle('hidden');
+        mainContent.classList.toggle('full-width');
+    }
+
     renderSurveys(surveyData);
 });
-
-function showPreview(surveyId) {
-    const survey = surveyData.find(survey => survey.survey_id === parseInt(surveyId));
-    if (!survey) {
-        console.error('Survey not found');
-        return;
-    }
-
-    // Populate the preview modal with survey details
-    document.getElementById('previewSurveyTitle').textContent = survey.survey_title;
-    document.getElementById('previewSurveyStatus').textContent = survey.status;
-    document.getElementById('previewProgramId').textContent = survey.program_id;
-    document.getElementById('previewPeriodStart').textContent = survey.period_start;
-    document.getElementById('previewPeriodEnd').textContent = survey.period_end;
-
-    // Show the modal
-    const previewModal = document.getElementById('previewModal');
-    previewModal.showModal();
-}
-
-// Close the preview modal
-document.getElementById('closePreview').addEventListener('click', () => {
-    const previewModal = document.getElementById('previewModal');
-    previewModal.close();
-});
-
-function showDeleteModal(surveyId) {
-    const survey = surveyData.find(survey => survey.survey_id === parseInt(surveyId));
-    if (!survey) {
-        console.error('Survey not found');
-        return;
-    }
-
-    // Populate the delete modal with survey title
-    document.getElementById('surveyTitle').textContent = survey.survey_title;
-
-    // Show the modal
-    const deleteModal = document.getElementById('deleteModal');
-    deleteModal.showModal();
-
-    // Attach confirm delete functionality
-    const confirmDelete = document.getElementById('confirmDelete');
-    confirmDelete.onclick = () => {
-        deleteSurvey(surveyId);
-        deleteModal.close();
-    };
-}
-
-// Close the delete modal
-document.getElementById('cancelDelete').addEventListener('click', () => {
-    const deleteModal = document.getElementById('deleteModal');
-    deleteModal.close();
-});
-
-function deleteSurvey(surveyId) {
-    const index = surveyData.findIndex(survey => survey.survey_id === parseInt(surveyId));
-    if (index !== -1) {
-        // TODO LOGIC TO REMOVE SURVEY FROM DATABASE
-        surveyData.splice(index, 1); // Remove the survey
-        console.log(`Survey with ID ${surveyId} deleted.`);
-    }
-}
-
-
-

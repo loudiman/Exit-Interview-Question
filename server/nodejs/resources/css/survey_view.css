@@ -1,80 +1,234 @@
+/* Reset default margin and padding */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-.survey-list {
+/* Main body layout */
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Container for Sidebar and Content */
+.container {
+    display: flex;
+    height: 100%;
+}
+
+/* Sidebar styles */
+.sidebar {
+    width: 250px;
+    position: fixed;
+}
+
+/* Hide the sidebar when it's toggled */
+.sidebar.hidden {
+    display: none;
+}
+
+/* Adjust the content area when sidebar is hidden */
+.content.full-width {
+    width: 100%;
+}
+
+/* Main content area */
+.content {
+    width: 100%;
+    padding: 20px;
+    height: 100%;
+    overflow-y: auto;
+}
+
+/* Search Bar Styles */
+.search-bar {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+#searchInput {
+    flex: 1;
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+#searchButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+}
+
+#searchButton:hover {
+    transform: scale(1.1);
+}
+
+#searchButton img {
+    width: 40px;
+    height: 40px;
+}
+
+/* Survey List Styles */
+.survey-view {
+    font-size: 28px;
+}
+
+#unpublishedSurveysHeading {
     margin-top: 10px;
 }
 
+#publishedSurveysHeading {
+    margin-top: 30px;
+}
+
+/* Survey Item Styles */
 .survey-item {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     background-color: #e0e0e0;
     margin-bottom: 5px;
     padding: 10px;
     border-radius: 5px;
 }
 
+.survey-item span {
+    font-weight: bold;
+    font-size: 28px;
+    flex: 1;
+}
+
+/* Button Group */
 .survey-item button {
     background: none;
     border: none;
     cursor: pointer;
 }
+
+/* Survey Item Button Icons */
+.survey-item button img {
+    width: 30px;
+    height: 30px;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+/* Hover effect for button icons */
+.survey-item button:hover img {
+    transform: scale(1.2); /* Scale up the icon on hover */
+}
+
+/* Survey Item Button Icons */
+.survey-item button img {
+    width: 30px;
+    height: 30px;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+/* Hover effect for button icons */
+.survey-item button:hover img {
+    transform: scale(1.2); /* Scale up the icon on hover */
+}
+
 .modal {
-    display: none; /* Hidden by default */
+    display: none; /* hidden by default */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 450px; /* Increased width */
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+.modal-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.button-group {
+    display: flex;
+    justify-content: center;
+}
+
+.modal[open] {
+    display: block;
+}
+
+/* Optional overlay styling */
+.modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-    justify-content: center;
-    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
 }
 
-.modal-content {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
+#deleteModalTitle {
     text-align: center;
-    width: 300px;
 }
 
-.cancel-btn {
+#deleteModalDesc {
+    text-align: center;
+}
+
+#previewModalTitle {
+    text-align: center;
+}
+
+/* Ensure both buttons have the same size */
+.cancel-btn, .delete-btn2 {
     background-color: #b0b0b0;
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 10px 20px; /* Same padding for both buttons */
     border-radius: 5px;
-    margin-right: 10px;
+    margin-top: 10px;
     cursor: pointer;
+    font-size: 14px;
+    display: inline-flex; /* Ensures both buttons align properly */
+    align-items: center; /* Vertically centers text */
+    justify-content: center; /* Horizontally centers text */
 }
 
-.delete-btn {
+/* Specific styling for delete button */
+.delete-btn2 {
     background-color: red;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
+    margin-left: 10px;
 }
 
-.cancel-btn:hover, .delete-btn:hover {
-    opacity: 0.9;
+/* Hover effect */
+.cancel-btn:hover, .delete-btn2:hover {
+    transform: scale(1.1);
 }
 
 .close-btn {
     background-color: #007BFF;
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 10px;
     border-radius: 5px;
     cursor: pointer;
     margin-top: 10px;
+    width: 100px;
+    display: block;
+    align-self: center;
 }
 
 .close-btn:hover {
-    opacity: 0.9;
+    transform: scale(1.1);
+}
+
+.delete-btn {
+    margin-left: 15px;
 }
