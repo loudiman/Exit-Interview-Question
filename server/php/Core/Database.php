@@ -31,6 +31,15 @@ class Database
         return $this;
     }
 
+    // Returns associative array having column names as keys
+    public function assoc_get()
+    {
+        // return $this->statement->fetchAll();
+        return $this->statement->get_result()->fetch_all(MYSQLI_ASSOC);
+        // return $this->statement->get_result()->fetch_all();
+    }
+
+    // Returns an array of arrays, where each sub-array is indexed numerically (i.e., by column number).
     public function get()
     {
         // return $this->statement->fetchAll();
