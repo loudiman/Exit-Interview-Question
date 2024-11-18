@@ -1,5 +1,5 @@
 // Listen for the Enter key on the search input
-document.getElementById("search-input").addEventListener("keypress", function(event) {
+document.getElementById("search-input").addEventListener("keypress", function (event) {
     if (event.key === "Enter") { // When Enter is pressed
         const searchQuery = document.getElementById("search-input").value.toLowerCase();
 
@@ -34,7 +34,7 @@ document.getElementById("search-input").addEventListener("keypress", function(ev
     }
 });
 
-document.querySelector('.hide-link').addEventListener('click', function() {
+document.querySelector('.hide-link').addEventListener('click', function () {
     const completedSurveysContainer = document.querySelector('.recent-surveys');
 
     completedSurveysContainer.classList.toggle('hidden');
@@ -47,7 +47,7 @@ document.querySelector('.hide-link').addEventListener('click', function() {
 });
 
 // Toggle search input visibility when search icon is clicked
-document.getElementById("search-icon").addEventListener("click", function() {
+document.getElementById("search-icon").addEventListener("click", function () {
     const searchInput = document.getElementById("search-input");
     searchInput.classList.toggle("hidden"); // Toggle visibility of the search input field
 });
@@ -55,15 +55,15 @@ document.getElementById("search-icon").addEventListener("click", function() {
 function createSurveyElements(data, containerId, isOpenSurvey) {
     const container = document.getElementById(containerId);
     container.innerHTML = ''; // Clear existing elements
-  
+
     data.forEach(survey => {
         const surveyElement = document.createElement('div');
         surveyElement.classList.add(isOpenSurvey ? 'survey-template' : 'recent-item');
-  
+
         const surveyTitle = document.createElement('p');
         surveyTitle.textContent = survey.survey_title;
         surveyElement.appendChild(surveyTitle);
-  
+
         // Create an anchor tag instead of a button
         const link = document.createElement('a');
         link.href = `/student/survey?id=${survey.survey_id}`; // Set the href attribute
@@ -78,23 +78,28 @@ function createSurveyElements(data, containerId, isOpenSurvey) {
             fetch(`/student/survey?id=${survey.survey_id}`)
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error('Network response was not ok');
+                        throw new Error(`Network response was not ok. Status: ${response.status}`);
                     }
                     return response.json();
                 })
                 .then(surveyData => {
                     console.log('(anchor) Raw response:', surveyData);
 
+                    if (!surveyData.survey_id) {
+                        throw new Error('Missing survey_id in the API response.');
+                    }
+
                     // Store the survey data in sessionStorage
                     sessionStorage.setItem('questionnaireData', JSON.stringify(surveyData));
 
-
                     // Redirect to the survey page
-                    window.location.href = `http://localhost:8888/student/survey/questionnaires?id=${surveyData.question_id}`; // NOTE: THIS IS TEMPORARY URI IF U FIND THIS NOTIFY ME DAGUL
+                    window.location.href = `http://localhost:8888/student/survey/questionnaire?id=${surveyData.survey_id}`; // NOTE: THIS IS TEMPORARY URI IF U FIND THIS NOTIFY ME DAGUL
                 })
                 .catch(error => {
-                    console.error('There was a problem with the fetch operation:', error);
+                    console.error('There was a problem with the fetch operation:', error.message);
+                    console.error(error);
                 });
+
         });
 
         surveyElement.appendChild(link);

@@ -1,185 +1,357 @@
-const surveyData = {
-    "questions": [
-      {
-        "question_json": {
-          "question": "Which network topology is most resilient to failures?",
-          "options": ["Star", "Ring", "Mesh", "Bus"]
-        },
-        "question_type": "multiple_choice"
-      },
-      {
-        "question_json": {
-          "question": "Rate your experience with our services.",
-          "options": []
-        },
-        "question_type": "rating"
-      },
-      {
-        "question_json": {
-          "question": "Please provide additional feedback.",
-          "options": []
-        },
-        "question_type": "text_input"
-      }
-    ]
-  };
-  
-sessionStorage.setItem('questionnaireData', JSON.stringify(surveyData));
+// const surveyData = {
+//     "questions": [
+//       {
+//         "question_json": {
+//           "question": "Which network topology is most resilient to failures?",
+//           "options": ["Star", "Ring", "Mesh", "Bus"]
+//         },
+//         "question_type": "multiple_choice"
+//       },
+//       {
+//         "question_json": {
+//           "question": "Rate your experience with our services.",
+//           "options": []
+//         },
+//         "question_type": "rating"
+//       },
+//       {
+//         "question_json": {
+//           "question": "Please provide additional feedback.",
+//           "options": []
+//         },
+//         "question_type": "text_input"
+//       }
+//     ]
+//   };
 
-document.addEventListener("DOMContentLoaded", function() {
-    // Retrieve survey data from sessionStorage
+// sessionStorage.setItem('questionnaireData', JSON.stringify(surveyData));
+async function main() {
+    const surveyId = getSurveyIdFromURL(); // Dynamically fetch the survey ID from the URL
+    if (surveyId) {
+        getQuestions(surveyId); // Call with the dynamic survey ID
+    } else {
+        console.error("Survey ID not found in URL.");
+    }
+}
+
+// Helper function to extract the survey ID from the URL
+function getSurveyIdFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("id"); //This is assuming the URL passed by student-homepage.js has a parameter id
+}
+
+async function getQuestions(id){
+    var response = await fetch("http://localhost:8888/student/survey?id="+id)
+    var data = await response.json()
+    await sessionStorage.setItem('questionnaireData', JSON.stringify(data))
+    generateQuestionDoms()
+}
+
+function generateQuestionDoms(){
     const storedSurveyData = sessionStorage.getItem('questionnaireData');
 
-    if (storedSurveyData) {
-        console.log("Using survey data from sessionStorage");
-
-        // Parse the stored data
-        const data = JSON.parse(storedSurveyData);
-
-        // Check if data.questions exists and is an array
-        if (data.questions && Array.isArray(data.questions)) {
-            // Populate survey questions dynamically based on the stored data
-            data.questions.forEach((question, index) => {
-                let questionHTML = '';
-
-                switch (question.question_type) {
-                    case 'multiple_choice':
-                        questionHTML = generateMultipleChoice(question.question_json);
-                        break;
-                    case 'rating':
-                        questionHTML = generateRating(question.question_json);
-                        break;
-                    case 'text_input':
-                        questionHTML = generateTextInput(question.question_json);
-                        break;
-                    default:
-                        console.warn("Unknown question type:", question.question_type);
-                        break;
-                }
-
-                // Insert the generated question HTML into the corresponding div
-                const surveyDiv = document.querySelectorAll('.survey-template')[index];
-                if (surveyDiv) {
-                    surveyDiv.innerHTML = questionHTML;
-                } else {
-                    console.error(`Survey div not found for question index: ${index}`);
-                }
-            });
-
-            // Bind event listeners only after elements are dynamically created
-            bindDynamicEventListeners();
-        } else {
-            console.error("Data does not contain a valid 'questions' array.");
-        }
-    } else {
-        console.error("No survey data found in sessionStorage");
+    //Guard clause to check if sessionStorage is empty or not
+    if(!storedSurveyData){
+        console.error("NO survey data found in sessionStorage")
+        return
     }
-});
 
-function bindDynamicEventListeners() {
-    // Handle rating selection with the option to unselect
-    document.getElementById("ratingContainer")?.addEventListener("click", function(e) {
-        if (e.target.tagName === "IMG") {
-            const selectedStar = e.target;
-            const allStars = document.querySelectorAll(".rating-item img");
+    console.log("Using survey data from sessionStorage");
 
-            // Check if the clicked star is already selected
-            const isSelected = selectedStar.src.includes("RatingAfter.png");
+    // Parse the stored data
+    const data = JSON.parse(storedSurveyData);
 
-            // Reset all stars to unselected state if clicking an unselected star
-            if (!isSelected) {
-                allStars.forEach(star => {
-                    star.src = "../resource/images/RatingBefore.png";
-                });
-                selectedStar.src = "../resource/images/RatingAfter.png"; // Select clicked star
-            } else {
-                selectedStar.src = "../resource/images/RatingBefore.png"; // Unselect clicked star
-            }
+
+    // Check if data.questions exists and is an array
+    if (!data.questions || !Array.isArray(data.questions)) {
+        console.error("Data does not contain valid questions");
+        return;
+    }
+
+    // Get the title container
+    const titleContainer = document.getElementById('title');
+
+    // Create a new label element for the title
+    const titleLabel = document.createElement('label');
+    titleLabel.setAttribute("class", "txt-xxl bold");
+    titleLabel.innerText = data.survey_title;
+    titleContainer.appendChild(titleLabel);
+
+    var questionNo = 1;
+
+    // Populate survey questions dynamically based on the stored data
+    data.questions.forEach((question) => {
+        switch (question.question_type) {
+            case 'multiple_choice':
+                generateMultipleChoice(questionNo, question, question.question_id);
+                questionNo++;
+                break;
+            case 'rating':
+                generateRatingQuestion(questionNo, question, question.question_id);
+                questionNo++;
+                break;
+            case 'essay':
+                generateEssayQuestion(questionNo, question, question.question_id);
+                questionNo++;
+                break;
+            default:
+                console.warn("Unknown question type:", question.question_type);
+                break;
         }
     });
 
-    // Handle checklist selection with the option to select multiple and toggle selection
-    document.getElementById("checklistContainer")?.addEventListener("click", function(e) {
-        if (e.target.classList.contains("checkbox-icon")) {
-            const isChecked = e.target.src.includes("Checked_Checkbox.png");
-
-            // Toggle checkbox state: if checked, uncheck it; if unchecked, check it
-            e.target.src = isChecked ? "../resource/images/Checkbox.png" : "../resource/images/Checked_Checkbox.png";
-        }
-    });
-
-    // Clear placeholder on focus in answer input
-    document.querySelector(".answer-input")?.addEventListener("focus", function(e) {
-        e.target.placeholder = "";
-    });
-
-    // Restore placeholder on blur if input is empty
-    document.querySelector(".answer-input")?.addEventListener("blur", function(e) {
-        if (e.target.value === "") {
-            e.target.placeholder = "Your Answer...";
-        }
-    });
-
-    // Back button functionality
-    document.getElementById("backButton")?.addEventListener("click", () => {
-        window.history.back();
-    });
-
-    // Submit button functionality
-    document.getElementById("submitButton")?.addEventListener("click", () => {
-        alert("Survey Submitted!");
-        window.history.back();
-    });
+    // Bind event listeners only after elements are dynamically created
+    console.log("Invoking generateButtonNav");
+    generateButtonNav();
 }
 
 // Function to generate HTML for multiple choice questions
-function generateMultipleChoice(questionData) {
-    // Ensure questionData and questionData.options are defined
-    const question = questionData?.question || "Question not available";
-    const options = questionData?.options || [];  // Default to empty array if options are missing
+function generateMultipleChoice(questionNo,questionData, id) {
+    var question = questionData.question_text
+    var questionId = id
 
-    // Create HTML for the multiple-choice question
-    let html = `<div class="survey-template">
-                  <p class="question-text">${question}</p>
-                  <ul class="options-list">`;
-    options.forEach(option => {
-        html += `<li class="option-item">
-                   <input type="radio" name="${question}" value="${option}" class="option-input"> ${option}
-                 </li>`;
-    });
-    html += `</ul></div>`;
-    return html;
+    var form = document.getElementById('form')
+    
+    // Create the base nodes to be populated
+    var questionDiv = document.createElement("div")
+    questionDiv.setAttribute("class","question")
+
+    var optionsDiv = document.createElement("div")
+    optionsDiv.setAttribute("class", "options")
+
+    // Create the nodes with content and proper css attributes
+    var questionHeader = document.createElement("div")
+    questionHeader.setAttribute("class","question-header")
+    
+    //This generates the node of the question header
+    var questionText = document.createElement("p")
+    questionText.setAttribute("class", "bold")
+    questionText.innerText = questionNo+". "+question
+    questionHeader.appendChild(questionText)
+
+    // For each option in the question data create dom and add to options div
+    //      This generates the child nodes of the question div
+    questionData.options.forEach((option) =>{
+        let optionDiv = document.createElement("div")
+        optionDiv.setAttribute("class","option")
+
+        let input = document.createElement("input")
+        input.setAttribute("type", "checkbox")
+        input.setAttribute("id",option)
+        input.setAttribute("name",questionId)
+        input.setAttribute("value",option)
+
+        let label = document.createElement("label")
+        label.setAttribute("for", option)
+        label.innerText = option
+
+        optionDiv.appendChild(input)
+        optionDiv.appendChild(label)
+
+        optionsDiv.appendChild(optionDiv)
+    })
+    //Append the child nodes of the question div to itself
+    questionDiv.appendChild(questionHeader)
+    questionDiv.appendChild(optionsDiv)
+
+    //Append the question div to the form element
+    form.appendChild(questionDiv)
 }
 
+function generateRatingQuestion(questionNo, questionData, id) {
+    var question = questionData.question_text;
+    var scale = questionData.scale; // Get the maximum rating scale (e.g., 5)
+    var questionId = id;
 
-// Function to generate HTML for rating questions
-function generateRating(question) {
-    let ratingHTML = '';
-    for (let i = 1; i <= question.question_json.scale; i++) {
-        ratingHTML += `
-            <div class="rating-item" data-rating="${i}">
-                <span>${i}</span>
-                <img src="../resource/images/RatingBefore.png" alt="Star ${i}">
-            </div>
-        `;
+    var form = document.getElementById('form');
+
+    // Create the base nodes to be populated
+    var questionDiv = document.createElement("div");
+    questionDiv.setAttribute("class", "question");
+
+    var ratingDiv = document.createElement("div");
+    ratingDiv.setAttribute("class", "rating");
+
+    // Create the nodes with content and proper CSS attributes
+    var questionHeader = document.createElement("div");
+    questionHeader.setAttribute("class", "question-header");
+
+    // Generate the question header
+    var questionText = document.createElement("p");
+    questionText.setAttribute("class", "bold");
+    questionText.innerText = questionNo + ". " + question + " (Scale from 1 to " + questionData.scale+")";
+    questionHeader.appendChild(questionText);
+
+    // For each rating option from 1 up to the scale, create a radio button and label
+    for (let i = 1; i <= scale; i++) {
+        let optionDiv = document.createElement("div");
+        optionDiv.setAttribute("class", "flex-col");
+
+        let input = document.createElement("input");
+        input.setAttribute("type", "radio");
+        input.setAttribute("id", `rating-${i}`);
+        input.setAttribute("name", `questionID-${questionId}`);
+        input.setAttribute("value", i); // Sets the value to the rating number chosen
+
+        let label = document.createElement("label");
+        label.setAttribute("for", `rating-${i}`);
+        label.innerText = i; // Shows the rating number
+
+        // Apply custom styles to the radio input here
+        input.classList.add('custom-radio'); // Add class for custom styles
+
+        // Apply custom styles to the label
+        label.classList.add('custom-label'); // Add class for custom label styles
+
+        // Add an event listener to handle the "selected" effect when the radio button is clicked
+        input.addEventListener('change', function () {
+            // Remove the selected effect from all radio buttons first
+            const allRadioButtons = document.querySelectorAll(`input[name="questionID-${questionId}"]`);
+            allRadioButtons.forEach(radio => {
+                radio.classList.remove('selected');  // Remove the selected class
+            });
+
+            // Add the selected effect to the clicked radio button
+            input.classList.add('selected');
+        });
+
+        // Add label above the radio button in the same div
+        optionDiv.appendChild(label);
+        optionDiv.appendChild(input);
+
+        // Append the option div (with the radio and label) to the parent container
+        ratingDiv.appendChild(optionDiv);
     }
 
-    return `
-        <div class="survey-template-header">${question.question_json.question}</div>
-        <div class="survey-template-content">
-            <div class="rating-container" id="ratingContainer">
-                ${ratingHTML}
-            </div>
-        </div>
-    `;
+    // Append the child nodes of the question div
+    questionDiv.appendChild(questionHeader);
+    questionDiv.appendChild(ratingDiv);
+
+    // Append the question div to the form element
+    form.appendChild(questionDiv);
 }
 
-// Function to generate HTML for text input questions
-function generateTextInput(question) {
-    return `
-        <div class="survey-template-header">${question.question_json.question}</div>
-        <div class="survey-template-content">
-            <input type="text" class="answer-input" placeholder="Your Answer...">
-        </div>
-    `;
+//Keeping the code below in case of change of mind
+// function generateRatingQuestion(questionNo, questionData, id) {
+//     const question = questionData.question_text;
+//     const scale = questionData.scale; // Get the maximum rating scale (e.g., 5)
+//     const questionId = id;
+//
+//     const form = document.getElementById('form');
+//
+//     // Create the base nodes to be populated
+//     const questionDiv = document.createElement("div");
+//     questionDiv.setAttribute("class", "question");
+//
+//     const questionHeader = document.createElement("div");
+//     questionHeader.setAttribute("class", "question-header");
+//
+//     // Generate the question header
+//     const questionText = document.createElement("p");
+//     questionText.setAttribute("class", "bold");
+//     questionText.innerText = questionNo + ". " + question;
+//     questionHeader.appendChild(questionText);
+//
+//     // Slider container
+//     const sliderContainer = document.createElement("div");
+//     sliderContainer.setAttribute("class", "slider-container");
+//
+//     // Create the slider input element
+//     const slider = document.createElement("input");
+//     slider.setAttribute("type", "range");
+//     slider.setAttribute("id", `slider-${questionId}`);
+//     slider.setAttribute("min", "1");
+//     slider.setAttribute("max", scale.toString());
+//     slider.setAttribute("value", Math.ceil(scale / 2).toString()); // Default to middle of scale
+//
+//     // Create the slider value display
+//     const sliderValueDisplay = document.createElement("span");
+//     sliderValueDisplay.setAttribute("id", `slider-value-${questionId}`);
+//     sliderValueDisplay.classList.add("slider-value");
+//     sliderValueDisplay.textContent = slider.value;
+//
+//     // Event listener to update display as slider moves
+//     slider.addEventListener("input", function () {
+//         const value = slider.value;
+//         sliderValueDisplay.textContent = value;
+//     });
+//
+//     // Append elements to their respective containers
+//     sliderContainer.appendChild(slider);
+//     sliderContainer.appendChild(sliderValueDisplay);
+//
+//     // Append all to question div
+//     questionDiv.appendChild(questionHeader);
+//     questionDiv.appendChild(sliderContainer);
+//
+//     // Append the question div to the form element
+//     form.appendChild(questionDiv);
+// }
+
+function generateEssayQuestion(questionNo, questionData, id) {
+    var question = questionData.question_text;
+    var questionId = id;
+
+    var form = document.getElementById('form');
+
+    // Create the base nodes to be populated
+    var questionDiv = document.createElement("div");
+    questionDiv.setAttribute("class", "question");
+
+    // Create a container for the question header
+    var questionHeader = document.createElement("div");
+    questionHeader.setAttribute("class", "question-header");
+
+    // Create the question text node
+    var questionText = document.createElement("p");
+    questionText.setAttribute("class", "bold");
+    questionText.innerText = questionNo + ". " + question;
+    questionHeader.appendChild(questionText);
+
+    // Create the textarea input for essay-type question
+    var textareaDiv = document.createElement("div");
+    textareaDiv.setAttribute("class", "textarea-container");
+
+    var textarea = document.createElement("textarea");
+    textarea.setAttribute("id", id);  // Use questionId as textarea id
+    textarea.setAttribute("name", id);  // Set name to questionId
+    textarea.setAttribute("rows", "4");  // Default rows for the textarea
+    textarea.setAttribute("cols", "50");  // Default columns for the textarea
+    textarea.setAttribute("placeholder", "Type your answer here...");
+
+    // Append textarea to the textarea container
+    textareaDiv.appendChild(textarea);
+
+    // Append question header and textarea container to the question div
+    questionDiv.appendChild(questionHeader);
+    questionDiv.appendChild(textareaDiv);
+
+    // Append the question div to the form element
+    form.appendChild(questionDiv);
 }
+
+function generateButtonNav(){
+    console.log("generating nav buttons")
+    var mainContainer = document.createElement("div")
+    mainContainer.setAttribute("class","flex-container h-align-center row")
+    mainContainer.setAttribute("id","button-container")
+
+    var backButton = document.createElement("button")
+    backButton.setAttribute("class","btn-primary-m")
+    backButton.innerText = "Back"
+
+    var submitButton = document.createElement("button")
+    submitButton.setAttribute("class","btn-primary-m")
+    submitButton.innerText = "Submit"
+
+    var spacer = document.createElement("div")
+    spacer.setAttribute("class","spacer")
+
+    mainContainer.appendChild(backButton)
+    mainContainer.appendChild(spacer)
+    mainContainer.appendChild(submitButton)
+    
+    document.getElementById("form").appendChild(mainContainer)
+}
+
+main()//what even is his for?
