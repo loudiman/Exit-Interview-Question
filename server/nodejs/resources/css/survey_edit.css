@@ -1,68 +1,115 @@
+/* Reset default margin and padding */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body {
-    font-family: Arial, sans-serif;
-    line-height: 1.6;
-    background-color: #f9f9f9;
-    padding: 20px;
+/* Layout for container with sidebar and main content */
+.container {
+    display: flex;
 }
 
-h1 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    color: #333;
-}
-
+/* Main survey-edit styling */
 .survey-edit {
+    flex: 1;
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    max-width: 600px;
-    margin: 0 auto;
+    padding: 40px;
 }
 
-.survey-edit label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-    color: #555;
-}
-
-.survey-edit input[type="text"],
-.survey-edit input[type="date"],
-.survey-edit select,
-.survey-edit textarea {
-    width: 100%;
+/* Survey title styling */
+#surveyTitle {
+    border: 2px solid black;
     padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
     border-radius: 5px;
-    font-size: 14px;
+    background-color: white;
+    cursor: text;
+    margin-bottom: 20px;
 }
 
-.survey-edit textarea {
-    height: 100px;
-    resize: none;
-}
-
-.survey-edit button {
-    background-color: #007BFF;
-    color: white;
+#surveyTitle[contenteditable="true"]:focus {
+    outline: none;
     border: none;
-    padding: 10px 20px;
+    text-decoration: underline;
+}
+
+#surveyTitle::selection {
+    background-color: #223C6B;
+    color: white;
+    text-decoration: underline;
+}
+
+/* Question container and individual question styling */
+.questions-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.question-item {
+    display: flex;
+    flex-direction: column;
+    background-color: #f1f1f1;
+    padding: 10px;
+    border-radius: 5px;
+    border: 2px solid black;
+}
+
+.question-item h3 {
+    margin: 0;
+    font-size: 1.1em;
+    flex-basis: 40%;
+    cursor: text;
+}
+
+.question-item ul,
+.question-item p {
+    flex: 1;
+    margin: 0;
+}
+
+/* Styling the dropdown menu */
+#questionType {
+    width: 200px; /* Set width of dropdown */
+    padding: 10px;
+    font-size: 1em;
+    color: #333;
+    background-color: #f9f9f9;
+    border: 2px solid black;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.3s ease;
+    appearance: none; /* Remove default arrow for customization */
+    margin-right: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+/* Dropdown hover and focus states */
+#questionType:hover {
+    background-color: #e1e1e1;
+}
+
+#questionType:focus {
+    outline: none;
+    border-color: black;
+    background-color: #ffffff;
+}
+
+/* Button styling */
+.survey-edit button {
+    background-color: #223C6B;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    margin-top: 10px;
 }
 
 .survey-edit button:hover {
-    background-color: #0056b3;
+    background-color: #223C6B;
 }
 
 .reset-btn {
@@ -82,6 +129,7 @@ h1 {
     background-color: #cc0000;
 }
 
+/* Alert styles */
 .alert {
     margin-bottom: 15px;
     padding: 10px;
@@ -99,6 +147,7 @@ h1 {
     color: #155724;
 }
 
+/* Media query for mobile responsiveness */
 @media (max-width: 768px) {
     .survey-edit {
         padding: 15px;
