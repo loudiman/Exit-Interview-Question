@@ -107,9 +107,18 @@ h2, p, a {
 
 .option-button {
     display: inline-block;
-    margin-right: 10px;
     padding: 8px 12px;
-    background-color: #1a73e8;
+    background-color: #223C6B;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.option-button-other {
+    display: inline-block;
+    padding: 8px 12px;
+    background-color: #223C6B;
     color: white;
     border: none;
     border-radius: 5px;
@@ -157,7 +166,16 @@ h2, p, a {
     display: flex;
     align-items: center;
     margin-bottom: 10px;
-    width: 100%;
+    gap: 10px;
+    width: 50%;
+}
+
+.option-container input[type="text"] {
+    flex-grow: 1;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
 }
 
 .option-input {
@@ -169,15 +187,18 @@ h2, p, a {
 }
 
 .remove-button {
-    position: inherit;
-    background-color: #e74c3c;
+    background-color: #223C6B;
     color: white;
     border: none;
     border-radius: 5px;
-    padding: 10px;
+    padding: 8px 12px;
     cursor: pointer;
-    width: 30%;
-    height: 10%;
+    text-align: center;
+    height:auto;
+    width: 150px;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 8px;
 }
 
 .remove-button:hover {
@@ -227,28 +248,6 @@ h2, p, a {
     padding: 8px;
     border-radius: 5px;
     border: 1px solid #ccc;
-}
-
-.option-container {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-    width: 100%;
-}
-
-.remove-button {
-    background-color: #e74c3c;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 8px 12px;
-    cursor: pointer;
-    margin-left: 10px;
-    width: 10%;
-}
-
-.remove-button:hover {
-    background-color: #c0392b;
 }
 
 .rating-container {

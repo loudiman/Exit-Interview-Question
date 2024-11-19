@@ -42,7 +42,6 @@ window.onload = function() {
 function addQuestion(event) {
     const button = event.target;
     const questionContainer = button.closest(".question-container");
-    const questionsContainer = document.getElementById("questionsContainer");
 
     const newQuestionContainer = document.createElement("div");
     newQuestionContainer.classList.add("question-container");
@@ -62,8 +61,8 @@ function addQuestion(event) {
           <div class="options"></div>
           <div class="button-container" style="display: none;">
             <button class="option-button" onclick="addOption(this)">Add Option</button>
-            <span>or</span>
-            <button class="option-button" onclick="addOtherOption(this)">Add Other</button>
+            <span>or </span>
+            <button class="option-button-other" onclick="addOtherOption(this)">Add Other</button>
           </div>
         </div>
         <div class="side-buttons">
