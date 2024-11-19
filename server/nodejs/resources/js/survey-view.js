@@ -83,8 +83,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 <button data-id="${survey.survey_id}" class="view-btn">
                     <img src="../../resources/images/Eye.png" alt="View" />
                 </button>
-                <button data-id="${survey.survey_id}" class="delete-btn">
-                    <img src="../../resources/images/Delete.png" alt="Delete" />
+                <button data-id="${survey.survey_id}" class="details-btn">
+                    <img src="../../resources/images/Details.png" alt="Delete" />
                 </button>
             `;
             }
@@ -107,8 +107,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!button) return;
 
         const surveyId = button.dataset.id;
-        if (button.classList.contains('view-btn')) {
+        if (button.classList.contains('details-btn')) {
             showPreview(surveyId);
+        } else if (button.classList.contains('view-btn')) {
+            // TODO: Redirect to Viewing
+            window.location.href = `survey-edit.html?survey_id=${surveyId}`;
         } else if (button.classList.contains('edit-btn')) {
             // Redirect to survey edit page
             window.location.href = `survey-edit.html?survey_id=${surveyId}`;
