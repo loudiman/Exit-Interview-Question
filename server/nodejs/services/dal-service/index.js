@@ -1,5 +1,5 @@
 const express = require('express')
-const {UserDAL, SurveyDAL} = require('./dal/dal')
+const {UserDAL, SurveyDAL, ProgramDAL} = require(`./dal/`)
 const dalService = express.Router()
 
 dalService.use(express.json())
@@ -11,7 +11,7 @@ dalService.get('/',(req,res)=>{
 dalService.get('/users', async (req,res) => {
     try{
         console.log("processing")
-        const [rows] = await UserDAL.getAllUsers()
+        const rows = await UserDAL.getAllUsers()
         res.status(200).json(rows)
     }catch(error){
         console.log(error)

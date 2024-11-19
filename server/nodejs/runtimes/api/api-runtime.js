@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express();
 
-const dalRoutes = require('../services/dal-service')
+const dalRoutes = require(`../../services/dal-service`)
 
 app.use('/api', dalRoutes)
 

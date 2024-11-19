@@ -1,6 +1,7 @@
-const mainRuntime = require("./runtimes/main")
+const mainRuntime = require(`./runtimes/main/main-runtime`)
+const apiRuntime = require(`./runtimes/api/api-runtime`)
 
 
-mainRuntime.listen(80, () => {
-  console.log("server running")
+apiRuntime.listen(2020, () => {
+  console.log("Server is running")
 })
