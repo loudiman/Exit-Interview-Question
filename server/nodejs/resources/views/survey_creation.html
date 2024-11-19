@@ -13,18 +13,18 @@
 <!-- Navbar -->
 <div class="navbar">
   <button onclick="toggleSidebar()">☰</button>
-  <img src="../images/male_user.png" alt="Profile" width="30" height="30">
+  <img src="../../resources/images/male_user.png" alt="Profile" width="30" height="30">
 </div>
 
 <!-- Sidebar and main content container -->
 <div class="sidebar-container">
   <!-- Sidebar -->
   <nav class="sidebar" id="sidebar">
-    <a href="#"><img src="../images/home_icon.png" alt="Home Icon"> Home</a>
-    <a href="#" class="active"><img src="../images/create_icon.png" alt="Create Icon"> Create</a>
-    <a href="#"><img src="../images/view_icon.png" alt="View Icon"> View</a>
-    <a href="#"><img src="../images/respondents_icon.png" alt="Respondents Icon"> Respondents</a>
-    <a href="#"><img src="../images/male_user.png" alt="Profile Icon"> Profile</a>
+    <a href="#"><img src="../../resources/images/home_icon.png" alt="Home Icon"> Home</a>
+    <a href="#" class="active"><img src="../../resources/images/create_icon.png" alt="Create Icon"> Create</a>
+    <a href="#"><img src="../../resources/images/view_icon.png" alt="View Icon"> View</a>
+    <a href="#"><img src="../../resources/images/respondents_icon.png" alt="Respondents Icon"> Respondents</a>
+    <a href="#"><img src="../../resources/images/male_user.png" alt="Profile Icon"> Profile</a>
   </nav>
 
   <!-- Main content -->
@@ -38,6 +38,7 @@
 
       <!-- Questions Container -->
       <div id="questionsContainer">
+        <!-- Initial Question Container -->
         <div class="question-container">
           <div class="question-content">
             <div class="question-header">
@@ -46,6 +47,7 @@
                 <option value="multiple-choice">Multiple Choice</option>
                 <option value="essay">Essay</option>
                 <option value="rating">Rating</option>
+                <option value="true-false">True or False</option>
               </select>
             </div>
             <div class="options"></div>
@@ -56,7 +58,7 @@
             </div>
           </div>
 
-          <!-- Side buttons -->
+          <!-- Side buttons for add question, add photo, add video -->
           <div class="side-buttons">
             <button class="side-button" id="addQuestionButton">+</button>
           </div>
@@ -70,6 +72,6 @@
 
 <script src="../js/survey_creation_navbar.js"></script>
 <script src="../js/survey-creation-editable.js"></script>
-
+<script src="../js/survey-creation-ui.js"></script>
 </body>
 </html>
