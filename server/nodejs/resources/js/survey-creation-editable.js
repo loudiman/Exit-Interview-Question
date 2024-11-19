@@ -55,7 +55,6 @@ function addQuestion(event) {
               <option value="multiple-choice">Multiple Choice</option>
               <option value="essay">Essay</option>
               <option value="rating">Rating</option>
-              <option value="true-false">True or False</option>
             </select>
           </div>
           <div class="options"></div>
@@ -112,7 +111,8 @@ function updateQuestionContent(selectElement) {
     if (questionType === 'multiple-choice') {
         addOption(buttonContainer.querySelector(".option-button"));
     } else if (questionType === 'essay') {
-        optionsContainer.innerHTML = `<textarea placeholder="Your answer here..." rows="4" cols="50" disabled></textarea>`;
+        optionsContainer.innerHTML = `<textarea placeholder="Enter an answer here" rows="4" cols="50" disabled class="textarea"></textarea>`;
+
     } else if (questionType === 'rating') {
         const ratingContainer = document.createElement("div");
         ratingContainer.classList.add("rating-container");
@@ -145,7 +145,6 @@ function updateQuestionContent(selectElement) {
                 radio.name = "rating";
                 radio.value = i;
                 radio.style.marginRight = "5px";
-                radio.disabled = true;
 
                 label.appendChild(radio);
                 label.appendChild(document.createTextNode(i));
@@ -155,13 +154,6 @@ function updateQuestionContent(selectElement) {
 
         optionsContainer.appendChild(maxRatingSelect);
         optionsContainer.appendChild(ratingContainer);
-    } else if (questionType === 'true-false') {
-        optionsContainer.innerHTML = `
-          <div>
-            <input type="radio" name="trueFalse" value="true" disabled> True
-            <input type="radio" name="trueFalse" value="false" disabled> False
-          </div>
-        `;
     }
 }
 

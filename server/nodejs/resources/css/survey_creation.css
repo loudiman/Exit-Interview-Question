@@ -35,6 +35,8 @@ h2, p, a {
     font-family: "CustomFont", sans-serif;
 }
 
+
+
 .main-content {
     flex-grow: 1;
     padding: 20px;
@@ -47,6 +49,14 @@ h2, p, a {
 
 .main-content.full-width {
     width: 100%;
+}
+
+.survey-container {
+    background-color: #ffffff;
+    padding: 20px;
+    margin: 5px auto;
+    max-width: 90%;
+    font-family: "CustomFont", sans-serif;
 }
 
 .survey-title {
@@ -269,4 +279,52 @@ h2, p, a {
     border: 1px solid #ccc;
     border-radius: 5px;
     resize: none;
+}
+
+textarea {
+    width: 86%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+}
+
+.rating-container {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.max-rating-select {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    outline: none;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.rating-container label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 14px;
+    cursor: pointer;
+    width: 70px;
+    height: auto;
+}
+
+.rating-container input[type="radio"] {
+    accent-color: #6200ee;
+    width: 18px;
+    height: 18px;
+    margin: 5px 0;
+    cursor: pointer;
+}
+.rating-container .scale-text {
+    font-size: 14px;
+    color: #555;
+    margin: 0 10px;
 }
