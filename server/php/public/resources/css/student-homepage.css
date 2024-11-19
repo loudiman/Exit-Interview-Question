@@ -155,13 +155,28 @@ header {
     color: white;
 }
 
-.hide-button, .action-button {
+.hide-button, .action-link{
     background-color: #3F5989;
     color: #fff;
     border: none;
     padding: 8px 12px;
     cursor: pointer;
     border-radius: 5px;
+    text-decoration: none; 
+    font-size: 14px;
+    line-height: 1.5;
+    display: inline-block;
+    box-sizing: border-box;
+}
+
+.hide-button{
+    margin-right: 10px;
+}
+
+
+
+.action-link:hover, .hide-button:hover, .search-button:hover {
+    background-color: #2980b9;
 }
 
 .search-icon-img {

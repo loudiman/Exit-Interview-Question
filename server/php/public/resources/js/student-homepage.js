@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     let surveyData = [];
+
     // Fetch surveys data from the server
     async function fetchSurveys() {
         try {
@@ -11,7 +12,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         "responded": false,
                         "period-start": "2024-09-25",
                         "period-end": "2024-09-26"
-
                     },
                     {
                         "survey-id": 2,
@@ -60,11 +60,23 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
                 <div class="survey-actions">
                     <button class="hide-button">Hide Survey</button>
-                    <button class="action-button">
+                    <a href="/student/survey?id=${survey['survey-id']}" class="action-link">
                         ${survey.responded ? 'Check Details 📄' : 'Take The Survey ✎'}
-                    </button>
+                    </a>
                 </div>
             `;
+
+            // Handle anchor tag click to get data from db
+            surveyElement.querySelector('a').addEventListener('click', function(event) {
+                event.preventDefault();
+                fetch(`/student/survey?id=${survey['survey-id']}`)
+                    .then(response => response.json())
+                    .then(surveyData => {
+                        sessionStorage.setItem('questionaireData', JSON.stringify(surveyData));
+                        window.location.href = `/student/survey/questionaire?id=${surveyData.question_id}`;
+                    })
+                    .catch(error => console.error("Fetch error: ", error));
+            });
 
             // Hide button functionality
             surveyElement.querySelector('.hide-button').addEventListener('click', () => {
@@ -84,6 +96,17 @@ document.addEventListener('DOMContentLoaded', function () {
         renderSurveys(filteredSurveys);
     });
 
+    // Add "Enter" key listener for the search input
+    document.getElementById('search-input').addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {  // Check if the key pressed is "Enter"
+            const searchQuery = document.getElementById('search-input').value.toLowerCase();
+            const filteredSurveys = surveyData.filter(survey =>
+                survey['survey-title'].toLowerCase().includes(searchQuery)
+            );
+            renderSurveys(filteredSurveys);
+        }
+    });
+
     document.getElementById('survey-filter').addEventListener('change', (event) => {
         const filterType = event.target.value;
         let filteredSurveys = surveyData;
@@ -92,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function () {
         } else if (filterType === 'missed') {
             filteredSurveys = surveyData.filter(survey => !survey.responded && new Date() > new Date(survey['period-end']));
         } else if (filterType === 'hidden') {
-            filteredSurveys = []; //subject for change
+            filteredSurveys = []; // subject for change
         }
         renderSurveys(filteredSurveys);
     });
