@@ -5,7 +5,6 @@ class UserDAL {
     static async getAllUsers(){
         try{
             const [rows] = await pool.query("SELECT username, last_name, given_name, type FROM user")
-            
             return rows;
         }catch(error){
             throw new Error('Error fetching users '+error.message)
@@ -28,7 +27,7 @@ class UserDAL {
     //Will return a user based on username
     static async getUserByUsername(username){
         try{
-            const [rows] = await pool.query("SELECT username, last_name, given_name, type FROM user WHERE ?",[username])
+            const [rows] = await pool.query("SELECT username, last_name, given_name, type FROM user WHERE username = ?",[username])
             return rows
         }catch(error){
             throw new Error("Error fetching user: "+username+" with error:"+error.message)

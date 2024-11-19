@@ -10,14 +10,15 @@ surveyRoutes.get("/questions/:survey_id",async (req,res)=>{
     const{survey_id} = req.params
     console.log(survey_id)
     try{
-        const rows = SurveyDAL.getQuestions(survey_id)
-        res.status.json(rows)
+        const rows = await SurveyDAL.getQuestions(survey_id)
+        console.log(rows)
+        res.status(200).json({"questions":rows})
     }catch(error){
         res.status(400).json("server error")
     }
 })
 
-surveyRoutes.get('/surveys/:username', async(req, res)=>{
+surveyRoutes.get('/survey/:username', async(req, res)=>{
     const {username} = req.params
     try{
         const rows = await SurveyDAL.getAllPublishedSurvey(username)
@@ -40,5 +41,7 @@ surveyRoutes.get('/surveys/:username', async(req, res)=>{
         res.status(500).json({error:'something went wrong'})
     }
 })
+
+surveyRoutes.get('/survey')
 
 module.exports = surveyRoutes

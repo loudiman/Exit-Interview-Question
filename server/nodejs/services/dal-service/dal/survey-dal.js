@@ -13,12 +13,14 @@ class SurveyDAL{
     }
 
     static async getQuestions(surveyID){
-        var query = "SELECT q.question_id, q.question_json, q.question_type FROM question AS q LEFT JOIN questionaire"+
-                    "ON q.question_id = questionaire.question_id"+
+        console.log(surveyID)
+        var query = "SELECT q.question_id, q.question_json, q.question_type FROM question AS q LEFT JOIN questionaire "+
+                    "ON q.question_id = questionaire.question_id "+
                     "WHERE questionaire.survey_id = ?"
 
         try{
             const[result] = await pool.query(query,[surveyID])
+            console.log(result)
             return result
         }catch(error){
             throw new Error(error.message)
