@@ -19,14 +19,32 @@
     padding: 40px;
 }
 
+/* Survey header styling */
+.survey-header {
+    display: flex;
+    align-items: center; /* Align items vertically */
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+/* Add Question Button and Dropdown group */
+.survey-title-container {
+    display: flex;
+    flex: 1;
+    gap: 10px; /* Space between elements */
+    align-items: center; /* Vertical alignment */
+}
+
 /* Survey title styling */
 #surveyTitle {
-    border: 2px solid black;
+    flex: 1;
+    font-size: 1.5em;
+    border: 1px solid black;
     padding: 10px;
     border-radius: 5px;
     background-color: white;
     cursor: text;
-    margin-bottom: 20px;
 }
 
 #surveyTitle[contenteditable="true"]:focus {
@@ -41,110 +59,176 @@
     text-decoration: underline;
 }
 
-/* Question container and individual question styling */
+#addQuestionBtn, #questionType {
+    flex-shrink: 0; /* Prevent shrinking of these elements */
+}
+
+/* Add Question Button */
+#addQuestionBtn {
+    background-color: #223C6B;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 18px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+#addQuestionBtn:hover {
+    background-color: #3b60a0;
+}
+
+/* Dropdown styling */
+#questionType {
+    width: auto;
+    align-self: flex-start;
+    width: 200px;
+    padding: 10px;
+    font-size: 22px;
+    color: #333;
+    background-color: #f9f9f9;
+    border: 1px solid black;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+}
+
+/* Question container styling */
 .questions-container {
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-.question-item {
+/* Styling for question cards */
+.question-card {
     display: flex;
     flex-direction: column;
-    background-color: #f1f1f1;
-    padding: 10px;
-    border-radius: 5px;
-    border: 2px solid black;
+    gap: 10px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border: 1px solid black;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.question-item h3 {
-    margin: 0;
-    font-size: 1.1em;
-    flex-basis: 40%;
+/* Header inside question cards */
+.question-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.question-header h3 {
+    font-size: 1.2em;
+    font-weight: bold;
     cursor: text;
 }
 
-.question-item ul,
-.question-item p {
-    flex: 1;
-    margin: 0;
+/* Action buttons in question cards */
+.action-buttons {
+    display: flex;
+    gap: 10px;
 }
 
-/* Styling the dropdown menu */
-#questionType {
-    width: 200px; /* Set width of dropdown */
-    padding: 10px;
-    font-size: 1em;
-    color: #333;
-    background-color: #f9f9f9;
-    border: 2px solid black;
+.action-buttons select {
+    padding: 8px 12px;
+    border: 1px solid black;
     border-radius: 5px;
+    font-size: 1em;
     cursor: pointer;
-    appearance: none; /* Remove default arrow for customization */
-    margin-right: 10px;
-    margin-bottom: 10px;
+    background-color: white;
     text-align: center;
 }
 
-/* Dropdown hover and focus states */
-#questionType:hover {
-    background-color: #e1e1e1;
-}
-
-#questionType:focus {
-    outline: none;
-    border-color: black;
-    background-color: #ffffff;
-}
-
-/* Button styling */
-.survey-edit button {
-    background-color: #223C6B;
-    color: white;
+.action-buttons button {
+    padding: 8px 12px;
+    font-size: 1em;
     border: none;
     border-radius: 5px;
-    padding: 10px;
     cursor: pointer;
-    margin-top: 10px;
-}
-
-.survey-edit button:hover {
+    color: white;
     background-color: #223C6B;
+    transition: background-color 0.2s;
 }
 
-.reset-btn {
-    background-color: #b0b0b0;
-    margin-right: 10px;
+.action-buttons button:hover {
+    background-color: #3b60a0;
 }
 
-.reset-btn:hover {
-    background-color: #8c8c8c;
+.btn-remove {
+    background-color: #ff4d4d;
 }
 
-.cancel-btn {
-    background-color: red;
+.btn-remove:hover {
+    background-color: #e63939;
 }
 
-.cancel-btn:hover {
-    background-color: #cc0000;
+/* Styling for question options (multiple choice) */
+.options-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
-/* Alert styles */
-.alert {
-    margin-bottom: 15px;
-    padding: 10px;
+.options-list li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.options-list input[type="text"] {
+    flex: 1;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
     border-radius: 5px;
-    font-size: 14px;
 }
 
-.alert-error {
-    background-color: #ffcccc;
-    color: #cc0000;
+.btn-add-option {
+    color: #fff;
+    padding: 10px;
+    align-self: flex-start;
+    border-radius: 5px;
+    background-color: #223C6B;
+    border: none;
 }
 
-.alert-success {
-    background-color: #d4edda;
-    color: #155724;
+.btn-add-option:hover {
+    background-color: #3b60a0;
+}
+
+.btn-remove-option {
+    color: #fff;
+    padding: 10px;
+    align-self: flex-start;
+    border-radius: 5px;
+    background-color: #223C6B;
+    border: none;
+}
+
+.btn-remove-option:hover {
+    background-color: #3b60a0;
+}
+
+/* Rating input styling */
+.rating-scale {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Essay textarea styling */
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
 }
 
 /* Media query for mobile responsiveness */
@@ -153,8 +237,21 @@
         padding: 15px;
     }
 
-    .survey-edit button {
+    .survey-title-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .question-card {
+        padding: 15px;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+    }
+
+    .action-buttons select,
+    .action-buttons button {
         width: 100%;
-        margin-bottom: 10px;
     }
 }
