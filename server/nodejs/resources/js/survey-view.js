@@ -111,7 +111,6 @@ document.addEventListener('DOMContentLoaded', () => {
             showPreview(surveyId);
         } else if (button.classList.contains('view-btn')) {
             // TODO: Redirect to Viewing
-            window.location.href = `survey-edit.html?survey_id=${surveyId}`;
         } else if (button.classList.contains('edit-btn')) {
             // Redirect to survey edit page
             window.location.href = `survey-edit.html?survey_id=${surveyId}`;
