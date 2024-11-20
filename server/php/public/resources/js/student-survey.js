@@ -85,13 +85,17 @@ function generateQuestionDoms(){
     titleLabel.innerText = parsedQuestionnaires.survey_title;
     titleContainer.appendChild(titleLabel);
 
-    var questionNo = 1;
+    let questionNo = 1;
 
     // Populate survey questions dynamically based on the stored data
     parsedQuestionnaires.questions.forEach((question) => {
         switch (question.question_type) {
             case 'multiple_choice':
                 generateMultipleChoice(questionNo, question, question.question_id);
+                questionNo++;
+                break;
+            case 'checkbox':
+                generateCheckboxQuestion(questionNo, question, question.question_id);
                 questionNo++;
                 break;
             case 'rating':
@@ -113,41 +117,99 @@ function generateQuestionDoms(){
     generateButtonNav();
 }
 
-// Function to generate HTML for multiple choice questions
-function generateMultipleChoice(questionNo,questionData, id) {
-    var question = questionData.question_text
-    var questionId = id
+//Function to generate HTML for multiple choice type questions
+function generateMultipleChoice(questionNo, questionData, id) {
+    let question = questionData.question_text
+    let questionId = id
 
-    var form = document.getElementById('form')
-    
+    let form = document.getElementById('form')
+
     // Create the base nodes to be populated
-    var questionDiv = document.createElement("div")
-    questionDiv.setAttribute("class","question")
+    let questionDiv = document.createElement("div")
+    questionDiv.setAttribute("class", "question")
+    questionDiv.setAttribute("data-question-type", "multiple_choice")
 
-    var optionsDiv = document.createElement("div")
+    let optionsDiv = document.createElement("div")
     optionsDiv.setAttribute("class", "options")
 
     // Create the nodes with content and proper css attributes
-    var questionHeader = document.createElement("div")
-    questionHeader.setAttribute("class","question-header")
-    
+    let questionHeader = document.createElement("div")
+    questionHeader.setAttribute("class", "question-header")
+
     //This generates the node of the question header
-    var questionText = document.createElement("p")
+    let questionText = document.createElement("p")
     questionText.setAttribute("class", "bold")
-    questionText.innerText = questionNo+". "+question
+    questionText.innerText = questionNo + ". " + question
     questionHeader.appendChild(questionText)
 
     // For each option in the question data create dom and add to options div
     //      This generates the child nodes of the question div
-    questionData.options.forEach((option) =>{
+    questionData.options.forEach((option) => {
         let optionDiv = document.createElement("div")
-        optionDiv.setAttribute("class","option")
+        optionDiv.setAttribute("class", "option")
+
+        let input = document.createElement("input")
+        input.setAttribute("type", "radio")
+        input.setAttribute("id", option)
+        input.setAttribute("name", questionId)
+        input.setAttribute("value", option)
+        input.setAttribute("class", "custom-radio")
+
+        let label = document.createElement("label")
+        label.setAttribute("for", option)
+        label.innerText = option
+
+        optionDiv.appendChild(input)
+        optionDiv.appendChild(label)
+
+        optionsDiv.appendChild(optionDiv)
+    })
+
+    //Append the child nodes of the question div to itself
+    questionDiv.appendChild(questionHeader)
+    questionDiv.appendChild(optionsDiv)
+
+    //Append the question div to the form element
+    form.appendChild(questionDiv)
+}
+
+// Function to generate HTML checkbox questions
+function generateCheckboxQuestion(questionNo, questionData, id) {
+    let question = questionData.question_text
+    let questionId = id
+
+    let form = document.getElementById('form')
+
+    // Create the base nodes to be populated
+    let questionDiv = document.createElement("div")
+    questionDiv.setAttribute("class", "question")
+    questionDiv.setAttribute("data-question-type", "checkbox")
+
+    let optionsDiv = document.createElement("div")
+    optionsDiv.setAttribute("class", "options")
+
+    // Create the nodes with content and proper css attributes
+    let questionHeader = document.createElement("div")
+    questionHeader.setAttribute("class", "question-header")
+
+    //This generates the node of the question header
+    let questionText = document.createElement("p")
+    questionText.setAttribute("class", "bold")
+    questionText.innerText = questionNo + ". " + question
+    questionHeader.appendChild(questionText)
+
+    // For each option in the question data create dom and add to options div
+    //      This generates the child nodes of the question div
+    questionData.options.forEach((option) => {
+        let optionDiv = document.createElement("div")
+        optionDiv.setAttribute("class", "option")
 
         let input = document.createElement("input")
         input.setAttribute("type", "checkbox")
-        input.setAttribute("id",option)
-        input.setAttribute("name",questionId)
-        input.setAttribute("value",option)
+        input.setAttribute("id", option)
+        input.setAttribute("name", questionId)
+        input.setAttribute("value", option)
+        input.setAttribute("class", "custom-checkbox")
 
         let label = document.createElement("label")
         label.setAttribute("for", option)
@@ -166,28 +228,96 @@ function generateMultipleChoice(questionNo,questionData, id) {
     form.appendChild(questionDiv)
 }
 
-function generateRatingQuestion(questionNo, questionData, id) {
-    var question = questionData.question_text;
-    var scale = questionData.scale; // Get the maximum rating scale (e.g., 5)
-    var questionId = id;
+//Function to generate HTML for Essay type questions
+function generateEssayQuestion(questionNo, questionData, id) {
+    let question = questionData.question_text;
+    let questionId = id;
+    let maxLength = 500; // Set the character limit
 
-    var form = document.getElementById('form');
+    let form = document.getElementById('form');
 
     // Create the base nodes to be populated
-    var questionDiv = document.createElement("div");
+    let questionDiv = document.createElement("div");
     questionDiv.setAttribute("class", "question");
+    questionDiv.setAttribute("data-question-type", "essay")
 
-    var ratingDiv = document.createElement("div");
+    // Create a container for the question header
+    let questionHeader = document.createElement("div");
+    questionHeader.setAttribute("class", "question-header");
+
+    // Create the question text node
+    let questionText = document.createElement("p");
+    questionText.setAttribute("class", "bold");
+    questionText.innerText = questionNo + ". " + question;
+    questionHeader.appendChild(questionText);
+
+    // Create the textarea container
+    let textareaDiv = document.createElement("div");
+    textareaDiv.setAttribute("class", "textarea-container");
+    textareaDiv.style.position = "relative"; // Position relative for counter placement
+
+    // Create the input area itself
+    let textarea = document.createElement("textarea");
+    textarea.setAttribute("id", id);
+    textarea.setAttribute("name", id);
+    textarea.setAttribute("rows", "3");
+    textarea.setAttribute("cols", "30");
+    textarea.setAttribute("placeholder", "Type your answer here...");
+    textarea.setAttribute("maxlength", maxLength);
+
+    // Create the character counter
+    let charCounter = document.createElement("div");
+    charCounter.setAttribute("class", "char-counter");
+    charCounter.innerText = `0/${maxLength} characters used`;
+
+    // Event listener to enforce character limit and update counter
+    textarea.addEventListener("input", function () {
+        const currentLength = textarea.value.length;
+
+        if (currentLength > maxLength) {
+            textarea.value = textarea.value.substring(0, maxLength); // Trim to max length
+        }
+
+        // Update the character counter
+        charCounter.innerText = `${textarea.value.length}/${maxLength} characters used`;
+    });
+
+    // Append textarea and counter to the textarea container
+    textareaDiv.appendChild(textarea);
+    textareaDiv.appendChild(charCounter);
+
+    // Append question header and textarea container to the question div
+    questionDiv.appendChild(questionHeader);
+    questionDiv.appendChild(textareaDiv);
+
+    // Append the question div to the form element
+    form.appendChild(questionDiv);
+}
+
+//Function to generate HTML for rating type questions
+function generateRatingQuestion(questionNo, questionData, id) {
+    let question = questionData.question_text;
+    let scale = questionData.scale; // Get the maximum rating scale (e.g., 5)
+    let questionId = id;
+
+    let form = document.getElementById('form');
+
+    // Create the base nodes to be populated
+    let questionDiv = document.createElement("div");
+    questionDiv.setAttribute("class", "question");
+    questionDiv.setAttribute("data-question-type", "rating")
+
+    let ratingDiv = document.createElement("div");
     ratingDiv.setAttribute("class", "rating");
 
     // Create the nodes with content and proper CSS attributes
-    var questionHeader = document.createElement("div");
+    let questionHeader = document.createElement("div");
     questionHeader.setAttribute("class", "question-header");
 
     // Generate the question header
-    var questionText = document.createElement("p");
+    let questionText = document.createElement("p");
     questionText.setAttribute("class", "bold");
-    questionText.innerText = questionNo + ". " + question + " (Scale from 1 to " + questionData.scale+")";
+    questionText.innerText = questionNo + ". " + "On a Scale of 1 to " + questionData.scale + ", " + question;
     questionHeader.appendChild(questionText);
 
     // For each rating option from 1 up to the scale, create a radio button and label
@@ -198,7 +328,7 @@ function generateRatingQuestion(questionNo, questionData, id) {
         let input = document.createElement("input");
         input.setAttribute("type", "radio");
         input.setAttribute("id", `rating-${i}`);
-        input.setAttribute("name", `questionID-${questionId}`);
+        input.setAttribute("name", questionId);
         input.setAttribute("value", i); // Sets the value to the rating number chosen
 
         let label = document.createElement("label");
@@ -234,132 +364,32 @@ function generateRatingQuestion(questionNo, questionData, id) {
     // Append the child nodes of the question div
     questionDiv.appendChild(questionHeader);
     questionDiv.appendChild(ratingDiv);
-
-    // Append the question div to the form element
-    form.appendChild(questionDiv);
-}
-
-//Keeping the code below in case of change of mind
-// function generateRatingQuestion(questionNo, questionData, id) {
-//     const question = questionData.question_text;
-//     const scale = questionData.scale; // Get the maximum rating scale (e.g., 5)
-//     const questionId = id;
-//
-//     const form = document.getElementById('form');
-//
-//     // Create the base nodes to be populated
-//     const questionDiv = document.createElement("div");
-//     questionDiv.setAttribute("class", "question");
-//
-//     const questionHeader = document.createElement("div");
-//     questionHeader.setAttribute("class", "question-header");
-//
-//     // Generate the question header
-//     const questionText = document.createElement("p");
-//     questionText.setAttribute("class", "bold");
-//     questionText.innerText = questionNo + ". " + question;
-//     questionHeader.appendChild(questionText);
-//
-//     // Slider container
-//     const sliderContainer = document.createElement("div");
-//     sliderContainer.setAttribute("class", "slider-container");
-//
-//     // Create the slider input element
-//     const slider = document.createElement("input");
-//     slider.setAttribute("type", "range");
-//     slider.setAttribute("id", `slider-${questionId}`);
-//     slider.setAttribute("min", "1");
-//     slider.setAttribute("max", scale.toString());
-//     slider.setAttribute("value", Math.ceil(scale / 2).toString()); // Default to middle of scale
-//
-//     // Create the slider value display
-//     const sliderValueDisplay = document.createElement("span");
-//     sliderValueDisplay.setAttribute("id", `slider-value-${questionId}`);
-//     sliderValueDisplay.classList.add("slider-value");
-//     sliderValueDisplay.textContent = slider.value;
-//
-//     // Event listener to update display as slider moves
-//     slider.addEventListener("input", function () {
-//         const value = slider.value;
-//         sliderValueDisplay.textContent = value;
-//     });
-//
-//     // Append elements to their respective containers
-//     sliderContainer.appendChild(slider);
-//     sliderContainer.appendChild(sliderValueDisplay);
-//
-//     // Append all to question div
-//     questionDiv.appendChild(questionHeader);
-//     questionDiv.appendChild(sliderContainer);
-//
-//     // Append the question div to the form element
-//     form.appendChild(questionDiv);
-// }
-
-function generateEssayQuestion(questionNo, questionData, id) {
-    var question = questionData.question_text;
-    var questionId = id;
-
-    var form = document.getElementById('form');
-
-    // Create the base nodes to be populated
-    var questionDiv = document.createElement("div");
-    questionDiv.setAttribute("class", "question");
-
-    // Create a container for the question header
-    var questionHeader = document.createElement("div");
-    questionHeader.setAttribute("class", "question-header");
-
-    // Create the question text node
-    var questionText = document.createElement("p");
-    questionText.setAttribute("class", "bold");
-    questionText.innerText = questionNo + ". " + question;
-    questionHeader.appendChild(questionText);
-
-    // Create the textarea input for essay-type question
-    var textareaDiv = document.createElement("div");
-    textareaDiv.setAttribute("class", "textarea-container");
-
-    var textarea = document.createElement("textarea");
-    textarea.setAttribute("id", id);  // Use questionId as textarea id
-    textarea.setAttribute("name", id);  // Set name to questionId
-    textarea.setAttribute("rows", "4");  // Default rows for the textarea
-    textarea.setAttribute("cols", "50");  // Default columns for the textarea
-    textarea.setAttribute("placeholder", "Type your answer here...");
-
-    // Append textarea to the textarea container
-    textareaDiv.appendChild(textarea);
-
-    // Append question header and textarea container to the question div
-    questionDiv.appendChild(questionHeader);
-    questionDiv.appendChild(textareaDiv);
-
     // Append the question div to the form element
     form.appendChild(questionDiv);
 }
 
 function generateButtonNav(){
     console.log("generating nav buttons")
-    var mainContainer = document.createElement("div")
-    mainContainer.setAttribute("class","flex-container h-align-center row")
-    mainContainer.setAttribute("id","button-container")
+    let mainContainer = document.createElement("div")
+    mainContainer.setAttribute("class", "flex-container h-align-center row")
+    mainContainer.setAttribute("id", "button-container")
 
-    var backButton = document.createElement("button")
-    backButton.setAttribute("class","btn-primary-m")
+    let backButton = document.createElement("button")
+    backButton.setAttribute("class", "btn-primary-m")
     backButton.innerText = "Back"
 
-    var submitButton = document.createElement("button")
-    submitButton.setAttribute("class","btn-primary-m")
-    submitButton.innerText = "Submit"
+    let submitButton = document.createElement("button");
+    submitButton.setAttribute("class", "btn-primary-m");
+    submitButton.setAttribute("id", "submit-button");
+    submitButton.innerText = "Submit";
 
-    var spacer = document.createElement("div")
-    spacer.setAttribute("class","spacer")
+    let spacer = document.createElement("div")
+    spacer.setAttribute("class", "spacer")
 
     mainContainer.appendChild(backButton)
     mainContainer.appendChild(spacer)
     mainContainer.appendChild(submitButton)
-    
     document.getElementById("form").appendChild(mainContainer)
 }
 
-main()//what even is his for?
+main()
