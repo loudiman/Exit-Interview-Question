@@ -39,6 +39,10 @@
 
     <!-- Main Content -->
     <main class="content" id="mainContent">
+        <!-- Card View Container -->
+        <section class="card-dashboard"></section>
+
+        <!-- Search Bar -->
         <section class="search-bar">
             <h1>Recent Surveys</h1>
             <label for="searchInput"></label><input id="searchInput" placeholder="Search" type="text">
@@ -46,7 +50,35 @@
                 <img src="../../resources/images/Search.png" alt="Search Icon">
             </button>
         </section>
+
+        <!-- Survey Labels -->
+        <section class="survey-label">
+            <div class="label-title">Survey Title</div>
+            <div class="label-respondents">Respondents</div>
+            <div class="label-status">Status</div>
+        </section>
+
+        <!-- Main Survey View -->
+        <section class="survey-view">
+            <div id="unpublishedSurveys" class="survey-list"></div>
+            <div id="publishedSurveys" class="survey-list"></div>
+        </section>
     </main>
+
+    <!-- Modal for Survey Preview -->
+    <dialog aria-describedby="previewModalDesc" aria-labelledby="previewModalTitle" class="modal" id="previewModal">
+        <div class="modal-content">
+            <h3 id="previewModalTitle">Survey Details</h3>
+            <div id="previewModalDesc">
+                <p id="previewSurveyTitle"></p>
+                <p><strong>Status:</strong> <span id="previewSurveyStatus"></span></p>
+                <p><strong>Program ID:</strong> <span id="previewProgramId"></span></p>
+                <p><strong>Period Start:</strong> <span id="previewPeriodStart"></span></p>
+                <p><strong>Period End:</strong> <span id="previewPeriodEnd"></span></p>
+            </div>
+            <button aria-label="Close Preview" class="close-btn" id="closePreview">Close</button>
+        </div>
+    </dialog>
 </div>
 </body>
 </html>
