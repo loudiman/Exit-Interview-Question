@@ -53,6 +53,7 @@ function addQuestion(event) {
             <input type="text" placeholder="Untitled Question">
             <select onchange="updateQuestionContent(this)">
               <option value="multiple-choice">Multiple Choice</option>
+               <option value="checkbox">Checkbox</option>
               <option value="essay">Essay</option>
               <option value="rating">Rating</option>
             </select>
@@ -106,11 +107,14 @@ function updateQuestionContent(selectElement) {
     const questionType = selectElement.value;
 
     optionsContainer.innerHTML = '';
-    buttonContainer.style.display = questionType === 'multiple-choice' ? 'block' : 'none';
+    buttonContainer.style.display = questionType === 'multiple-choice' || `checkbox` ? 'block' : 'none';
 
     if (questionType === 'multiple-choice') {
         addOption(buttonContainer.querySelector(".option-button"));
-    } else if (questionType === 'essay') {
+    } else if(questionType === `checkbox`){
+        addOption(buttonContainer.querySelector(".option-button"));
+    }
+    else if (questionType === 'essay') {
         optionsContainer.innerHTML = `<textarea placeholder="Enter an answer here" rows="4" cols="50" disabled class="textarea"></textarea>`;
 
     } else if (questionType === 'rating') {

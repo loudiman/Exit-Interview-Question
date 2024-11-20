@@ -5,7 +5,11 @@
     box-sizing: border-box;
 }
 
-/* Main body layout */
+html, body {
+    height: 100%;
+    overflow: hidden;
+}
+
 body {
     display: flex;
     flex-direction: column;
@@ -19,13 +23,9 @@ body {
 /* Main content area */
 .content {
     width: 100%;
-    padding: 20px;
+    padding: 50px;
     height: 100%;
     overflow-y: auto;
-}
-
-.sidebar {
-    flex: 0 0 250px;
 }
 
 /* Search Bar Styles */
