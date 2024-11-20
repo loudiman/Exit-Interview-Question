@@ -10,10 +10,21 @@ WHERE questionaire.survey_id = :id;', [
     'id' => $_GET['id']
 ])->get();
 
+// Decode question_json field for each question
+foreach ($survey as &$question) {
+    $question['question_json'] = json_decode($question['question_json'], true);
+}
+
 $result = [
     "questions" => $survey
 ];
 
-// dd($survey);
+// Encode to JSON and check for errors
+$jsonResult = json_encode($result);
 
-echo json_encode($result);
+if (json_last_error() !== JSON_ERROR_NONE) {
+    echo "JSON Encoding Error: " . json_last_error_msg();
+    exit;
+}
+
+echo $jsonResult;

@@ -1,185 +1,166 @@
-const surveyData = {
-    "questions": [
-      {
-        "question_json": {
-          "question": "Which network topology is most resilient to failures?",
-          "options": ["Star", "Ring", "Mesh", "Bus"]
-        },
-        "question_type": "multiple_choice"
-      },
-      {
-        "question_json": {
-          "question": "Rate your experience with our services.",
-          "options": []
-        },
-        "question_type": "rating"
-      },
-      {
-        "question_json": {
-          "question": "Please provide additional feedback.",
-          "options": []
-        },
-        "question_type": "text_input"
-      }
-    ]
-  };
+// const surveyData = {
+//     "questions": [
+//       {
+//         "question_json": {
+//           "question": "Which network topology is most resilient to failures?",
+//           "options": ["Star", "Ring", "Mesh", "Bus"]
+//         },
+//         "question_type": "multiple_choice"
+//       },
+//       {
+//         "question_json": {
+//           "question": "Rate your experience with our services.",
+//           "options": []
+//         },
+//         "question_type": "rating"
+//       },
+//       {
+//         "question_json": {
+//           "question": "Please provide additional feedback.",
+//           "options": []
+//         },
+//         "question_type": "text_input"
+//       }
+//     ]
+//   };
   
-sessionStorage.setItem('questionnaireData', JSON.stringify(surveyData));
+// sessionStorage.setItem('questionnaireData', JSON.stringify(surveyData));
 
-document.addEventListener("DOMContentLoaded", function() {
-    // Retrieve survey data from sessionStorage
+async function main(){
+    getQuestions(1)// change the parameter depending on the query
+}
+
+async function getQuestions(id){
+    var response = await fetch("http://localhost:8888/student/survey?id="+id)
+    var data = await response.json()
+    console.log(data)
+    await sessionStorage.setItem('questionnaireData', JSON.stringify(data))
+    generateQuestionDoms()
+}
+
+function generateQuestionDoms(){
     const storedSurveyData = sessionStorage.getItem('questionnaireData');
 
-    if (storedSurveyData) {
-        console.log("Using survey data from sessionStorage");
-
-        // Parse the stored data
-        const data = JSON.parse(storedSurveyData);
-
-        // Check if data.questions exists and is an array
-        if (data.questions && Array.isArray(data.questions)) {
-            // Populate survey questions dynamically based on the stored data
-            data.questions.forEach((question, index) => {
-                let questionHTML = '';
-
-                switch (question.question_type) {
-                    case 'multiple_choice':
-                        questionHTML = generateMultipleChoice(question.question_json);
-                        break;
-                    case 'rating':
-                        questionHTML = generateRating(question.question_json);
-                        break;
-                    case 'text_input':
-                        questionHTML = generateTextInput(question.question_json);
-                        break;
-                    default:
-                        console.warn("Unknown question type:", question.question_type);
-                        break;
-                }
-
-                // Insert the generated question HTML into the corresponding div
-                const surveyDiv = document.querySelectorAll('.survey-template')[index];
-                if (surveyDiv) {
-                    surveyDiv.innerHTML = questionHTML;
-                } else {
-                    console.error(`Survey div not found for question index: ${index}`);
-                }
-            });
-
-            // Bind event listeners only after elements are dynamically created
-            bindDynamicEventListeners();
-        } else {
-            console.error("Data does not contain a valid 'questions' array.");
-        }
-    } else {
-        console.error("No survey data found in sessionStorage");
+    //Guard clause to check if sessionStorage is empty or not
+    if(!storedSurveyData){
+        console.error("NO survey data found in sessionStorage")
+        return
     }
-});
 
-function bindDynamicEventListeners() {
-    // Handle rating selection with the option to unselect
-    document.getElementById("ratingContainer")?.addEventListener("click", function(e) {
-        if (e.target.tagName === "IMG") {
-            const selectedStar = e.target;
-            const allStars = document.querySelectorAll(".rating-item img");
+    console.log("Using survey data from sessionStorage");
 
-            // Check if the clicked star is already selected
-            const isSelected = selectedStar.src.includes("RatingAfter.png");
+    // Parse the stored data
+    const data = JSON.parse(storedSurveyData);
 
-            // Reset all stars to unselected state if clicking an unselected star
-            if (!isSelected) {
-                allStars.forEach(star => {
-                    star.src = "../resource/images/RatingBefore.png";
-                });
-                selectedStar.src = "../resource/images/RatingAfter.png"; // Select clicked star
-            } else {
-                selectedStar.src = "../resource/images/RatingBefore.png"; // Unselect clicked star
-            }
+    // Check if data.questions exists and is an array
+    if(!data.questions && Array.isArray(data.questions)){
+        console.error("Data does not contain valid questions")
+        return
+    }
+
+    // Populate survey questions dynamically based on the stored data
+    data.questions.forEach((question, index) => {
+        let questionNo = 1
+        switch (question.question_type) {
+            case 'multiple_choice':
+                generateMultipleChoice(questionNo ,question.question_json, question.question_id);
+                break;
+            case 'rating':
+                //generateRating(question.question_json);
+                break;
+            case 'text_input':
+                //generateTextInput(question.question_json);
+                break;
+            default:
+                console.warn("Unknown question type:", question.question_type);
+                break;
         }
+        questionNo++
     });
 
-    // Handle checklist selection with the option to select multiple and toggle selection
-    document.getElementById("checklistContainer")?.addEventListener("click", function(e) {
-        if (e.target.classList.contains("checkbox-icon")) {
-            const isChecked = e.target.src.includes("Checked_Checkbox.png");
-
-            // Toggle checkbox state: if checked, uncheck it; if unchecked, check it
-            e.target.src = isChecked ? "../resource/images/Checkbox.png" : "../resource/images/Checked_Checkbox.png";
-        }
-    });
-
-    // Clear placeholder on focus in answer input
-    document.querySelector(".answer-input")?.addEventListener("focus", function(e) {
-        e.target.placeholder = "";
-    });
-
-    // Restore placeholder on blur if input is empty
-    document.querySelector(".answer-input")?.addEventListener("blur", function(e) {
-        if (e.target.value === "") {
-            e.target.placeholder = "Your Answer...";
-        }
-    });
-
-    // Back button functionality
-    document.getElementById("backButton")?.addEventListener("click", () => {
-        window.history.back();
-    });
-
-    // Submit button functionality
-    document.getElementById("submitButton")?.addEventListener("click", () => {
-        alert("Survey Submitted!");
-        window.history.back();
-    });
+    // Bind event listeners only after elements are dynamically created
+    console.log("Invoking generateNavs")
+    generateButtonNav();
 }
 
 // Function to generate HTML for multiple choice questions
-function generateMultipleChoice(questionData) {
-    // Ensure questionData and questionData.options are defined
-    const question = questionData?.question || "Question not available";
-    const options = questionData?.options || [];  // Default to empty array if options are missing
+function generateMultipleChoice(questionNo,questionData, id) {
+    var question = questionData.question
+    var questionId = id
+    console.log(question)
 
-    // Create HTML for the multiple-choice question
-    let html = `<div class="survey-template">
-                  <p class="question-text">${question}</p>
-                  <ul class="options-list">`;
-    options.forEach(option => {
-        html += `<li class="option-item">
-                   <input type="radio" name="${question}" value="${option}" class="option-input"> ${option}
-                 </li>`;
-    });
-    html += `</ul></div>`;
-    return html;
+    var form = document.getElementById('form')
+    
+    // Create the base nodes to be populated
+    var questionDiv = document.createElement("div")
+    questionDiv.setAttribute("class","question")
+
+    var optionsDiv = document.createElement("div")
+    optionsDiv.setAttribute("class", "options")
+
+    // Create the nodes with content and proper css attributes
+    var questionHeader = document.createElement("div")
+    questionHeader.setAttribute("class","question-header")
+    
+    //This generates the node of the question header
+    var questionText = document.createElement("p")
+    questionText.setAttribute("class", "bold")
+    questionText.innerText = questionNo+". "+question
+    questionHeader.appendChild(questionText)
+
+    // For each option in the question data create dom and add to options div
+    //      This generates the child nodes of the question div
+    questionData.options.forEach((option) =>{
+        console.log(option)
+        console.log(questionId)
+        let optionDiv = document.createElement("div")
+        optionDiv.setAttribute("class","option")
+
+        let input = document.createElement("input")
+        input.setAttribute("type", "checkbox")
+        input.setAttribute("id",option)
+        input.setAttribute("name",questionId)
+        input.setAttribute("value",option)
+
+        let label = document.createElement("label")
+        label.setAttribute("for", option)
+        label.innerText = option
+
+        optionDiv.appendChild(input)
+        optionDiv.appendChild(label)
+
+        optionsDiv.appendChild(optionDiv)
+    })
+    //Append the child nodes of the question div to itself
+    questionDiv.appendChild(questionHeader)
+    questionDiv.appendChild(optionsDiv)
+
+    //Append the question div to the form element
+    form.appendChild(questionDiv)
 }
 
+function generateButtonNav(){
+    console.log("generating nav buttons")
+    var mainContainer = document.createElement("div")
+    mainContainer.setAttribute("class","flex-container h-align-center row")
+    mainContainer.setAttribute("id","button-container")
 
-// Function to generate HTML for rating questions
-function generateRating(question) {
-    let ratingHTML = '';
-    for (let i = 1; i <= question.question_json.scale; i++) {
-        ratingHTML += `
-            <div class="rating-item" data-rating="${i}">
-                <span>${i}</span>
-                <img src="../resource/images/RatingBefore.png" alt="Star ${i}">
-            </div>
-        `;
-    }
+    var backButton = document.createElement("button")
+    backButton.setAttribute("class","btn-primary-m")
+    backButton.innerText = "Back"
 
-    return `
-        <div class="survey-template-header">${question.question_json.question}</div>
-        <div class="survey-template-content">
-            <div class="rating-container" id="ratingContainer">
-                ${ratingHTML}
-            </div>
-        </div>
-    `;
+    var submitButton = document.createElement("button")
+    submitButton.setAttribute("class","btn-primary-m")
+    submitButton.innerText = "Submit"
+
+    var spacer = document.createElement("div")
+    spacer.setAttribute("class","spacer")
+
+    mainContainer.appendChild(backButton)
+    mainContainer.appendChild(spacer)
+    mainContainer.appendChild(submitButton)
+    
+    document.getElementById("form").appendChild(mainContainer)
 }
 
-// Function to generate HTML for text input questions
-function generateTextInput(question) {
-    return `
-        <div class="survey-template-header">${question.question_json.question}</div>
-        <div class="survey-template-content">
-            <input type="text" class="answer-input" placeholder="Your Answer...">
-        </div>
-    `;
-}
+main()
