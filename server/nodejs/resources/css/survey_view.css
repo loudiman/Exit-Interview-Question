@@ -23,10 +23,9 @@ body {
 /* Main content area */
 .content {
     width: 100%;
-    padding: 20px;
+    padding: 50px;
     height: 100%;
     overflow-y: auto;
-
 }
 
 /* Search Bar Styles */
