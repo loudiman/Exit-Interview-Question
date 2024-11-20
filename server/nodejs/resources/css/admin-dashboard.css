@@ -47,6 +47,7 @@ h1 {
     text-align: right;
 }
 
+/* TODO: Make this have a specific style only for Card 1 */
 /* Card Data Styling */
 .card-data {
     background-color: white;
