@@ -27,25 +27,28 @@ export function login() {
 
       if (data.userType === 0) { // Admin
         console.log("Admin");
-        window.location.href = `${ADMIN_URL}/api/items`; 
+        window.location.href = `${ADMIN_URL}/api/items`;
         return;
       }
 
-      if (data.userType === 1)  // Student
+      if (data.userType === 1) { // Student
         console.log("Student");
+        window.location.href = `${STUDENT_URL}/student/surveys`;
+        return;
+      } 
+      
     }).catch(error => {
       console.log("POST Student Error:", error);
     })
   
-  console.log("GET Fetching surveys data");
-
-  fetch(`${STUDENT_URL}/student`)
-  .then(response => response.text())
-  .then(surveys => {
-    console.log("Storing surveys data in sessionStorage:", surveys);
-    sessionStorage.setItem('surveysData', JSON.stringify(surveys));
-    window.location.href = `${STUDENT_URL}/student/surveys`;
-  }).catch(error => console.log("Error:", error));
+  // console.log("GET Fetching surveys data");
+  // fetch(`${STUDENT_URL}/student`)
+  // .then(response => response.text())
+  // .then(surveys => {
+  //   console.log("Storing surveys data in sessionStorage:", surveys);
+  //   sessionStorage.setItem('surveysData', JSON.stringify(surveys));
+  //   window.location.href = `${STUDENT_URL}/student/surveys`;
+  // }).catch(error => console.log("Error:", error));
 }
 
 document.addEventListener('DOMContentLoaded', () => {

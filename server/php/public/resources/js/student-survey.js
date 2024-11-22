@@ -1,69 +1,77 @@
 // const surveyData = {
+//     "survey_id": 1,
+//     "survey_title": "CS Department Evaluation 2024",
 //     "questions": [
-//       {
-//         "question_json": {
-//           "question": "Which network topology is most resilient to failures?",
-//           "options": ["Star", "Ring", "Mesh", "Bus"]
+//         {
+//             "question_id": 1,
+//             "question_text": "Question text goes here",
+//             "question_type": "multiple_choice",
+//             "options": [
+//                 "Strongly Disagree",
+//                 "Disagree",
+//                 "Neutral",
+//                 "Agree",
+//                 "Strongly Agree"
+//             ],
+//              "scale": null
 //         },
-//         "question_type": "multiple_choice"
-//       },
-//       {
-//         "question_json": {
-//           "question": "Rate your experience with our services.",
-//           "options": []
+//         {
+//             "question_id": 2,
+//             "question_text": "Question text goes here",
+//             "question_type": "essay",
+//             "options": [],
+//             "scale": null
 //         },
-//         "question_type": "rating"
-//       },
-//       {
-//         "question_json": {
-//           "question": "Please provide additional feedback.",
-//           "options": []
-//         },
-//         "question_type": "text_input"
-//       }
+//         {
+//             "question_id": 3,
+//             "question_text": "Question text goes here",
+//             "question_type": "rating",
+//             "options": null,
+//             "scale": 5
+//         }
 //     ]
-//   };
+// };
 
 // sessionStorage.setItem('questionnaireData', JSON.stringify(surveyData));
 async function main() {
-    const surveyId = getSurveyIdFromURL(); // Dynamically fetch the survey ID from the URL
-    if (surveyId) {
-        getQuestions(surveyId); // Call with the dynamic survey ID
-    } else {
-        console.error("Survey ID not found in URL.");
-    }
+    // const surveyId = getSurveyIdFromURL(); // Dynamically fetch the survey ID from the URL
+    // if (surveyId) {
+    //     getQuestions(surveyId); // Call with the dynamic survey ID
+    // } else {
+    //     console.error("Survey ID not found in URL.");
+    // }
+    generateQuestionDoms();
 }
 
 // Helper function to extract the survey ID from the URL
-function getSurveyIdFromURL() {
-    const params = new URLSearchParams(window.location.search);
-    return params.get("id"); //This is assuming the URL passed by student-homepage.js has a parameter id
-}
+// function getSurveyIdFromURL() {
+    // const params = new URLSearchParams(window.location.search);
+    // return params.get("id"); //This is assuming the URL passed by student-homepage.js has a parameter id
+// }
 
-async function getQuestions(id){
-    var response = await fetch("http://localhost:8888/student/survey?id="+id)
-    var data = await response.json()
-    await sessionStorage.setItem('questionnaireData', JSON.stringify(data))
-    generateQuestionDoms()
-}
+// async function getQuestions(id){
+//     var response = await fetch("http://localhost:8888/student/survey?id="+id)
+//     var data = await response.json()
+//     await sessionStorage.setItem('questionnaireData', JSON.stringify(data))
+//     generateQuestionDoms()
+// }
 
 function generateQuestionDoms(){
-    const storedSurveyData = sessionStorage.getItem('questionnaireData');
+    const storedQuestionnaireData = sessionStorage.getItem('questionnaireData');
 
     //Guard clause to check if sessionStorage is empty or not
-    if(!storedSurveyData){
+    if(!storedQuestionnaireData){
         console.error("NO survey data found in sessionStorage")
         return
     }
 
     console.log("Using survey data from sessionStorage");
 
-    // Parse the stored data
-    const data = JSON.parse(storedSurveyData);
-
+    // Parse the stored datas
+    const parsedQuestionnaires = JSON.parse(storedQuestionnaireData);
 
     // Check if data.questions exists and is an array
-    if (!data.questions || !Array.isArray(data.questions)) {
+    if (!parsedQuestionnaires.questions || !Array.isArray(parsedQuestionnaires.questions)) {
         console.error("Data does not contain valid questions");
         return;
     }
@@ -74,13 +82,13 @@ function generateQuestionDoms(){
     // Create a new label element for the title
     const titleLabel = document.createElement('label');
     titleLabel.setAttribute("class", "txt-xxl bold");
-    titleLabel.innerText = data.survey_title;
+    titleLabel.innerText = parsedQuestionnaires.survey_title;
     titleContainer.appendChild(titleLabel);
 
     var questionNo = 1;
 
     // Populate survey questions dynamically based on the stored data
-    data.questions.forEach((question) => {
+    parsedQuestionnaires.questions.forEach((question) => {
         switch (question.question_type) {
             case 'multiple_choice':
                 generateMultipleChoice(questionNo, question, question.question_id);
