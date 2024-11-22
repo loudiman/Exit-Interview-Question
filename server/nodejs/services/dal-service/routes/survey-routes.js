@@ -2,6 +2,16 @@ const express = require(`express`)
 const {SurveyDAL} = require(`../dal/index`)
 const surveyRoutes = express.Router()
 
+function checkPerm(req,res,next){
+    const{userType} = req.body
+    if(userType != "admin"){
+        res.status(403).json({error:"Invalid body"})
+        return
+    }
+    next()
+}
+
+
 surveyRoutes.get('/',(req,res)=>{
     res.send("Hello there, This is the survey endpoint")
 })
