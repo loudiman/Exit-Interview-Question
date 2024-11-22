@@ -28,49 +28,56 @@
 
   <!-- Main content -->
   <div class="main-content" id="mainContent">
-    <!-- Survey Header -->
+
     <div class="survey-header-container">
       <h1>Survey Title</h1>
-      <p>Provide a brief description of the survey here.</p>
+      <p>Description.</p>
     </div>
 
     <!-- Survey Details -->
     <div class="survey-details-container">
-      <!-- Date Range -->
-      <span>From: <input type="date" value="2024-11-04"></span>
-      <span>Until: <input type="date" value="2024-11-12"></span>
-      <span>Time: <input type="time" value="23:59"></span>
-
-      <!-- Program Restriction -->
-      <label for="program-dropdown">Program Restriction:</label>
-      <select id="program-dropdown" class="dropdown">
-        <option>Bachelor of Science in Accountancy</option>
-        <option>Bachelor of Science in Information Technology</option>
-        <option>Bachelor of Science in Computer Science</option>
-      </select>
-
-      <!-- Student Restriction -->
-      <label for="student-dropdown">Student Restriction:</label>
-      <select id="student-dropdown" class="dropdown">
-        <option>Lou Diamond Morados</option>
-        <option>Jane Doe</option>
-        <option>John Smith</option>
-      </select>
-
-      <!-- Block Restriction -->
-      <label for="block-dropdown">Block Restriction:</label>
-      <select id="block-dropdown" class="dropdown">
-        <option>BSCS 3-1</option>
-        <option>BSIT 2-2</option>
-        <option>BSBA 1-1</option>
-      </select>
-    </div>
-
-    <!-- Publish Buttons -->
+        <!-- Date Range -->
+        <div class="date-time-row">
+          <label>From: <input type="date" value="2024-11-04"></label>
+          <label>Until: <input type="date" value="2024-11-12"></label>
+          <label>Time: <input type="time" value="23:59"></label>
+        </div>
+      
+        <!-- Restrictions -->
+        <div class="restriction-row">
+          <select id="program-dropdown" class="dropdown">
+              <option value="" disabled selected>Make available for</option>
+              <option>Bachelor of Science in Accountancy</option>
+              <option>Bachelor of Science in Information Technology</option>
+              <option>Bachelor of Science in Computer Science</option>
+          </select>
+      </div>
+      
+      <div class="restriction-row">
+          <select id="student-dropdown" class="dropdown">
+              <option value="" disabled selected>Student/s Restricted</option>
+              <option>Lou Diamond Morados</option>
+              <option>Jane Doe</option>
+              <option>John Smith</option>
+          </select>
+      </div>
+      
+      <div class="restriction-row">
+          <select id="block-dropdown" class="dropdown">
+              <option value="" disabled selected>Class Restricted</option>
+              <option>BSCS 3-1</option>
+              <option>BSIT 2-2</option>
+              <option>BSBA 1-1</option>
+          </select>
+      </div>
+      <!-- Publish Buttons -->
     <div class="button-container">
       <button class="publish-button">Publish Now</button>
       <button class="publish-button">Publish Later</button>
     </div>
+    </div>
+
+    
   </div>
 </div>
 
