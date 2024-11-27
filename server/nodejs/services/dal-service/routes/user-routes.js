@@ -23,6 +23,8 @@ userRoutes.get('/users',checkPerm ,async (req,res) => {
     if(question_type != "unfiltered"){
         try{
             const rows = filteredGet()
+            res.status(200).json({users: rows})
+            return
         }catch(error){
             console.log(error)
             res.status(400).json({"error":"server error"})
@@ -43,11 +45,50 @@ async function filteredGet(req){
     const equalFilter = req.body.filters.equals
     const notFilter = req.body.filters.not
 
+    const statements = []
+
+    createEqualStatements(statements)
+    createNonEqualStatements(statements)
+
     console.log(equalFilter)
     console.log(notFilter)
+
+    try{
+        const {rows} = UserDAL.getUsersByFilter(statements)
+        return rows
+    }catch(error){
+        throw new Error(error.message)
+    }
 }
 
-function generateStatement(){}
+function createEqualStatements(output, filters, cols){
+    const keyset = cols
+
+    var size = filters.size
+    if(size > 1){
+        for(i in keyset){
+            output.append(`${i} == ${filters.i}`)
+            return
+        }
+    }
+
+
+}
+
+// Algorithm:
+//      1. For every col
+//      2. Check for number of filters per col
+//      3. if no. of filters > 1 use NOT IN()
+//      4. if not use ==
+//      5. append to every new statement to output string
+function createNonEqualStatements(output, filters, cols){
+    const keyset = cols
+    if(filters.size > 1){
+        for(i in keyset){
+            
+        }
+    }
+}
 
 userRoutes.get('/user/:username',checkPerm ,async(req, res)=>{
     const {username} = req.params
@@ -85,6 +126,5 @@ userRoutes.post('/user', async(req, res) => {
     }
 })
 
-//TODO: Do the endpoint with reusable filters
 
 module.exports = userRoutes
