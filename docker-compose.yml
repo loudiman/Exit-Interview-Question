@@ -1,0 +1,25 @@
+services:
+  php-apache:
+    build:
+      context: ./server/php
+      dockerfile: php-apache.dockerfile
+    ports:
+      - 8888:80
+    volumes:
+      - ./server/php:/var/www/html
+    depends_on:
+      - mysql      
+
+  mysql:
+    image: mariadb:10.6
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: amalgam
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: secret
+    volumes:
+      - mysql_data:/var/lib/mysql
+      
+volumes:
+  mysql_data:
