@@ -1,0 +1,16 @@
+{
+  "name": "dal-service",
+  "version": "1.0.0",
+  "description": "This is a internal api that will act as a DAL for our database",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mark Lestat Agustin",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "mysql2": "^3.11.4"
+  }
+}

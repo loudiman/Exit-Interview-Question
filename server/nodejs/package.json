@@ -1,16 +1,16 @@
 {
   "name": "nodejs",
   "version": "1.0.0",
-  "description": "",
+  "description": "main server runtime of nodejs ",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
-  "keywords": [],
-  "author": "",
+  "author": "Mark Lestat Agustin",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.21.1"
   }
 }
