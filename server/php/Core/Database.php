@@ -2,7 +2,6 @@
 
 namespace Core;
 
-use PDO;
 use mysqli;
 
 class Database

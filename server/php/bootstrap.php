@@ -18,5 +18,3 @@ $container->resolve('Core\Database');
 // $container->resolve('dasdakjqwh'); This result an error because key does not exist in container object
 
 App::setContainer($container);
-
-

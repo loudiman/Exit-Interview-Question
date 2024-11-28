@@ -22,7 +22,7 @@ $surveyData = App::resolve(Database::class)->query("
     WHERE 
         s.survey_id = ?
     ORDER BY 
-        q.question_id;", [1]
+        q.question_id;", [$_GET['id']]
         )->assoc_get();
 
 // Initialize the survey structure. These are the parent items
