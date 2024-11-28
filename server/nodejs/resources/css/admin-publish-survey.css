@@ -1,0 +1,35 @@
+@font-face {
+    font-family: "CustomFont";
+    src: url("../../../php/public/resources/fonts/Istok_Web/IstokWeb-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: "CustomFont";
+    src: url("../../../php/public/resources/fonts/Istok_Web/IstokWeb-Bold.ttf") format("truetype");
+    font-weight: bold;
+    font-style: normal;
+}
+body {
+    margin: 0;
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #FFFFFF;
+    height: 100vh;
+    overflow-y: auto;
+    border: 2px solid #ccc;
+}
+.publish-button, .review-button, .back-button {
+    padding: 10px 15px;
+    background-color: #223C6B;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.review-button:hover, .back-button:hover, .publish-button:hover {
+    background-color: #0c5ac0;
+}

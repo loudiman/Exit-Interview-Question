@@ -7,7 +7,6 @@
 
 /* Sidebar */
 .sidebar {
-    flex-basis: 220px;
     background-color: #9EA9BE;
     padding: 20px 15px;
     display: flex;
