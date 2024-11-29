@@ -1,0 +1,40 @@
+services:
+  node-js-server:
+    build:
+      context: ./server/nodejs/
+    ports:
+      - 80:2020
+    environment:
+      NODE_ENV: production
+      DB_HOST: host.docker.internal
+      DB_USER: root
+      DB_NAME: amalgam
+      DB_PASSWORD: secret
+      PORT: 3306
+    depends_on:
+      - mysql
+
+  php-apache:
+    build:
+      context: ./server/php/
+      dockerfile: php-apache.dockerfile
+    ports:
+      - 8888:80
+    volumes:
+      - ./server/php:/var/www/html
+    depends_on:
+      - mysql      
+
+  mysql:
+    image: mariadb:10.6
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: amalgam
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: secret
+    volumes:
+      - mysql_data:/var/lib/mysql
+      
+volumes:
+  mysql_data:

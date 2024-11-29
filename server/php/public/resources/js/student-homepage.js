@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         .then(surveyData => {
                             sessionStorage.setItem('questionnaireData', JSON.stringify(surveyData));
                             // window.location.href = `/student/survey/questionaire?id=${surveyData.question_id}`;
-                            window.location.href = '/student/survey/questionnaires';
+                            window.location.href = '/student/survey/questionnaires';    
                         })
                         .catch(error => console.error("Fetch error: ", error));
                 };

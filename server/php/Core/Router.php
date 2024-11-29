@@ -53,7 +53,6 @@ class Router
                 return require base_path('app/Http/controllers/' . $route['controller']);
             };
         }
-
         abort('404');
     }
 }
