@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Create</title>
-  <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="../css/nav_bar.css">
   <link rel="stylesheet" href="../css/side_bar.css">
   <link rel="stylesheet" href="../css/admin-publish-survey.css">
@@ -29,21 +28,56 @@
 
   <!-- Main content -->
   <div class="main-content" id="mainContent">
-    <div>
-      <div class="survey-header-container">
-        <!-- Survey Title -->
-        <!-- Survey Description -->
-      </div>
-      <div class="survey-details-container">
-        <!-- From: N/A Until: N/A Time: __:__PM/AM -->
-        <!-- Program restrictions -->
-        <!-- Student restrictions -->
-        <!-- Block restrictions -->
-      </div>
+
+    <div class="survey-header-container">
+      <h1>Survey Title</h1>
+      <p>Description.</p>
     </div>
 
-    <button class="publish-button"><p>Publish Now</p></button>
-    <button class="publish-button"><p>Publish Later</p></button>
+    <!-- Survey Details -->
+    <div class="survey-details-container">
+        <!-- Date Range -->
+        <div class="date-time-row">
+          <label>From: <input type="date" value="2024-11-04"></label>
+          <label>Until: <input type="date" value="2024-11-12"></label>
+          <label>Time: <input type="time" value="23:59"></label>
+        </div>
+      
+        <!-- Restrictions -->
+        <div class="restriction-row">
+          <select id="program-dropdown" class="dropdown">
+              <option value="" disabled selected>Make available for</option>
+              <option>Bachelor of Science in Accountancy</option>
+              <option>Bachelor of Science in Information Technology</option>
+              <option>Bachelor of Science in Computer Science</option>
+          </select>
+      </div>
+      
+      <div class="restriction-row">
+          <select id="student-dropdown" class="dropdown">
+              <option value="" disabled selected>Student/s Restricted</option>
+              <option>Lou Diamond Morados</option>
+              <option>Jane Doe</option>
+              <option>John Smith</option>
+          </select>
+      </div>
+      
+      <div class="restriction-row">
+          <select id="block-dropdown" class="dropdown">
+              <option value="" disabled selected>Class Restricted</option>
+              <option>BSCS 3-1</option>
+              <option>BSIT 2-2</option>
+              <option>BSBA 1-1</option>
+          </select>
+      </div>
+      <!-- Publish Buttons -->
+    <div class="button-container">
+      <button class="publish-button">Publish Now</button>
+      <button class="publish-button">Publish Later</button>
+    </div>
+    </div>
+
+    
   </div>
 </div>
 
