@@ -1,77 +1,69 @@
 // const surveyData = {
-//     "survey_id": 1,
-//     "survey_title": "CS Department Evaluation 2024",
 //     "questions": [
-//         {
-//             "question_id": 1,
-//             "question_text": "Question text goes here",
-//             "question_type": "multiple_choice",
-//             "options": [
-//                 "Strongly Disagree",
-//                 "Disagree",
-//                 "Neutral",
-//                 "Agree",
-//                 "Strongly Agree"
-//             ],
-//              "scale": null
+//       {
+//         "question_json": {
+//           "question": "Which network topology is most resilient to failures?",
+//           "options": ["Star", "Ring", "Mesh", "Bus"]
 //         },
-//         {
-//             "question_id": 2,
-//             "question_text": "Question text goes here",
-//             "question_type": "essay",
-//             "options": [],
-//             "scale": null
+//         "question_type": "multiple_choice"
+//       },
+//       {
+//         "question_json": {
+//           "question": "Rate your experience with our services.",
+//           "options": []
 //         },
-//         {
-//             "question_id": 3,
-//             "question_text": "Question text goes here",
-//             "question_type": "rating",
-//             "options": null,
-//             "scale": 5
-//         }
+//         "question_type": "rating"
+//       },
+//       {
+//         "question_json": {
+//           "question": "Please provide additional feedback.",
+//           "options": []
+//         },
+//         "question_type": "text_input"
+//       }
 //     ]
-// };
+//   };
 
 // sessionStorage.setItem('questionnaireData', JSON.stringify(surveyData));
 async function main() {
-    // const surveyId = getSurveyIdFromURL(); // Dynamically fetch the survey ID from the URL
-    // if (surveyId) {
-    //     getQuestions(surveyId); // Call with the dynamic survey ID
-    // } else {
-    //     console.error("Survey ID not found in URL.");
-    // }
-    generateQuestionDoms();
+    const surveyId = getSurveyIdFromURL(); // Dynamically fetch the survey ID from the URL
+    if (surveyId) {
+        getQuestions(surveyId); // Call with the dynamic survey ID
+    } else {
+        console.error("Survey ID not found in URL.");
+    }
 }
 
 // Helper function to extract the survey ID from the URL
-// function getSurveyIdFromURL() {
-    // const params = new URLSearchParams(window.location.search);
-    // return params.get("id"); //This is assuming the URL passed by student-homepage.js has a parameter id
-// }
+function getSurveyIdFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("id"); //This is assuming the URL passed by student-homepage.js has a parameter id
+}
 
-// async function getQuestions(id){
-//     var response = await fetch("http://localhost:8888/student/survey?id="+id)
-//     var data = await response.json()
-//     await sessionStorage.setItem('questionnaireData', JSON.stringify(data))
-//     generateQuestionDoms()
-// }
+async function getQuestions(id){
+    var response = await fetch("http://localhost:8888/student/survey?id="+id)
+    var data = await response.json()
+    await sessionStorage.setItem('questionnaireData', JSON.stringify(data))
+    generateQuestionDoms()
+}
 
 function generateQuestionDoms(){
-    const storedQuestionnaireData = sessionStorage.getItem('questionnaireData');
+    const storedSurveyData = sessionStorage.getItem('questionnaireData');
 
     //Guard clause to check if sessionStorage is empty or not
-    if(!storedQuestionnaireData){
+    if(!storedSurveyData){
         console.error("NO survey data found in sessionStorage")
         return
     }
 
     console.log("Using survey data from sessionStorage");
 
-    // Parse the stored datas
-    const parsedQuestionnaires = JSON.parse(storedQuestionnaireData);
+    // Parse the stored data
+    const data = JSON.parse(storedSurveyData);
+
 
     // Check if data.questions exists and is an array
-    if (!parsedQuestionnaires.questions || !Array.isArray(parsedQuestionnaires.questions)) {
+    if (!data.questions || !Array.isArray(data.questions)) {
         console.error("Data does not contain valid questions");
         return;
     }
@@ -82,13 +74,13 @@ function generateQuestionDoms(){
     // Create a new label element for the title
     const titleLabel = document.createElement('label');
     titleLabel.setAttribute("class", "txt-xxl bold");
-    titleLabel.innerText = parsedQuestionnaires.survey_title;
+    titleLabel.innerText = data.survey_title;
     titleContainer.appendChild(titleLabel);
 
     let questionNo = 1;
 
     // Populate survey questions dynamically based on the stored data
-    parsedQuestionnaires.questions.forEach((question) => {
+    data.questions.forEach((question) => {
         switch (question.question_type) {
             case 'multiple_choice':
                 generateMultipleChoice(questionNo, question, question.question_id);
@@ -390,6 +382,139 @@ function generateButtonNav(){
     mainContainer.appendChild(spacer)
     mainContainer.appendChild(submitButton)
     document.getElementById("form").appendChild(mainContainer)
+    document.getElementById("submit-button").addEventListener("click", gatherResponses);
+}
+
+// Function to gather the inputs from form and submit the data
+function gatherResponses() {
+    if (!confirm("You won't be able to edit your answers after you submit. Are you sure you want to proceed?")) {
+        return;
+    }
+
+    const responseJson = [];
+    const surveyId = new URLSearchParams(window.location.search).get("id");
+    const username = sessionStorage.getItem('username');
+
+    if (!username || !surveyId) {
+        alert("Missing required information. Please ensure you're logged in and accessing a valid survey.");
+        return;
+    }
+
+    // Validate and format data types
+    const numericUsername = parseInt(username, 10);
+    const numericSurveyId = parseInt(surveyId, 10);
+
+    if (isNaN(numericUsername) || isNaN(numericSurveyId)) {
+        alert("Invalid username or survey ID format");
+        return;
+    }
+
+    const questions = document.querySelectorAll(".question");
+    let hasUnansweredQuestions = false;
+
+    questions.forEach((questionDiv) => {
+        const questionId = questionDiv.querySelector("input, textarea").name;
+        const questionType = questionDiv.getAttribute("data-question-type");
+        let response = { question_id: parseInt(questionId, 10) };
+
+        switch (questionType) {
+            case "multiple_choice":
+                const selectedChoice = questionDiv.querySelector("input[type='radio']:checked");
+                if (!selectedChoice) {
+                    hasUnansweredQuestions = true;
+                    return;
+                }
+                response.answer = selectedChoice.value;
+                break;
+
+            case "checkbox":
+                const selectedOptions = Array.from(questionDiv.querySelectorAll("input[type='checkbox']:checked"))
+                    .map(option => option.value);
+                response.answer = selectedOptions;
+                break;
+
+            case "essay":
+                const essayInput = questionDiv.querySelector("textarea");
+                const essayValue = essayInput ? essayInput.value.trim() : "";
+                if (!essayValue) {
+                    hasUnansweredQuestions = true;
+                    return;
+                }
+                response.answer = essayValue;
+                break;
+
+            case "rating":
+                const selectedRating = questionDiv.querySelector("input[type='radio']:checked");
+                if (!selectedRating) {
+                    hasUnansweredQuestions = true;
+                    return;
+                }
+                response.rating = parseInt(selectedRating.value, 10);
+                break;
+        }
+
+        if (response.answer !== undefined || response.rating !== undefined) {
+            responseJson.push(response);
+        }
+    });
+
+    if (hasUnansweredQuestions) {
+        alert("Please answer all questions before submitting.");
+        return;
+    }
+
+    if (responseJson.length === 0) {
+        alert("No responses gathered. Please answer at least one question.");
+        return;
+    }
+
+    const payload = {
+        username: numericUsername,
+        survey_id: numericSurveyId,
+        response_json: responseJson
+    };
+
+    console.log("Submitting payload:", payload);
+
+    const submitButton = document.getElementById("submit-button");
+    if (submitButton) {
+        submitButton.disabled = true;
+    }
+
+    fetch(`http://localhost:8888/student/survey/questionnaires`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+        credentials: 'include'
+    })
+        .then(async response => {
+            const responseText = await response.text();
+            console.log("Raw response:", responseText);
+
+            let data;
+            try {
+                data = JSON.parse(responseText);
+            } catch (e) {
+                throw new Error(`Server returned invalid JSON. Response: ${responseText}`);
+            }
+
+            if (!response.ok) {
+                throw new Error(data.error || data.message || `HTTP error! status: ${response.status}`);
+            }
+
+            console.log("Response saved successfully:", data);
+            alert("Survey submitted successfully!");
+            window.location.href = 'http://localhost:8888/student/surveys';
+        })
+        .catch((error) => {
+            console.error("Error details:", error);
+            if (submitButton) {
+                submitButton.disabled = false;
+            }
+            alert(`Failed to submit survey: ${error.message}`);
+        });
 }
 
 main()
