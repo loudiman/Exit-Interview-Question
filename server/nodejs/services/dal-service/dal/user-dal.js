@@ -53,6 +53,16 @@ class UserDAL {
             throw new Error(error.message)
         }
     }
+
+    static async addToUser(username, programID, sem, batch, gender){
+        query = "INSERT INTO student (username, program_id, sem, batch, gender) VALUES(?,?,?,?,?)"
+        try{
+            const[result] = pool.execute(query, [username, programID, sem, batch, gender])
+            return resul
+        }catch(error){
+            throw new Error(error.message)
+        }
+    }
 }
 
 module.exports = UserDAL
