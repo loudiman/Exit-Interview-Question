@@ -2,6 +2,8 @@
 
 namespace Core;
 
+use Core\Middleware\Middleware;
+
 class Router
 {
     protected $routes = [];
@@ -11,33 +13,43 @@ class Router
         $this->routes[] = [
             'uri' => $uri,
             'controller' => $route,
-            'method' => $method
+            'method' => $method,
+            'middleware' => null
         ];
+
+        return $this;
     }
 
     public function get($uri, $routes)
     {
-        $this->add('GET', $uri, $routes);
+        return $this->add('GET', $uri, $routes);
     }
 
     public function post($uri, $routes)
     {
-        $this->add('POST', $uri, $routes);
+        return $this->add('POST', $uri, $routes);
     }
 
     public function delete($uri, $routes)
     {
-        $this->add('DELETE', $uri, $routes);
+        return $this->add('DELETE', $uri, $routes);
     }
 
     public function patch($uri, $routes)
     {
-        $this->add('PATCH', $uri, $routes);
+        return $this->add('PATCH', $uri, $routes);
     }
 
     public function put($uri, $routes)
     {
-        $this->add('PUT', $uri, $routes);
+        return $this->add('PUT', $uri, $routes);
+    }
+
+    public function only($key)
+    {
+        $this->routes[array_key_last($this->routes)]['middleware'] = $key;
+
+        return $this;
     }
 
     public static function previousUrl()
@@ -50,6 +62,8 @@ class Router
         foreach($this->routes as $route){
             if($route['uri'] == $uri && $route['method'] == strtoupper($method))
             {
+                Middleware::resolve($route['middleware']);
+                
                 return require base_path('app/Http/controllers/' . $route['controller']);
             };
         }
