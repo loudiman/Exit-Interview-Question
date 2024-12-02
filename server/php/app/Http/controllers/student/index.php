@@ -5,7 +5,7 @@ use Core\Database;
 
 try {
     $surveys = App::resolve(Database::class)->query(
-        'SELECT z.survey_id, x.survey_title, z.responded, x.period_start, x.period_end FROM survey x INNER JOIN student y ON x.program_id = y.program_id INNER JOIN (SELECT survey_id, responded FROM responders) z ON z.survey_id = x.survey_id WHERE y.username = ? and x.status = "published"', [$_SESSION['user']['username']] // To be replaced with [$_SESSION['user']['username']] when logout is implemented.
+        'SELECT z.survey_id, x.survey_title, z.responded, x.period_start, x.period_end FROM survey x INNER JOIN student y ON x.program_id = y.program_id INNER JOIN (SELECT survey_id, responded FROM responders) z ON z.survey_id = x.survey_id WHERE y.username = ? and x.status = "published"', [$_SESSION['user']['username']] 
     )->assoc_get();
 
     // print_r($surveys);
