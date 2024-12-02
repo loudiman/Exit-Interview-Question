@@ -25,45 +25,45 @@
 //   };
 
 // sessionStorage.setItem('questionnaireData', JSON.stringify(surveyData));
-async function main() {
-    const surveyId = getSurveyIdFromURL(); // Dynamically fetch the survey ID from the URL
-    if (surveyId) {
-        getQuestions(surveyId); // Call with the dynamic survey ID
-    } else {
-        console.error("Survey ID not found in URL.");
-    }
-}
+// async function main() {
+    // const surveyId = getSurveyIdFromURL(); // Dynamically fetch the survey ID from the URL
+    // if (surveyId) {
+    //     getQuestions(surveyId); // Call with the dynamic survey ID
+    // } else {
+    //     console.error("Survey ID not found in URL.");
+    // }
+// }
+
+generateQuestionDoms()
 
 // Helper function to extract the survey ID from the URL
 function getSurveyIdFromURL() {
-    const params = new URLSearchParams(window.location.search);
-    return params.get("id"); //This is assuming the URL passed by student-homepage.js has a parameter id
+    // const params = new URLSearchParams(window.location.search);
+    // return params.get("id"); //This is assuming the URL passed by student-homepage.js has a parameter id
 }
 
 async function getQuestions(id){
-    var response = await fetch("http://localhost:8888/student/survey?id="+id)
-    var data = await response.json()
-    await sessionStorage.setItem('questionnaireData', JSON.stringify(data))
-    generateQuestionDoms()
+    // var response = await fetch("http://localhost:8888/student/survey?id="+id)
+    // var data = await response.json()
+    // await sessionStorage.setItem('questionnaireData', JSON.stringify(data))
 }
 
 function generateQuestionDoms(){
-    const storedSurveyData = sessionStorage.getItem('questionnaireData');
+    const storedQuestionnaireData = sessionStorage.getItem('questionnaireData');
 
     //Guard clause to check if sessionStorage is empty or not
-    if(!storedSurveyData){
-        console.error("NO survey data found in sessionStorage")
+    if(!storedQuestionnaireData){
+        console.error("No survey data found in sessionStorage")
         return
     }
 
     console.log("Using survey data from sessionStorage");
 
-    // Parse the stored data
-    const data = JSON.parse(storedSurveyData);
+    // Parse the stored questionnaire data
+    const parsedQuestionnaires = JSON.parse(storedQuestionnaireData);
 
-
-    // Check if data.questions exists and is an array
-    if (!data.questions || !Array.isArray(data.questions)) {
+    // Check if parsedQuestionnaires.questions exists and is an array
+    if (!parsedQuestionnaires.questions || !Array.isArray(parsedQuestionnaires.questions)) {
         console.error("Data does not contain valid questions");
         return;
     }
@@ -74,20 +74,16 @@ function generateQuestionDoms(){
     // Create a new label element for the title
     const titleLabel = document.createElement('label');
     titleLabel.setAttribute("class", "txt-xxl bold");
-    titleLabel.innerText = data.survey_title;
+    titleLabel.innerText = parsedQuestionnaires.survey_title;
     titleContainer.appendChild(titleLabel);
 
-    let questionNo = 1;
+    var questionNo = 1;
 
     // Populate survey questions dynamically based on the stored data
-    data.questions.forEach((question) => {
+    parsedQuestionnaires.questions.forEach((question) => {
         switch (question.question_type) {
             case 'multiple_choice':
                 generateMultipleChoice(questionNo, question, question.question_id);
-                questionNo++;
-                break;
-            case 'checkbox':
-                generateCheckboxQuestion(questionNo, question, question.question_id);
                 questionNo++;
                 break;
             case 'rating':
@@ -107,6 +103,7 @@ function generateQuestionDoms(){
     // Bind event listeners only after elements are dynamically created
     console.log("Invoking generateButtonNav");
     generateButtonNav();
+    document.getElementById("submit-button").addEventListener("click", () => gatherResponses(parsedQuestionnaires.survey_id));
 }
 
 //Function to generate HTML for multiple choice type questions
@@ -382,17 +379,16 @@ function generateButtonNav(){
     mainContainer.appendChild(spacer)
     mainContainer.appendChild(submitButton)
     document.getElementById("form").appendChild(mainContainer)
-    document.getElementById("submit-button").addEventListener("click", gatherResponses);
 }
 
 // Function to gather the inputs from form and submit the data
-function gatherResponses() {
+function gatherResponses(surveyId) {
     if (!confirm("You won't be able to edit your answers after you submit. Are you sure you want to proceed?")) {
         return;
     }
 
     const responseJson = [];
-    const surveyId = new URLSearchParams(window.location.search).get("id");
+    // const surveyId = new URLSearchParams(window.location.search).get("id");
     const username = sessionStorage.getItem('username');
 
     if (!username || !surveyId) {
@@ -468,6 +464,8 @@ function gatherResponses() {
         return;
     }
 
+    console.log("Gathered responses:", responseJson);
+
     const payload = {
         username: numericUsername,
         survey_id: numericSurveyId,
@@ -489,21 +487,14 @@ function gatherResponses() {
         body: JSON.stringify(payload),
         credentials: 'include'
     })
-        .then(async response => {
-            const responseText = await response.text();
-            console.log("Raw response:", responseText);
-
-            let data;
+        .then(response => response.text())
+        .then(data => {
+            console.log("Raw response:", data);
             try {
-                data = JSON.parse(responseText);
+                data = JSON.parse(data);
             } catch (e) {
-                throw new Error(`Server returned invalid JSON. Response: ${responseText}`);
+                throw new Error(`Server returned invalid JSON. Response: ${data}`);
             }
-
-            if (!response.ok) {
-                throw new Error(data.error || data.message || `HTTP error! status: ${response.status}`);
-            }
-
             console.log("Response saved successfully:", data);
             alert("Survey submitted successfully!");
             window.location.href = 'http://localhost:8888/student/surveys';
@@ -517,4 +508,4 @@ function gatherResponses() {
         });
 }
 
-main()
+// main()
