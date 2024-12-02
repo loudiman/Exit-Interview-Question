@@ -42,22 +42,40 @@ userRoutes.get('/users/filtered', checkPerm("admin"), async(req,res)=>{
     await createStatement("not", notJSON, filterStatements)
     await createStatement("equal", equalJSON, filterStatements)
     
-    console.log(filterStatements)
-    res.status(200).json(filterStatements)
+    try{
+        const rows = await UserDAL.getUsersByFilter(filterStatements)
+        res.status(200).json(rows)
+    }catch(error){
+        console.log(error)
+        res.status(500).json({error:"Server Error"})
+    }
     
 })
 
 function createStatement(type , jsonObject, output){
     console.log("creating")
     let filterStatements = []
+
+    //Guard Clause for not filter type
     if(type == "not"){
+        // item would be the column in the database to filter by
         for(item in jsonObject.not){
             var filters = jsonObject.not[item].map((filter) => `${filter}`).join(",")
-            var statement = `${item} NOT IN (${filters})`
-            filterStatements.push(statement)
-            console.log(statement)
+            var statement = `s.${item} NOT IN (${filters})` // This should be made dynamic later on, for now lets keep it this way the `s.`
+            output.push(statement)
         }
-        output.push(filterStatements)
+        return
+    }
+
+    // Guard clause for equal filter type
+    if(type == "equal"){
+        // item would be the column in the database to filter by
+        for(item in jsonObject.equal){
+            var filters = jsonObject.equal[item].map((filter) => `${filter}`).join(",")
+            var statement = `s.${item} IN (${filters})`
+            output.push(statement)
+        }
+        return
     }
 }
 
