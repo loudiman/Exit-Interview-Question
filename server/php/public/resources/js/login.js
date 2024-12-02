@@ -20,6 +20,7 @@ export function login() {
     .then(data => {
       console.log("(login) Raw response:", data);
       data = JSON.parse(data);
+      sessionStorage.setItem('username', data.username);
 
       if (data.errors) {
         console.log("Error message:", data.errors);
