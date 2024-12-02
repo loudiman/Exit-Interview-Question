@@ -12,12 +12,15 @@ class UserDAL {
     }
 
     //Parameter would be an array of filter statements ie. "username = 2233915"
-    static async getUsersByFilter(...filterStatements){
+    static async getUsersByFilter(filterStatements){
+        console.log(filterStatements)
         var filters = filterStatements.map((statement) => `${statement}`).join(" AND ")
-        var query = `SELECT * FROM users WHERE ${filters}`
+        console.log(filters)
+        var query = `SELECT * FROM user AS u LEFT JOIN student AS s ON u.username = s.username WHERE ${filters}`
         
         try{
             const[result] = await pool.query(query)
+            console.log(result)
             return result
         }catch(error){
             throw new Error(error.message)
