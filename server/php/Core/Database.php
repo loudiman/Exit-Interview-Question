@@ -56,7 +56,7 @@ class Database
         $result = $this->find();
 
         if (! $result) {
-            abort();
+            abort(404);
         }
 
         return $result;

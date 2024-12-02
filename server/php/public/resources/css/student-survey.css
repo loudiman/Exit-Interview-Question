@@ -18,7 +18,11 @@ nav>div>p{
 
 form{
     margin-top:20px;
-    width: 80%;
+    width: 50%;
+}
+
+.flex-container.h-align-center {
+
 }
 
 .question{
@@ -38,12 +42,22 @@ form{
     padding: 10px;
 }
 
+.textarea-container {
+    width: 100%;
+    display: flex;
+}
+
 .options{
-
-}
-.textarea-container {
-    width: 100%;
+    padding: 10px;
     display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.option{
+    display: flex;
+    gap: 10px;
 }
 
 textarea {
@@ -53,24 +67,13 @@ textarea {
     padding: 1vw;
 }
 
-.question {
-    margin-bottom: 20px;
-}
-
-.textarea-container {
-    width: 100%;
-    display: flex;
-}
-
-textarea {
-    width: 100%;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-    padding: 1vw;
-}
-
-.question {
-    margin-bottom: 20px;
+.char-counter{
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+    font-size: 12px;
+    color: gray;
+    pointer-events: none;
 }
 
 .flex-col {
@@ -80,7 +83,6 @@ textarea {
 
 .rating {
     display: flex;
-    gap: 10%;
     justify-content: space-between;
     padding: 1% 12% 1%;
 }
@@ -99,17 +101,17 @@ textarea {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    width: 30px;
-    height: 30px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
-    border: 3px solid rgba(34, 60, 107, 0.35);
+    border: 3px solid rgb(255, 255, 255);
     background-color: #fff;
     cursor: pointer;
     position: relative;
     transition: all 0.3s ease;
 }
 
-/* Styling for the radio button when it is checked */
+/** Styling for the radio button when it is checked *!*/
 .custom-radio:checked {
     background-color: #223C6B;
 }
@@ -121,6 +123,15 @@ textarea {
     font-weight: bold;
     color: #333;
     cursor: pointer;
+}
+
+.custom-checkbox{
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
 }
 
 /* For very small screens (below 320px), ensure everything fits */
@@ -151,11 +162,10 @@ textarea {
 }
 
 /* For small screens (below 425px), ensure radio buttons and labels do not overflow */
-@media screen and (max-width: 425px) {
+@media screen and (min-width: 321px) and (max-width: 425px) {
     .rating {
         display: flex;
         justify-content: space-between; /* Keep items in a row */
-        gap: 5%; /* Reduce gap between radio buttons */
         padding: 2% 5%; /* Adjust padding for smaller screens */
     }
 
@@ -211,72 +221,3 @@ textarea {
         height: 30px;
     }
 }
-
-/* For larger screens (tablets and small desktops, 768px and up) */
-@media screen and (min-width: 768px) {
-    .flex-col {
-        margin: 15px; /* Larger margin for larger screens */
-        align-items: center; /* Center items horizontally */
-    }
-
-    .custom-label {
-        font-size: 20px; /* Larger font size for larger screens */
-    }
-
-    .custom-radio {
-        width: 35px; /* Larger radio button size for bigger screens */
-        height: 35px;
-    }
-}
-
-/*Keeping the Styles below in case of a change of mind*/
-/*.slider-container {*/
-/*    display: flex;*/
-/*    align-items: center;*/
-/*    margin-top: 10px;*/
-/*    width: 100%;*/
-/*}*/
-
-/*.slider-container input[type="range"] {*/
-/*    -webkit-appearance: none;*/
-/*    appearance: none;*/
-/*    width: 90%; !* Slider takes 90% of the container *!*/
-/*    height: 0.8vw;*/
-/*    border-radius: 5px;*/
-/*    background: #223C6B;*/
-/*    outline: none;*/
-/*    margin: 1vw;*/
-/*}*/
-
-/*.slider-container input[type="range"]::-webkit-slider-thumb {*/
-/*    -webkit-appearance: none;*/
-/*    appearance: none;*/
-/*    width: 28px;*/
-/*    height: 28px;*/
-/*    background-color: white;*/
-/*    border: 3px solid rgb(0, 0, 0);*/
-/*    border-radius: 50%;*/
-/*    cursor: pointer;*/
-/*    transition: border-color 0.3s;*/
-/*}*/
-
-/*.slider-container input[type="range"]::-moz-range-thumb {*/
-/*    width: 28px;*/
-/*    height: 28px;*/
-/*    background-color: white;*/
-/*    border: 3px solid #000000;*/
-/*    border-radius: 50%;*/
-/*    cursor: pointer;*/
-/*    transition: border-color 0.3s;*/
-/*}*/
-
-/*.slider-value {*/
-/*    font-size: 1.2vw;*/
-/*    font-weight: bold;*/
-/*    color: rgb(0, 0, 0);*/
-/*    display: flex;*/
-/*    align-items: center;*/
-/*    justify-content: center;*/
-/*    width: 10%;*/
-/*    text-align: center;*/
-/*}*/

@@ -1,17 +1,11 @@
 <?php
 
-use Core\App;
-use Core\Database;
 use Core\Authenticator;
 use app\Http\Forms\LoginForm;
 
-// header("Access-Control-Allow-Origin: *");
-// header("Access-Control-Allow-Methods: POST");
 // header("Content-Type: application/json");
 
-// Retrieve the raw POST data
 $inputData = file_get_contents("php://input");
-
 $data = json_decode($inputData, true);
 
 $form = LoginForm::validate($attributes = [
