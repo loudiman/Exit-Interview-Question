@@ -11,9 +11,11 @@
     font-style: normal;
 }
 
+
 body {
     margin: 0;
     font-family: "CustomFont", Arial, sans-serif;
+    height: max-content;
 }
 
 .navbar {
@@ -33,51 +35,14 @@ body {
     cursor: pointer;
 }
 
-.sidebar-container {
-    display: flex;
-    height: 100vh;
-}
-
-.sidebar {
-    width: 200px;
-    background-color: #334A75;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    padding: 15px;
-    gap: 10px;
-}
-
-.sidebar a {
-    text-decoration: none;
-    color: white;
-    font-size: 16px;
-    padding: 10px 5px;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-.sidebar a.active,
-.sidebar a:hover {
-    background-color: #223C6B;
-}
-
-.sidebar img {
-    width: 20px;
-    height: 20px;
-}
-
 .main-content {
     flex-grow: 1;
     padding: 20px;
     background-color: #FFFFFF;
     border: 1px solid #ccc;
     align-items: center;
+    height: max-content;
+    border: none;
 }
 
 .survey-header-container,
