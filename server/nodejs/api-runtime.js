@@ -1,9 +1,15 @@
 const express = require('express')
 const app = express();
 
-const dalRoutes = require(`./services/dal-service`)
+app.use(express.json());
 
+const dalRoutes = require(`./services/dal-service`)
 app.use('/api', dalRoutes)
+
+const surveyRoutes = require(`./services/resource-service/routes/survey-routes`)
+app.use('/api', surveyRoutes)
+
+
 
 app.get('/',(req,res) => {
     res.send("This is the API endpoint")
