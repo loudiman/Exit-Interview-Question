@@ -49,32 +49,29 @@ document.querySelector('.hide-link').addEventListener('click', function() {
 // Toggle search input visibility when search icon is clicked
 document.getElementById("search-icon").addEventListener("click", function() {
     const searchInput = document.getElementById("search-input");
-    searchInput.classList.toggle("hidden"); // Toggle visibility of the search input field
+    searchInput.classList.toggle("hidden");
 });
 
 function createSurveyElements(data, containerId, isOpenSurvey) {
     const container = document.getElementById(containerId);
-    container.innerHTML = ''; // Clear existing elements
-  
+    container.innerHTML = '';
+
     data.forEach(survey => {
         const surveyElement = document.createElement('div');
         surveyElement.classList.add(isOpenSurvey ? 'survey-template' : 'recent-item');
-  
+
         const surveyTitle = document.createElement('p');
         surveyTitle.textContent = survey.survey_title;
         surveyElement.appendChild(surveyTitle);
-  
-        // Create an anchor tag instead of a button
+
         const link = document.createElement('a');
         link.href = `/student/survey?id=${survey.survey_id}`; // Set the href attribute
         link.textContent = isOpenSurvey ? 'Take The Survey' : 'View Details';
-        link.classList.add('survey-link'); // Optional: add a class for styling if needed
+        link.classList.add('survey-link');
 
-        // Attach click event to the anchor tag
         link.addEventListener('click', function(event) {
-            event.preventDefault(); // Prevent default anchor behavior
+            event.preventDefault();
 
-            // Fetch survey data (replace the URL with your actual endpoint)
             fetch(`/student/survey?id=${survey.survey_id}`)
                 .then(response => {
                     if (!response.ok) {
@@ -85,11 +82,8 @@ function createSurveyElements(data, containerId, isOpenSurvey) {
                 .then(surveyData => {
                     console.log('(anchor) Raw response:', surveyData);
 
-                    // Store the survey data in sessionStorage
                     sessionStorage.setItem('questionnaireData', JSON.stringify(surveyData));
 
-
-                    // Redirect to the survey page
                     window.location.href = `http://localhost:8888/student/survey/questionnaire?id=${surveyData.question_id}`; // NOTE: THIS IS TEMPORARY URI IF U FIND THIS NOTIFY ME DAGUL
                 })
                 .catch(error => {
@@ -143,7 +137,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
-  
+
 async function fetchSurveys() {
 try {
     const response = await fetch('http://localhost:8888/student/surveys');
