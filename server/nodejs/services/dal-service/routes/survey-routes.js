@@ -52,6 +52,30 @@ surveyRoutes.get('/survey/:username', async(req, res)=>{
     }
 })
 
-surveyRoutes.get('/survey')
+surveyRoutes.post('/survey', async (req, res) => {
+    const {surveyReq, questions} = req.body
+    
+    
+
+    let survey = {
+        survey_title: surveyReq.survey_title,
+        program_id: surveyReq.program_id,
+        period_start: surveyReq.period_start,
+        period_end: surveyReq.perios_end,
+        status: surveyReq.status
+    }
+
+    try{
+        const surveyID = await SurveyDAL.insertSurvey(survey)
+        const questionIDS = await SurveyDAL.insertQuestions(questions)
+        const result = await SurveyDAL.insertQuestionnaire(questionIDS, surveyID)
+        
+        res.status(200)
+    }catch(error){
+        console.log(error)
+        res.status(500)
+    }
+    
+})
 
 module.exports = surveyRoutes
