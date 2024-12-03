@@ -1,4 +1,14 @@
-#profile-logo{
-    width: 10%;
+#profile-icon{
+    width:5%;
     height:auto;
+    object-fit: contain;
 }
+
+body{
+    margin: 0
+}
+
+button{
+    margin-bottom:5px;
+}
+
