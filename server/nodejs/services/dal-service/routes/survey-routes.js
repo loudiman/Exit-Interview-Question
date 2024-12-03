@@ -63,7 +63,7 @@ surveyRoutes.get('/survey/:username', async(req, res)=>{
 })
 
 surveyRoutes.post('/survey', async (req, res) => {
-    const {surveyReq, questions} = req.body
+    const {surveyReq, questions, users} = req.body
     
     
 
@@ -78,7 +78,8 @@ surveyRoutes.post('/survey', async (req, res) => {
     try{
         const surveyID = await SurveyDAL.insertSurvey(survey)
         const questionIDS = await SurveyDAL.insertQuestions(questions)
-        const result = await SurveyDAL.insertQuestionnaire(questionIDS, surveyID)
+        const questionnaireResult = await SurveyDAL.insertQuestionnaire(questionIDS, surveyID)
+        const respondersResult = await SurveyDAL.insertResponders(users, surveyID)
         
         res.status(200)
     }catch(error){
@@ -86,6 +87,22 @@ surveyRoutes.post('/survey', async (req, res) => {
         res.status(500)
     }
     
+})
+
+surveyRoutes.post('/survey/publish/:survey_id', async(req, res) => {
+    const {survey_id} = req.params
+    const {status} = req.body
+    let survey = {
+        status:status,
+        survey_id: survey_id
+    }
+
+    try{
+        const result = await SurveyDAL.updateSurveyStatus(survey)
+        res.status(200)
+    }catch(error){
+        res.status(500)
+    }
 })
 
 surveyRoutes.post('/response')
