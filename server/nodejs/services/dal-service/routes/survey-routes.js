@@ -16,6 +16,16 @@ surveyRoutes.get('/',(req,res)=>{
     res.send("Hello there, This is the survey endpoint")
 })
 
+surveyRoutes.get("/survey",async(req, res)=>{
+    try{
+        const rows = await SurveyDAL.getAllSurvey()
+        res.status(200).json(rows)
+    }catch(error){
+        console.log(error)
+        res.status(500)
+    }
+})
+
 surveyRoutes.get("/questions/:survey_id",async (req,res)=>{
     const{survey_id} = req.params
     console.log(survey_id)
@@ -78,6 +88,6 @@ surveyRoutes.post('/survey', async (req, res) => {
     
 })
 
-
+surveyRoutes.post('/response')
 
 module.exports = surveyRoutes

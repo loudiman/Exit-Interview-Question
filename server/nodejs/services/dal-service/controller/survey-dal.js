@@ -1,6 +1,15 @@
 const pool = require('../db/mysql')
 
 class SurveyDAL{
+
+    static async getAllSurvey(){
+        try{
+            const [result] = await pool.query(`SELECT * FROM survey`)
+        }catch(Error){
+            console.log(Error.message)
+        }
+    }
+
     static async getAllPublishedSurvey(username){
         try{
             console.log("username: "+username)
