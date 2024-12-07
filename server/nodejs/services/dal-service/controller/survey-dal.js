@@ -139,6 +139,16 @@ class SurveyDAL{
             throw new Error(error.message)
         }
     }
+
+    static async insertResponse(responseJSON, surveyID){
+        var query = `INSERT INTO responses (survey_id, response_json) VALUES(?,?)`
+        try{
+            const[result] = pool.execute(query, [surveyID, responseJSON])
+            return result
+        }catch(error){
+            throw new Error(error.message)
+        }
+    }
 }
 
 module.exports = SurveyDAL
