@@ -1,5 +1,5 @@
 const express = require(`express`)
-const {SurveyDAL} = require(`../dal/index`)
+const {SurveyDAL} = require(`../controller/index`)
 const surveyRoutes = express.Router()
 
 function checkPerm(req,res,next){
@@ -105,6 +105,14 @@ surveyRoutes.post('/survey/publish/:survey_id', async(req, res) => {
     }
 })
 
-surveyRoutes.post('/response')
+surveyRoutes.post('/response',async(req,res) => {
+    const {survey_id, response_json} = req.body
+    try{
+        const result = SurveyDAL.insertResponse(response_json, survey_id)
+        res.status(200)
+    }catch(error){
+       res.status(500) 
+    }
+})
 
 module.exports = surveyRoutes
