@@ -1,14 +1,138 @@
-#profile-icon{
-    width:5%;
-    height:auto;
-    object-fit: contain;
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
 }
 
-body{
-    margin: 0
+/* Navbar Styles */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #2c3e50;
+    color: white;
+    padding: 10px 20px;
 }
 
-button{
-    margin-bottom:5px;
+.navbar button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
 }
+
+.navbar img {
+    border-radius: 50%;
+}
+
+/* Sidebar */
+.sidebar-container {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #34495e;
+    color: white;
+    padding-top: 1rem;
+    flex-shrink: 0;
+}
+
+.sidebar a {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    color: white;
+    font-weight: bold;
+}
+
+.sidebar a img {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+.sidebar a.active {
+    background-color: #2c3e50;
+}
+
+/* Main Content */
+main {
+    flex: 1;
+    padding: 1.5rem;
+    background-color: #ecf0f1;
+    overflow-y: auto;
+}
+
+.flex-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+}
+
+#profile-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+}
+.flex-container.row {
+    width: 100%;
+    justify-content: flex-start;
+    gap: 1rem;
+}
+/* Buttons */
+.btn-prm-long {
+    display: block;
+    text-decoration: none;
+    background-color: #223C6B;
+    color: white;
+    border: none;
+    padding: 1.5rem 1.5rem;
+    font-size: 1.3rem;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.btn-prm-long:hover {
+    background-color: #9B9898;
+}
+
+h2 {
+    font-size: 2rem;
+    margin: 0.5rem 0;
+}
+
+.spacer {
+    flex: 1;
+}
+
+.logout-button{
+    color: white;
+    background-color: #E80000;
+    display: block;
+    text-decoration: none;
+    border: none;
+    padding: 1.5rem 1.5rem;
+    font-size: 1.3rem;
+    width: 103%;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: bold;
+}
+.logout-button:hover {
+    background-color: darkred;
+}
+/*
+TODO: Add css for the modal functionality
+ */
 
