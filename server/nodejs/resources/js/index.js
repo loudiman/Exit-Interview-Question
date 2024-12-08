@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const surveyData = [
         {
             survey_id: 1,
-            survey_title: 'Sample Survey 1',
+            survey_title: 'Sample Survey 1  ',
             status: 'unpublished',
             program_id: 101,
             period_start: '2024-11-01',
@@ -56,11 +56,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     ];
 
-    // TODO: Verify the meaning of such titles
     const cardData = [
-        { title: 'Completed the Recent Survey deployed', data: 30/100 },
-        { title: 'Missed the Recent Survey deployed', data: 5 },
-        { title: 'Surveys deployed', data: 3 }
+        { title: 'Overall Respondents for <br> Surveys Deployed', data: 30/100 },
+        { title: 'Overall Missed <br> Surveys Deployed', data: 5 },
+        { title: 'Surveys Deployed', data: 3 }
     ];
 
 
