@@ -26,6 +26,11 @@
     font-style: italic;
 }
 
+html, body {
+    height: 100%;
+    overflow: hidden;
+}
+
 body {
     margin: 0;
 }
@@ -35,8 +40,6 @@ h2, p, a {
     font-family: "CustomFont", sans-serif;
 }
 
-
-
 .main-content {
     flex-grow: 1;
     padding: 20px;
@@ -44,7 +47,6 @@ h2, p, a {
     transition: all 0.3s ease;
     height: 100vh;
     overflow-y: auto;
-    border: 2px solid #ccc;
 }
 
 .main-content.full-width {
@@ -139,7 +141,7 @@ h2, p, a {
     background-color: #0c5ac0;
 }
 
-.review-button, .back-button {
+.publish-button, .back-button {
     padding: 10px 15px;
     font-size: 16px;
     height: 50px;
@@ -154,7 +156,7 @@ h2, p, a {
     z-index: 1000;
 }
 
-.review-button {
+.publish-button {
     position: fixed;
     bottom: 20px;
     right: 20px;
