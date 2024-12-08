@@ -10,55 +10,57 @@
     <link rel="stylesheet" href="../css/side_bar.css">
 </head>
 <body>
-      <!-- Navbar-->
-  <div class="navbar">
+
+<!-- Navbar -->
+<div class="navbar">
     <button onclick="toggleSidebar()">☰</button>
     <img src="../images/male_user.png" alt="Profile" width="30" height="30">
-  </div>
+</div>
 
-  <!-- Sidebar and main content container -->
-  <div class="sidebar-container">
+<!-- Sidebar and main content container -->
+<div class="sidebar-container">
     <!-- Sidebar -->
     <nav class="sidebar" id="sidebar">
-      <a href="#">
-        <img src="../images/home_icon.png" alt="Home Icon"> Home
-      </a>
-      <a href="#" class="active">
-        <img src="../images/create_icon.png" alt="Create Icon"> Create
-      </a>
-      <a href="#">
-        <img src="../images/view_icon.png" alt="View Icon"> View
-      </a>
-      <a href="#">
-        <img src="../images/respondents_icon.png" alt="Respondents Icon"> Respondents
-      </a>
-      <a href="#">
-        <img src="../images/male_user.png" alt="Profile Icon"> Profile
-      </a>
+        <a href="#">
+            <img src="../images/home_icon.png" alt="Home Icon"> Home
+        </a>
+        <a href="#">
+            <img src="../images/create_icon.png" alt="Create Icon"> Create
+        </a>
+        <a href="#">
+            <img src="../images/view_icon.png" alt="View Icon"> View
+        </a>
+        <a href="#">
+            <img src="../images/respondents_icon.png" alt="Respondents Icon"> Respondents
+        </a>
+        <a href="#" class="active">
+            <img src="../images/male_user.png" alt="Profile Icon"> Profile
+        </a>
     </nav>
-
+    <!-- Main Content -->
     <main>
         <div class="flex-container">
             <div class="flex-container row">
                 <img src="../images/black-img.png" alt="ICON" id="profile-icon">
-                <h2>Name</h2>
+                <h2>Mark Lestat Agustin</h2>
             </div>
-            <button class="btn-prm-long left-align txt-m bolder">Change Password</button>
-            <div class="flex-container row">
-                <div class="spacer"></div>
-                <div class="flex-container bg-primary">
-                    <form action="" method="post">
-                        <label for="" class="color-white">Change Password</label>
-                        <input type="password" name="old_password" id="old_password">
-                    </form>
+            <a href="admin-profile-changepass.html" class="btn-prm-long">Change Password</a>
+            <a href="admin-profile-createacc.html" class="btn-prm-long">Create Admin Account</a>
+            <button class="logout-button">Log Out</button>
+            <!-- Logout Modal -->
+            <div id="logout-modal" class="modal">
+                <div class="modal-content">
+                    <h3>Are you sure you want to log out?</h3>
+                    <div class="modal-actions">
+                        <button class="btn btn-secondary" onclick="closeLogoutModal()">Cancel</button>
+                        <button class="btn btn-primary" onclick="logOut()">Log out</button>
+                    </div>
                 </div>
-                <div class="spacer"></div>
+                <!--TODO: Use the logout modal function into script to open the prompt after clicking the logout button-->
             </div>
-            <button class="btn-prm-long left-align txt-m bolder">Create Admin Account</button>
-            <button class="btn-prm-long left-align txt-m bolder">Log Out</button>
         </div>
     </main>
 </div>
-    <script src="../js/survey_creation_navbar.js"></script>
+<script src="../js/survey_creation_navbar.js"></script>
 </body>
 </html>
