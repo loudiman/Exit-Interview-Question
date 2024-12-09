@@ -114,7 +114,6 @@ h2 {
 .spacer {
     flex: 1;
 }
-
 .logout-button{
     color: white;
     background-color: #E80000;
@@ -132,7 +131,33 @@ h2 {
 .logout-button:hover {
     background-color: darkred;
 }
-/*
-TODO: Add css for the modal functionality
- */
+.logout-prompt {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: #223C6B;
+}
+
+.prompt-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 30%;
+}
+
+.prompt-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.prompt-actions button {
+    margin-left: 10px;
+}
 

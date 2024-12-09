@@ -46,17 +46,16 @@
             </div>
             <a href="admin-profile-changepass.html" class="btn-prm-long">Change Password</a>
             <a href="admin-profile-createacc.html" class="btn-prm-long">Create Admin Account</a>
-            <button class="logout-button">Log Out</button>
-            <!-- Logout Modal -->
-            <div id="logout-modal" class="modal">
-                <div class="modal-content">
+            <button class="logout-button" onclick="showLogoutPrompt()">Log Out</button>
+            <!-- Logout Prompt -->
+            <div class="logout-prompt" id="logout-prompt">
+                <div class="prompt-content">
                     <h3>Are you sure you want to log out?</h3>
-                    <div class="modal-actions">
-                        <button class="btn btn-secondary" onclick="closeLogoutModal()">Cancel</button>
-                        <button class="btn btn-primary" onclick="logOut()">Log out</button>
+                    <div class="prompt-actions">
+                        <button class="btn btn-secondary" id="cancelLogoutBtn" onclick="closeLogoutPrompt()">Cancel</button>
+                        <button class="btn btn-primary" id="logOut" onclick="logOut()">Log out</button>
                     </div>
                 </div>
-                <!--TODO: Use the logout modal function into script to open the prompt after clicking the logout button-->
             </div>
         </div>
     </main>
