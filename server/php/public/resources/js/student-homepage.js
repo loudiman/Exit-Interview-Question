@@ -61,36 +61,27 @@ document.addEventListener('DOMContentLoaded', function () {
             surveyElement.classList.add('survey-item');
             if (hiddenSurveys.includes(survey.survey_id)) surveyElement.classList.add('hidden-survey'); // If survey is hidden, add class
 
-            // Format the end time in standard time format
-            const periodEndDate = new Date(survey['period-end']);
-            const formattedDate = !isNaN(periodEndDate.getTime())
-                ? periodEndDate.toLocaleString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    hour: 'numeric',
-                    minute: 'numeric',
-                    second: 'numeric',
-                    hour12: true
-                })
-                : 'Invalid Date';
-
-            const currentDate = new Date();
+            const periodEndFormatted = formatDateToStandardTime(survey.period_end);
+            const submittedAtFormatted = survey.responded == 1 ? formatDateToStandardTime(survey.submitted_at) : '';
 
             // Set different colors based on survey status and period end
-            if (survey.responded) {
+            if (survey.responded == 1) {
                 surveyElement.classList.add('green');
-            } else if (currentDate > periodEndDate) {
-                surveyElement.classList.add('red'); // Missed
-            } else if (currentDate < periodEndDate) {
-                surveyElement.classList.add('yellow'); // Still valid
+            }
+
+            if (survey.responded == 0) {
+                if (new Date() > new Date(survey.period_end)) {
+                    surveyElement.classList.add('red'); // Missed
+                } else if (new Date() < new Date(survey.period_end)) {
+                    surveyElement.classList.add('yellow'); // Still valid
+                }
             }
 
             surveyElement.innerHTML = `
                 <div>
                     <div class="survey-title">${survey.survey_title}</div>
                     <div class="survey-info">
-                        ${survey.responded == 1? `Time Submitted: ${survey.submitted_at}` : survey.responded == 0 && new Date() < new Date(survey.period_end) ? `Valid Until: ${survey.period_end}` : `Submission Closed: ${survey.period_end}` }
+                        ${survey.responded == 1? `Time Submitted: ${submittedAtFormatted}` : survey.responded == 0 && new Date() < new Date(survey.period_end) ? `Valid Until: ${periodEndFormatted}` : `Submission Closed: ${periodEndFormatted}` }
                     </div>
                 </div>
                 <div class="survey-actions">
@@ -203,6 +194,24 @@ document.addEventListener('DOMContentLoaded', function () {
     // Initial fetch
     fetchSurveys();
 });
+
+function formatDateToStandardTime(dateInput) {
+    // Handle both Date objects and date strings
+    const dateToFormat = dateInput instanceof Date ? dateInput : new Date(dateInput);
+    
+    // Check if date is valid
+    return !isNaN(dateToFormat.getTime())
+        ? dateToFormat.toLocaleString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+            hour12: true
+        })
+        : 'Invalid Date';
+}
 
 // Another way to logout
 // function logout() {
