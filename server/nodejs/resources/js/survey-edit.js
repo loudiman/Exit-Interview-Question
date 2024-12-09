@@ -1,199 +1,381 @@
-function makeEditable(elementId) {
-    var element = document.getElementById(elementId);
-    if (!element.querySelector('input')) {
-        var currentText = element.textContent;
-        var input = document.createElement('input');
-        input.type = 'text';
-        input.value = currentText;
-
-        var computedStyle = window.getComputedStyle(element);
-        input.style.width = computedStyle.width;
-        input.style.fontSize = computedStyle.fontSize;
-        input.style.fontFamily = computedStyle.fontFamily;
-        input.style.border = '1px solid #ccc';
-        input.style.borderRadius = '5px';
-        input.style.padding = '8px 10px';
-        input.style.boxSizing = 'border-box';
-
-        input.onblur = function() { saveText(elementId, input.value); };
-
-        element.innerHTML = '';
-        element.appendChild(input);
-        input.focus();
-        input.select();
-    }
-}
-
-function saveText(elementId, text) {
-    var element = document.getElementById(elementId);
-    element.textContent = text || (elementId === 'formTitle' ? 'Sample Title' : 'Form Description');
-}
-
 let questionIndex = 1;
 
-window.onload = function() {
-    const addQuestionButton = document.getElementById('addQuestionButton');
-    addQuestionButton.addEventListener('click', addQuestion);
+// Example survey JSON data
+const surveyData = {
+    "survey_id": 1,
+    "survey_title": "CS Department Evaluation 2024",
+    "questions": [
+        {
+            "question_id": 1,
+            "question_text": "How satisfied are you with the course curriculum?",
+            "question_type": "multiple_choice",
+            "options": [
+                "Strongly Disagree",
+                "Disagree",
+                "Neutral",
+                "Agree",
+                "Strongly Agree"
+            ],
+            "scale": null
+        },
+        {
+            "question_id": 2,
+            "question_text": "Please provide additional feedback about the course.",
+            "question_type": "essay",
+            "options": [],
+            "scale": null
+        },
+        {
+            "question_id": 3,
+            "question_text": "Rate the quality of teaching",
+            "question_type": "rating",
+            "options": null,
+            "scale": 5
+        }
+    ]
+};
 
-    const firstSelectElement = document.querySelector('select');
-    updateQuestionContent(firstSelectElement);
+// Function to fetch survey data from the server/API
+function fetchSurveyData() {
+    return fetch('/path/to/your/api')  // Replace with your API endpoint
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch from server');
+            }
+            return response.json();
+        })
+        .catch(error => {
+            console.error('Error fetching survey data from server:', error);
+            return null;  // Return null if the fetch fails
+        });
 }
 
-function addQuestion(event) {
-    const button = event.target;
-    const questionContainer = button.closest(".question-container");
+// Function to render the survey from JSON data
+function renderSurvey(surveyData) {
+    const formTitle = document.getElementById('formTitle');
+    const questionsContainer = document.getElementById('questionsContainer');
 
+    // Clear existing questions
+    questionsContainer.innerHTML = '';
+
+    // Set the title from the JSON data
+    formTitle.textContent = surveyData.survey_title;
+
+    // Iterate over the questions and add them to the DOM
+    surveyData.questions.forEach((questionData) => {
+        addQuestionFromData(questionData, questionsContainer);
+    });
+}
+
+// Function to initialize the survey rendering process
+function initializeSurvey() {
+    const questionsContainer = document.getElementById('questionsContainer');
+
+    // Try to fetch survey data from the server/API first
+    fetchSurveyData().then(data => {
+        if (data && data.survey_title) {
+            // If data is available from the server, render it
+            renderSurvey(data);
+        } else {
+            // If no data from server, use fallback local JSON data
+            console.log('Using fallback data from local JSON');
+            renderSurvey(surveyData);
+        }
+    });
+}
+
+// Function to create a new question container
+function createQuestionContainer(questionData) {
     const newQuestionContainer = document.createElement("div");
     newQuestionContainer.classList.add("question-container");
-    newQuestionContainer.setAttribute("data-id", questionIndex);
+    newQuestionContainer.setAttribute("data-question-id", questionData.question_id || questionIndex);
 
     newQuestionContainer.innerHTML = `
         <div class="question-content">
-          <div class="question-header">
-            <input type="text" placeholder="Untitled Question">
-            <select onchange="updateQuestionContent(this)">
-              <option value="multiple-choice">Multiple Choice</option>
-              <option value="essay">Essay</option>
-              <option value="rating">Rating</option>
-            </select>
-          </div>
-          <div class="options"></div>
-          <div class="button-container" style="display: none;">
-            <button class="option-button" onclick="addOption(this)">Add Option</button>
-            <span>or </span>
-            <button class="option-button-other" onclick="addOtherOption(this)">Add Other</button>
-          </div>
+            <div class="question-header">
+                <input type="text" class="question-text" value="${questionData.question_text}" onchange="updateQuestionText(this)">
+                <select class="question-type" onchange="changeQuestionType(this)">
+                    <option value="multiple_choice" ${questionData.question_type === 'multiple_choice' ? 'selected' : ''}>Multiple Choice</option>
+                    <option value="essay" ${questionData.question_type === 'essay' ? 'selected' : ''}>Essay</option>
+                    <option value="rating" ${questionData.question_type === 'rating' ? 'selected' : ''}>Rating</option>
+                </select>
+            </div>
+            <div class="options"></div>
+            <div class="button-container" style="display: ${questionData.question_type === 'multiple_choice' ? 'block' : 'none'};">
+                <button class="option-button" onclick="addOption(this)">Add Option</button>
+                <span>or</span>
+                <button class="option-button" onclick="addOtherOption(this)">Add Other</button>
+            </div>
         </div>
         <div class="side-buttons">
-          <button class="side-button" id="addQuestionButton">+</button>
-          <button class="side-button" onclick="removeQuestion(this)">x</button>
+            <button class="side-button add-question-btn" onclick="addNewQuestion(this)">+</button>
+            <button class="side-button remove-question-btn" onclick="removeQuestion(this)">x</button>
         </div>
     `;
 
-    questionContainer.insertAdjacentElement("afterend", newQuestionContainer);
+    return newQuestionContainer;
+}
+
+// Function to render a question from the JSON structure
+function addQuestionFromData(questionData, container) {
+    const newQuestionContainer = createQuestionContainer(questionData);
+
+    // Render based on question type
+    switch(questionData.question_type) {
+        case 'multiple_choice':
+            renderMultipleChoiceOptions(newQuestionContainer, questionData.options);
+            break;
+        case 'essay':
+            renderEssayQuestion(newQuestionContainer);
+            break;
+        case 'rating':
+            renderRatingQuestion(newQuestionContainer, questionData.scale);
+            break;
+    }
+
+    container.appendChild(newQuestionContainer);
     questionIndex++;
-
-    const newAddButton = newQuestionContainer.querySelector('.side-button');
-    newAddButton.addEventListener('click', addQuestion);
-
-    const newSelectElement = newQuestionContainer.querySelector('select');
-    updateQuestionContent(newSelectElement);
 }
 
-function removeQuestion(button) {
-    const questionContainer = button.closest(".question-container");
+// Render multiple choice options
+function renderMultipleChoiceOptions(questionContainer, options = []) {
+    const optionsContainer = questionContainer.querySelector('.options');
+    optionsContainer.innerHTML = ''; // Clear existing options
 
-    if (questionContainer) {
-        questionContainer.remove();
-        reindexQuestions();
-    }
-}
-
-function reindexQuestions() {
-    const questions = document.querySelectorAll(".question-container");
-    questionIndex = 1;
-
-    questions.forEach((question, index) => {
-        question.setAttribute("data-id", questionIndex);
-        questionIndex++;
-    });
-}
-
-function updateQuestionContent(selectElement) {
-    const questionContent = selectElement.closest(".question-content");
-    const optionsContainer = questionContent.querySelector(".options");
-    const buttonContainer = questionContent.querySelector(".button-container");
-    const questionType = selectElement.value;
-
-    optionsContainer.innerHTML = '';
-    buttonContainer.style.display = questionType === 'multiple-choice' ? 'block' : 'none';
-
-    if (questionType === 'multiple-choice') {
-        addOption(buttonContainer.querySelector(".option-button"));
-    } else if (questionType === 'essay') {
-        optionsContainer.innerHTML = `<textarea placeholder="Enter an answer here" rows="4" cols="50" disabled class="textarea"></textarea>`;
-
-    } else if (questionType === 'rating') {
-        const ratingContainer = document.createElement("div");
-        ratingContainer.classList.add("rating-container");
-        ratingContainer.style.display = "flex";
-        ratingContainer.style.gap = "10px";
-        ratingContainer.style.marginBottom = "10px";
-
-        const maxRatingSelect = document.createElement("select");
-        maxRatingSelect.classList.add("max-rating-select");
-        maxRatingSelect.style.marginBottom = "10px";
-
-        for (let i = 1; i <= 10; i++) {
-            const option = document.createElement("option");
-            option.value = i;
-            option.textContent = i;
-            maxRatingSelect.appendChild(option);
-        }
-
-        maxRatingSelect.addEventListener("change", () => {
-            const maxRating = parseInt(maxRatingSelect.value, 10);
-            ratingContainer.innerHTML = "";
-
-            for (let i = 1; i <= maxRating; i++) {
-                const label = document.createElement("label");
-                label.style.display = "flex";
-                label.style.alignItems = "center";
-
-                const radio = document.createElement("input");
-                radio.type = "radio";
-                radio.name = "rating";
-                radio.value = i;
-                radio.style.marginRight = "5px";
-
-                label.appendChild(radio);
-                label.appendChild(document.createTextNode(i));
-                ratingContainer.appendChild(label);
-            }
+    if (options.length === 0) {
+        // Add a default option if no options exist
+        addOptionToQuestion(questionContainer);
+    } else {
+        // Render existing options
+        options.forEach(option => {
+            addOptionToQuestion(questionContainer, option);
         });
-
-        optionsContainer.appendChild(maxRatingSelect);
-        optionsContainer.appendChild(ratingContainer);
     }
 }
 
-function addOption(button) {
-    const questionContent = button.closest(".question-content");
-    const optionsContainer = questionContent.querySelector(".options");
+// Render essay question
+function renderEssayQuestion(questionContainer) {
+    const optionsContainer = questionContainer.querySelector('.options');
+    const buttonContainer = questionContainer.querySelector('.button-container');
 
-    const newOption = document.createElement("div");
-    newOption.classList.add("option-container");
+    optionsContainer.innerHTML = `
+        <textarea placeholder="Enter an answer here" rows="4" cols="50" disabled class="textarea"></textarea>
+    `;
+    buttonContainer.style.display = 'none';
+}
 
-    newOption.innerHTML = `
-        <input type="text" placeholder="Option">
+// Render rating question
+function renderRatingQuestion(questionContainer, scale = 5) {
+    const optionsContainer = questionContainer.querySelector('.options');
+    const buttonContainer = questionContainer.querySelector('.button-container');
+
+    optionsContainer.innerHTML = `
+        <select class="max-rating-select" onchange="updateRatingScale(this)">
+            ${[...Array(10)].map((_, i) =>
+        `<option value="${i+1}" ${i+1 === scale ? 'selected' : ''}>${i+1}</option>`
+    ).join('')}
+        </select>
+        <div class="rating-container">
+            ${[...Array(scale)].map((_, i) =>
+        `<label>
+                    <input type="radio" name="rating" value="${i+1}">
+                    ${i+1}
+                </label>`
+    ).join('')}
+        </div>
+    `;
+    buttonContainer.style.display = 'none';
+}
+
+// Change question type
+function changeQuestionType(selectElement) {
+    const questionContainer = selectElement.closest('.question-container');
+    const optionsContainer = questionContainer.querySelector('.options');
+    const buttonContainer = questionContainer.querySelector('.button-container');
+    const newType = selectElement.value;
+
+    // Reset options based on new type
+    switch(newType) {
+        case 'multiple_choice':
+            buttonContainer.style.display = 'block';
+            renderMultipleChoiceOptions(questionContainer);
+            break;
+        case 'essay':
+            renderEssayQuestion(questionContainer);
+            break;
+        case 'rating':
+            renderRatingQuestion(questionContainer);
+            break;
+    }
+}
+
+// Make the title editable
+function makeEditable(id) {
+    const titleElement = document.getElementById(id);
+
+    // If it's already an input, save the value and revert back
+    if (titleElement.tagName === 'INPUT') {
+        const newTitle = titleElement.value;
+        titleElement.replaceWith(createTitleElement(newTitle));  // Revert back to the title
+    } else {
+        // Create an input field for editing
+        const inputElement = document.createElement('input');
+        inputElement.type = 'text';
+        inputElement.value = titleElement.textContent;
+        inputElement.addEventListener('blur', () => {
+            const newTitle = inputElement.value;
+            titleElement.replaceWith(createTitleElement(newTitle));  // Revert back to the title
+        });
+        titleElement.replaceWith(inputElement);
+        inputElement.focus();  // Focus on the input field for immediate editing
+    }
+}
+
+// Helper function to create the title element (either h2 or input)
+function createTitleElement(titleText) {
+    const titleElement = document.createElement('h2');
+    titleElement.id = 'formTitle';
+    titleElement.textContent = titleText;
+    titleElement.onclick = () => makeEditable('formTitle');  // Re-enable click-to-edit
+    return titleElement;
+}
+
+// Add option to a multiple choice question
+function addOptionToQuestion(questionContainer, optionText = '') {
+    const optionsContainer = questionContainer.querySelector('.options');
+    const optionElement = document.createElement('div');
+    optionElement.classList.add('option-container');
+
+    optionElement.innerHTML = `
+        <input type="text" class="option-input" value="${optionText}" onchange="updateOptionText(this)">
         <button class="remove-button" onclick="removeOption(this)">Remove</button>
     `;
 
-    optionsContainer.appendChild(newOption);
-    updateOptionLabels(optionsContainer);
+    optionsContainer.appendChild(optionElement);
 }
 
-function addOtherOption(button) {
-    const optionsContainer = button.closest(".question-content").querySelector(".options");
-    const otherOption = document.createElement("div");
-    otherOption.classList.add("option-container");
-    otherOption.innerHTML = `
-        <input type="text" placeholder="Other">
-        <button class="remove-button" onclick="removeOption(this, false)">Remove</button>
-    `;
-    optionsContainer.appendChild(otherOption);
+// Add option button handler
+function addOption(buttonElement) {
+    const questionContainer = buttonElement.closest('.question-container');
+    addOptionToQuestion(questionContainer);
 }
 
-function removeOption(button) {
-    const optionsContainer = button.closest(".options");
-    button.parentElement.remove();
-    updateOptionLabels(optionsContainer);
+// Add "Other" option
+function addOtherOption(buttonElement) {
+    const questionContainer = buttonElement.closest('.question-container');
+    addOptionToQuestion(questionContainer, 'Other');
 }
-function updateOptionLabels(optionsContainer) {
-    const optionContainers = optionsContainer.querySelectorAll(".option-container");
 
-    optionContainers.forEach((option, index) => {
-        const input = option.querySelector("input");
-        input.placeholder = `Option ${index + 1}`;
+// Remove an option
+function removeOption(removeButton) {
+    const optionContainer = removeButton.closest('.option-container');
+    optionContainer.remove();
+}
+
+// Remove a question
+function removeQuestion(removeButton) {
+    const questionContainer = removeButton.closest('.question-container');
+
+    // Prevent removing the last question
+    const questionsContainer = document.getElementById('questionsContainer');
+    if (questionsContainer.children.length > 1) {
+        questionContainer.remove();
+    } else {
+        alert('You must have at least one question.');
+    }
+}
+
+// Add a new question
+function addNewQuestion(addButton) {
+    const questionsContainer = document.getElementById('questionsContainer');
+    const newQuestionData = {
+        question_id: questionIndex,
+        question_text: 'Untitled Question',
+        question_type: 'multiple_choice',
+        options: ['Option 1']
+    };
+
+    const newQuestionContainer = createQuestionContainer(newQuestionData);
+
+    // Get the closest question to the 'Add' button
+    const questionContainer = addButton.closest('.question-container');
+    // Insert the new question after the current question
+    questionContainer.insertAdjacentElement('afterend', newQuestionContainer);
+
+    // Ensure the new question is rendered properly
+    renderMultipleChoiceOptions(newQuestionContainer, newQuestionData.options);
+
+    questionIndex++;
+}
+
+// Update question text
+function updateQuestionText(inputElement) {
+    // You can add additional logic here if needed
+    console.log('Question text updated:', inputElement.value);
+}
+
+// Update option text
+function updateOptionText(inputElement) {
+    // You can add additional logic here if needed
+    console.log('Option text updated:', inputElement.value);
+}
+
+// Update rating scale
+function updateRatingScale(selectElement) {
+    const questionContainer = selectElement.closest('.question-container');
+    const newScale = parseInt(selectElement.value, 10);
+    renderRatingQuestion(questionContainer, newScale);
+}
+
+// Collect survey data
+function collectSurveyData() {
+    const surveyData = {
+        survey_title: document.getElementById('formTitle').textContent,
+        questions: []
+    };
+
+    const questionContainers = document.querySelectorAll('.question-container');
+    questionContainers.forEach((container, index) => {
+        const questionData = {
+            question_id: index + 1,
+            question_text: container.querySelector('.question-text').value,
+            question_type: container.querySelector('.question-type').value,
+            options: [],
+            scale: null
+        };
+
+        switch(questionData.question_type) {
+            case 'multiple_choice':
+                questionData.options = Array.from(
+                    container.querySelectorAll('.option-input')
+                ).map(input => input.value);
+                break;
+            case 'rating':
+                questionData.scale = parseInt(
+                    container.querySelector('.max-rating-select').value,
+                    10
+                );
+                break;
+        }
+
+        surveyData.questions.push(questionData);
     });
+
+    return surveyData;
 }
+
+// Publish survey (example function)
+function publishSurvey() {
+    const surveyData = collectSurveyData();
+    console.log('Survey data to be published:', surveyData);
+    // Add your publishing logic here (e.g., send to backend)
+    alert('Survey data collected and ready to be published!');
+}
+
+// Initial render or add first question on page load
+window.onload = function() {
+    initializeSurvey();
+
+    // Attach publish button event
+    document.querySelector('.publish-button').addEventListener('click', publishSurvey);
+};
