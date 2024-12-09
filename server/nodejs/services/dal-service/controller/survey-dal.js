@@ -133,7 +133,7 @@ class SurveyDAL{
         var query = `INSERT INTO responders (username, survey_id, responded) VALUES ${placeholders}`
 
         try{
-            const[result] = pool.execute(query, values)
+            const[result] = await pool.execute(query, values)
             return true
         }catch(error){
             throw new Error(error.message)
@@ -143,7 +143,28 @@ class SurveyDAL{
     static async insertResponse(responseJSON, surveyID){
         var query = `INSERT INTO responses (survey_id, response_json) VALUES(?,?)`
         try{
-            const[result] = pool.execute(query, [surveyID, responseJSON])
+            const[result] = await pool.execute(query, [surveyID, responseJSON])
+            return result
+        }catch(error){
+            throw new Error(error.message)
+        }
+    }
+
+    static async getSurveySummary(){
+        console.log("Getting summary")
+        const query = `
+        SELECT s.survey_id, s.survey_title, s.status, s.program_id, s.period_start, s.period_end,
+        COUNT(CASE WHEN r.responded = TRUE THEN 1 END) AS total_responded,
+        COUNT(*) AS total_responders
+        FROM survey s
+        LEFT JOIN responders r ON s.survey_id = r.survey_id
+        GROUP BY s.survey_id LIMIT 100;
+    `;
+    
+        
+        try{
+            const[result] = await pool.execute(query)
+
             return result
         }catch(error){
             throw new Error(error.message)
