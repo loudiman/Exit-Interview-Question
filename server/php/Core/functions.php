@@ -56,7 +56,8 @@ function login($user)
 {
     $_SESSION['user'] = [
         'userType' => $user['userType'],
-        'username' => $user['username']
+        'username' => $user['username'],
+        'fname' => $user['fname']
     ];
 
     session_regenerate_id(true);
