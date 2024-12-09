@@ -1,5 +1,12 @@
 const express = require('express')
+const cors = require('cors')
 const app = express();
+
+const corsOptions = {
+    origin: '*' // This is a temp fix, for production running this server through a proxy should bypass cors
+}
+
+app.use(cors(corsOptions))
 
 const dalRoutes = require(`./services/dal-service`)
 
