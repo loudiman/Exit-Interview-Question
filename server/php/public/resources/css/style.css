@@ -38,6 +38,13 @@ html *{
     display: flex;
 }
 
+.flex-container.v-align-center{
+    align-items: center;
+}
+
+.flex-container.h-align-center{
+    justify-content: center;
+}
 
 .flex-col{
     flex-direction: column;
@@ -87,4 +94,40 @@ html *{
     font-size: large;
     font-weight: bold;
     border: 0px solid;
+}
+
+.btn-primary-m{
+    background-color: #223C6B;
+    color:white;
+    border-radius:10px;
+    border: 1px solid;
+    font-size:large;
+    padding:5px 10px;
+}
+
+.img-10-per{
+    width:10%;
+    height: auto;
+}
+
+.img-5-per{
+    width:5%;
+    height: auto;
+}
+
+.img-2-per{
+    width: 2%;
+    height: auto;
+}
+
+.txt-l{
+    font-size: large;
+}
+
+.txt-xxl{
+    font-size: xx-large;
+}
+
+.bold{
+    font-weight: bold;
 }

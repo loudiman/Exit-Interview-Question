@@ -38,7 +38,12 @@ header {
     font-size: 18px;
 }
 
-.logout-button {
+#logout-form {
+    display: flex;
+    align-items: center;
+}
+
+#logout-button {
     background-color: #3F5989;
     color: #fff;
     border: none;
@@ -47,7 +52,7 @@ header {
     border-radius: 5px;
 }
 
-.logout-button:hover {
+#logout-button:hover {
     background-color: #2980b9;
 }
 

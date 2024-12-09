@@ -4,9 +4,11 @@ use Core\Session;
 use Core\ValidationException;
 use Core\Router;
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+session_start();
+
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
 
 /* This file is the entry point for all incoming request */
 const BASE_PATH = __DIR__ . '/../'; // Points to the root of the project
@@ -16,8 +18,6 @@ require BASE_PATH . 'Core/functions.php';
 require base_path('vendor/autoload.php');
 
 require base_path('bootstrap.php');
-
-session_start();
 
 $router = new Core\Router;
 

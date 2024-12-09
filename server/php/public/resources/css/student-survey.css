@@ -1,268 +1,223 @@
-/* Basic Reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+#button-container{
+    margin-top: 10px;
 }
 
-/* Navbar Styling */
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #2f4f6f;
-    padding: 10px 20px;
-    color: #fff;
-    width: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 50px;
+body{
+    margin:0;
+}
+nav{
+    background-color: #223C6B;
+    padding:10px;
 }
 
-.navbar-left {
-    display: flex;
-    align-items: center;
+nav>div>p{
+    padding:0;
+    margin:0;
 }
 
-.navbar-right {
-    display: flex;
-    align-items: center;
+
+form{
+    margin-top:20px;
+    width: 50%;
 }
 
-.icon {
-    width: 34px;
-    height: 34px;
-    margin-left: 15px;
+.flex-container.h-align-center {
+
 }
 
-.profile-icon {
-    margin-right: 10px;
-    width: 34px;
-    height: 34px;
-}
-
-.welcome-text {
-    font-family: "Arial", sans-serif;
-    font-size: 18px;
-}
-
-/* Main Content Styling */
-.main-content {
-    padding: 70px 20px 20px;
-    background-color: #f5f5f5;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-}
-
-h1 {
-    color: #000;
-    font-family: "Arial", sans-serif;
-    font-size: 48px;
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-
-/* Survey Template Container */
-.survey-template-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    width: 100%;
-    max-width: 1300px;
-    padding: 0 10px; /* Optional: adds some space on smaller screens */
-}
-
-/* Survey Template */
-.survey-template {
-    background-color: rgba(47, 79, 111, 0.1);
+.question{
+    background-color:#223C6B70;
     border-radius: 10px;
+    margin-bottom:20px;
+}
+
+.question>.question-header>p{
+    margin:0px;
+    color:white;
+}
+
+.question-header{
+    background-color: #223C6B;
+    border-radius:10px 10px 0 0;
+    padding: 10px;
+}
+
+.textarea-container {
+    width: 100%;
+    display: flex;
+}
+
+.options{
+    padding: 10px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    width: 100%;
-    box-sizing: border-box;
+    justify-content: space-between;
+    gap: 10px;
 }
 
-/* Adjust Survey Template Header */
-.survey-template-header {
-    width: 100%;
-    background-color: rgba(47, 79, 111);
-    color: #fff;
-    font-family: "Arial", sans-serif;
-    font-size: 18px;
-    padding: 10px;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    text-align: center;
+.option{
+    display: flex;
+    gap: 10px;
 }
 
-/* Adjust Survey Template Content */
-.survey-template-content {
+textarea {
     width: 100%;
-    background-color: rgba(47, 79, 111, 0.4);
-    padding: 20px;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
+    padding: 1vw;
 }
 
-/* Question Input Styling */
-.answer-input {
-    width: 100%;
-    height: auto;
-    border: none;
-    border-bottom: 1px solid #2f4f6f;
-    background-color: transparent;
-    padding: 5px 0;
-    font-family: "Arial", sans-serif;
-    font-size: 16px;
-    color: #000;
-    outline: none;
-    margin-bottom: 20px;
+.char-counter{
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+    font-size: 12px;
+    color: gray;
+    pointer-events: none;
 }
 
-/* Rating and Checklist Containers - Make sure they adjust to the container size */
-.rating-container, .checklist-container {
+.flex-col {
+    align-items: center; /* Vertically center the items */
+    margin-bottom: 10px; /* Add some space between the radio buttons */
+}
+
+.rating {
     display: flex;
-    justify-content: center;
-    width: 100%;
-    margin: 10px 0;
-    flex-wrap: wrap; /* Allow wrapping when necessary */
-    gap: 10px; /* Adjust spacing */
+    justify-content: space-between;
+    padding: 1% 12% 1%;
 }
 
-/* Checklist Item Styling */
-.checklist-item {
-    display: flex;
-    flex-direction: column-reverse; /* Label above checkbox */
-    align-items: center;
-    width: 80px; /* Adjust width based on container size */
-    height: auto;
-    cursor: pointer;
-    font-family: "Arial", sans-serif;
-    font-size: 14px;
-    text-align: center;
-    margin: 0 80px;
-}
-
-.checklist-item img.checkbox-icon {
-    width: 50%; /* Adjust size as needed */
-    height: 70%;
-    margin-top: 5px; /* Space between icon and text */
-}
-
-/* Rating Item Styling */
-.rating-item {
-    width: 70px; /* Adjust width for responsiveness */
-    height: 70px; /* Adjust size for responsiveness */
-    display: flex;
-    flex-direction: column;
+/* Style for the container of each rating option */
+.flex-col {
+    display: flex;              /* Sorry lestat it seems to change when i use your styles.css's flex-col*/
+    flex-direction: column;     /* That's why I have to override it here. Find a fix if you can */
     justify-content: center;
     align-items: center;
-    font-family: "Arial", sans-serif;
-    font-size: 16px;
-    margin: 0 80px;
-    cursor: pointer;
+    margin: 10px;
+}
+
+/* Style for the custom radio button */
+.custom-radio {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
-    position: relative;
-}
-
-/* Place rating number above the circle */
-.rating-item span {
-    margin-bottom: 5px; /* Space between the text and the circle */
-    font-size: 14px; /* Adjust text size as needed */
-}
-
-/* Rating Image to fit within the circle */
-.rating-item img {
-    width: 50%;
-    height: 50%;
-    object-fit: cover; /* Ensures image fits without distortion */
-}
-
-/* Button Container Styling */
-.button-container {
-    display: flex;
-    justify-content: flex-start; /* Align buttons to the left */
-    width: 100%;
-    max-width: 600px;
-    margin-top: 20px;
-    padding: 0 10px; /* Optional: adds space on smaller screens */
-}
-
-/* Button Styling */
-.button {
-    padding: 10px 20px;
-    font-size: 18px;
-    font-family: "Arial", sans-serif;
-    background-color: #2f4f6f;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
+    border: 3px solid rgb(255, 255, 255);
+    background-color: #fff;
     cursor: pointer;
-    margin-right: 20px;
+    position: relative;
+    transition: all 0.3s ease;
 }
 
-/* Button Hover */
-.button:hover {
-    background-color: #1e3b5b;
+/** Styling for the radio button when it is checked *!*/
+.custom-radio:checked {
+    background-color: #223C6B;
 }
 
-/* Media Queries for Smaller Screens */
-@media screen and (max-width: 768px) {
-    .survey-template-container {
-        padding: 0 15px;
+/* Style for the label */
+.custom-label {
+    margin-bottom: 5px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+}
+
+.custom-checkbox{
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+/* For very small screens (below 320px), ensure everything fits */
+@media screen and (max-width: 320px) {
+    .rating {
+        display: flex;
+        justify-content: space-between; /* Maintain row layout */
+        padding: 1% 3%; /* Adjust padding for tiny screens */
     }
 
-    .survey-template-header {
-        font-size: 16px;
+    .flex-col {
+        display: flex;
+        justify-content: center; /* Keep content centered */
+        align-items: center;
+        margin: 5px 0; /* Reduce margin for very small screens */
     }
 
-    .survey-template-content {
-        padding: 15px;
+    /* Custom radio button size adjustment for 320px screens */
+    .custom-radio {
+        width: 15px; /* Make radio button smaller */
+        height: 15px;
     }
 
-    .checklist-item, .rating-item {
-        width: 60px; /* Adjust item width for smaller screens */
-        height: 60px;
-    }
-
-    .rating-item img {
-        width: 60px;
-        height: 60px;
-    }
-
-    .button-container {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .button {
-        margin-right: 0;
-        margin-bottom: 10px; /* Add spacing between buttons */
+    /* Adjust label font size for 320px screens */
+    .custom-label {
+        font-size: 14px; /* Smaller font size */
     }
 }
 
-@media screen and (max-width: 480px) {
-    h1 {
-        font-size: 32px; /* Adjust font size for smaller screens */
+/* For small screens (below 425px), ensure radio buttons and labels do not overflow */
+@media screen and (min-width: 321px) and (max-width: 425px) {
+    .rating {
+        display: flex;
+        justify-content: space-between; /* Keep items in a row */
+        padding: 2% 5%; /* Adjust padding for smaller screens */
     }
 
-    .survey-template {
-        width: 100%;
-        margin: 0 10px;
+    .flex-col {
+        display: flex;
+        justify-content: center; /* Keep content centered */
+        align-items: center;
+        margin: 5px 0; /* Reduce margin for smaller screens */
     }
 
-    .checklist-item, .rating-item {
-        width: 50px; /* Smaller checklist and rating items on mobile */
-        height: 50px;
+    /* Custom radio button size adjustment for small screens */
+    .custom-radio {
+        width: 24px; /* Adjust size of radio buttons */
+        height: 24px;
     }
 
-    .rating-item img {
-        width: 50px;
-        height: 50px;
+    /* Adjust label font size for small screens */
+    .custom-label {
+        font-size: 16px; /* Smaller font size for labels */
+    }
+}
+
+/* For medium screens, starting from 426px to 539px (smartphones and larger phones) */
+@media screen and (min-width: 426px) and (max-width: 539px) {
+    .flex-col {
+        margin: 10px; /* Moderate margin for medium screens */
+        align-items: center; /* Center items horizontally */
+    }
+
+    .custom-label {
+        font-size: 16px; /* Default label size */
+    }
+
+    .custom-radio {
+        width: 26px; /* Medium radio button size */
+        height: 26px; /* Medium radio button size */
+    }
+}
+
+/* For larger mobile devices and smaller tablets (540px to 767px) */
+@media screen and (min-width: 540px) and (max-width: 767px) {
+    .flex-col {
+        margin: 10px; /* Standard margin for medium devices */
+        align-items: center; /* Center items horizontally */
+    }
+
+    .custom-label {
+        font-size: 18px; /* Default label size for medium screens */
+    }
+
+    .custom-radio {
+        width: 30px; /* Default radio button size for medium screens */
+        height: 30px;
     }
 }
