@@ -94,9 +94,12 @@ userRoutes.get('/user/:username',checkPerm("admin") ,async(req, res)=>{
 })
 
 userRoutes.post('/user/:username', async(req, res) => {
-    const {username, password, newPassword} = req.body
+    const {username, oldPassword, newPassword} = req.body
     try{
-        const [rows] = await UserDAL.changePass(username, password, newPassword)
+        console.log(username)
+        console.log(oldPassword)
+        console.log(newPassword)
+        const rows = await UserDAL.changePass(username, oldPassword, newPassword)
         res.status(200).json(rows)
     }catch(error){
         console.log(error)
@@ -108,7 +111,7 @@ userRoutes.post('/user',checkPerm("admin"), async(req, res) => {
     const {username, password, last_name, given_name, type} = req.body
     var data
     try{
-        const [rows] = await UserDAL.addUser(username,password,last_name,given_name, type)
+        const rows = await UserDAL.addUser(username,password,last_name,given_name, type)
         data = rows
 
         if(type == 1){
