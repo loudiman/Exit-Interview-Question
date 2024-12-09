@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Survey View</title>
+
+    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/nav_bar.css" rel="stylesheet">
+    <link href="../css/survey_view.css" rel="stylesheet">
+    <link href="../css/side_bar.css" rel="stylesheet">
+    <script defer src="../js/survey-view.js"></script>
+</head>
+<body>
+<header class="navbar">
+    <button aria-label="Toggle Sidebar" id="sidebarToggle">☰</button>
+    <img alt="Profile" height="30" src="../../resources/images/male_user.png" width="30">
+</header>
+
+<div class="container">
+    <!-- Sidebar -->
+    <nav aria-label="Main Navigation" class="sidebar" id="sidebar">
+        <a aria-label="Home" href="#">
+            <img alt="Home Icon" src="../../resources/images/home_icon.png"> Home
+        </a>
+        <a aria-label="Create" href="#">
+            <img alt="Create Icon" src="../../resources/images/create_icon.png"> Create
+        </a>
+        <a aria-label="View" class="active" href="#">
+            <img alt="View Icon" src="../../resources/images/view_icon.png"> View
+        </a>
+        <a aria-label="Respondents" href="#">
+            <img alt="Respondents Icon" src="../../resources/images/respondents_icon.png"> Respondents
+        </a>
+        <a aria-label="Profile" href="#">
+            <img alt="Profile Icon" src="../../resources/images/male_user.png"> Profile
+        </a>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="content" id="mainContent">
+        <section class="search-bar">
+            <label for="searchInput"></label><input id="searchInput" placeholder="Search" type="text">
+            <button aria-label="Search Surveys" id="searchButton">
+                <img src="../../resources/images/Search.png" alt="Search Icon">
+            </button>
+        </section>
+
+        <!-- Survey View Container -->
+        <section class="survey-view">
+            <h2 id="unpublishedSurveysHeading">Unpublished Surveys</h2>
+            <div aria-labelledby="unpublishedSurveysHeading" class="survey-list" id="unpublishedSurveys"></div>
+
+            <h2 id="publishedSurveysHeading">Published Surveys</h2>
+            <div aria-labelledby="publishedSurveysHeading" class="survey-list" id="publishedSurveys"></div>
+        </section>
+    </main>
+</div>
+
+<!-- Modal for Delete Confirmation -->
+<dialog aria-describedby="deleteModalDesc" aria-labelledby="deleteModalTitle" class="modal" id="deleteModal">
+    <div class="modal-content">
+        <h3 id="deleteModalTitle">Confirm Deletion</h3>
+        <p id="deleteModalDesc">Are you sure you want to delete <span id="surveyTitle"></span>?</p>
+
+        <!-- Button Group -->
+        <div class="button-group">
+            <button aria-label="Cancel Deletion" class="cancel-btn" id="cancelDelete">Cancel</button>
+            <button aria-label="Confirm Deletion" class="delete-btn2" id="confirmDelete">Delete</button>
+        </div>
+    </div>
+</dialog>
+
+<!-- Modal for Survey Preview -->
+<dialog aria-describedby="previewModalDesc" aria-labelledby="previewModalTitle" class="modal" id="previewModal">
+    <div class="modal-content">
+        <h3 id="previewModalTitle">Survey Details</h3>
+        <div id="previewModalDesc">
+            <p id="previewSurveyTitle"></p>
+            <p><strong>Status:</strong> <span id="previewSurveyStatus"></span></p>
+            <p><strong>Program ID:</strong> <span id="previewProgramId"></span></p>
+            <p><strong>Period Start:</strong> <span id="previewPeriodStart"></span></p>
+            <p><strong>Period End:</strong> <span id="previewPeriodEnd"></span></p>
+        </div>
+        <button aria-label="Close Preview" class="close-btn" id="closePreview">Close</button>
+    </div>
+</dialog>
+</body>
+</html>
