@@ -1,29 +1,7 @@
-@font-face {
-    font-family: "CustomFont";
-    src: url("../resource/fonts/Istok_Web/IstokWeb-Regular.ttf") format("truetype");
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: "CustomFont";
-    src: url("../resource/fonts/Istok_Web/IstokWeb-Bold.ttf") format("truetype");
-    font-weight: bold;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: "CustomFont";
-    src: url("../resource/fonts/Istok_Web/IstokWeb-Italic.ttf") format("truetype");
-    font-weight: normal;
-    font-style: italic;
-}
-
-@font-face {
-    font-family: "CustomFont";
-    src: url("../resource/fonts/Istok_Web/IstokWeb-BoldItalic.ttf") format("truetype");
-    font-weight: bold;
-    font-style: italic;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
@@ -33,20 +11,30 @@ body {
 h2, p, a {
     color: black;
     font-family: "CustomFont", sans-serif;
+    padding: 8px;
 }
+
+
 
 .main-content {
     flex-grow: 1;
     padding: 20px;
     background-color: #FFFFFF;
     transition: all 0.3s ease;
-    height: 100vh;
     overflow-y: auto;
-    border: 2px solid #ccc;
+    overflow-x: hidden;
 }
 
 .main-content.full-width {
     width: 100%;
+}
+
+.survey-container {
+    background-color: #ffffff;
+    padding: 20px;
+    margin: 5px auto;
+    max-width: 90%;
+    font-family: "CustomFont", sans-serif;
 }
 
 .survey-title {
@@ -107,9 +95,18 @@ h2, p, a {
 
 .option-button {
     display: inline-block;
-    margin-right: 10px;
     padding: 8px 12px;
-    background-color: #1a73e8;
+    background-color: #223C6B;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.option-button-other {
+    display: inline-block;
+    padding: 8px 12px;
+    background-color: #223C6B;
     color: white;
     border: none;
     border-radius: 5px;
@@ -145,7 +142,6 @@ h2, p, a {
 .back-button {
     position: fixed;
     bottom: 20px;
-    left: calc(auto + var(--sidebar-width, 20px));
     transition: left 0.3s, background-color 0.3s;
 }
 
@@ -157,7 +153,16 @@ h2, p, a {
     display: flex;
     align-items: center;
     margin-bottom: 10px;
-    width: 100%;
+    gap: 10px;
+    width: 50%;
+}
+
+.option-container input[type="text"] {
+    flex-grow: 1;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
 }
 
 .option-input {
@@ -169,15 +174,18 @@ h2, p, a {
 }
 
 .remove-button {
-    position: inherit;
-    background-color: #e74c3c;
+    background-color: #223C6B;
     color: white;
     border: none;
     border-radius: 5px;
-    padding: 10px;
+    padding: 8px 12px;
     cursor: pointer;
-    width: 30%;
-    height: 10%;
+    text-align: center;
+    height:auto;
+    width: 150px;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 8px;
 }
 
 .remove-button:hover {
@@ -229,28 +237,6 @@ h2, p, a {
     border: 1px solid #ccc;
 }
 
-.option-container {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-    width: 100%;
-}
-
-.remove-button {
-    background-color: #e74c3c;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 8px 12px;
-    cursor: pointer;
-    margin-left: 10px;
-    width: 10%;
-}
-
-.remove-button:hover {
-    background-color: #c0392b;
-}
-
 .rating-container {
     display: flex;
     gap: 10px;
@@ -270,4 +256,52 @@ h2, p, a {
     border: 1px solid #ccc;
     border-radius: 5px;
     resize: none;
+}
+
+textarea {
+    width: 86%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+}
+
+.rating-container {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.max-rating-select {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    outline: none;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.rating-container label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 14px;
+    cursor: pointer;
+    width: 70px;
+    height: auto;
+}
+
+.rating-container input[type="radio"] {
+    accent-color: #6200ee;
+    width: 18px;
+    height: 18px;
+    margin: 5px 0;
+    cursor: pointer;
+}
+.rating-container .scale-text {
+    font-size: 14px;
+    color: #555;
+    margin: 0 10px;
 }

@@ -4,27 +4,31 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Create</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="stylesheet" href="/static/css/nav-bar.css">
+  <link rel="stylesheet" href="/static/css/survey-creation.css">
+  <link rel="stylesheet" href="/static/css/side-bar.css">
+
   <link rel="stylesheet" href="../css/style.css">
-  <link rel="stylesheet" href="../css/nav_bar.css">
-  <link rel="stylesheet" href="../css/survey_creation.css">
-  <link rel="stylesheet" href="../css/side_bar.css">
-</head>
+  <link rel="stylesheet" href="../css/nav-bar.css">
+  <link rel="stylesheet" href="../css/survey-creation.css">
+  <link rel="stylesheet" href="../css/side-bar.css">
 <body>
 <!-- Navbar -->
 <div class="navbar">
   <button onclick="toggleSidebar()">☰</button>
-  <img src="../resource/images/male_user.png" alt="Profile" width="30" height="30">
+  <img src="../images/male_user.png" alt="Profile" width="30" height="30">
 </div>
 
 <!-- Sidebar and main content container -->
 <div class="sidebar-container">
   <!-- Sidebar -->
   <nav class="sidebar" id="sidebar">
-    <a href="#"><img src="../resource/images/home_icon.png" alt="Home Icon"> Home</a>
-    <a href="#" class="active"><img src="../resource/images/create_icon.png" alt="Create Icon"> Create</a>
-    <a href="#"><img src="../resource/images/view_icon.png" alt="View Icon"> View</a>
-    <a href="#"><img src="../resource/images/respondents_icon.png" alt="Respondents Icon"> Respondents</a>
-    <a href="#"><img src="../resource/images/male_user.png" alt="Profile Icon"> Profile</a>
+    <a href="#"><img src="../images/home_icon.png" alt="Home Icon"> Home</a>
+    <a href="#" class="active"><img src="../images/create_icon.png" alt="Create Icon"> Create</a>
+    <a href="#"><img src="../images/view_icon.png" alt="View Icon"> View</a>
+    <a href="#"><img src="../images/respondents_icon.png" alt="Respondents Icon"> Respondents</a>
+    <a href="#"><img src="../images/male_user.png" alt="Profile Icon"> Profile</a>
   </nav>
 
   <!-- Main content -->
@@ -45,9 +49,9 @@
               <input type="text" placeholder="Untitled Question">
               <select onchange="updateQuestionContent(this)">
                 <option value="multiple-choice">Multiple Choice</option>
+                <option value="checkbox">Checkbox</option>
                 <option value="essay">Essay</option>
                 <option value="rating">Rating</option>
-                <option value="true-false">True or False</option>
               </select>
             </div>
             <div class="options"></div>
@@ -70,8 +74,9 @@
   </div>
 </div>
 
+<script src="/static/js/survey_creation_navbar.js"></script>
+<script src="/static/js/survey-creation-editable.js"></script>
 <script src="../js/survey_creation_navbar.js"></script>
-<script src="../js/survey_creation_editable.js"></script>
-<script src="../js/survey_creation.js"></script>
+<script src="../js/survey-creation-editable.js"></script>
 </body>
 </html>

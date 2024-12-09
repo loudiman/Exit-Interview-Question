@@ -2,7 +2,8 @@
     display: flex;
     transition: all 0.3s ease;
     position: relative;
-    height:fit-content;
+    height: max-content;
+
 }
 
 /* Sidebar */

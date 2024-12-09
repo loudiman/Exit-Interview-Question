@@ -42,7 +42,6 @@ window.onload = function() {
 function addQuestion(event) {
     const button = event.target;
     const questionContainer = button.closest(".question-container");
-    const questionsContainer = document.getElementById("questionsContainer");
 
     const newQuestionContainer = document.createElement("div");
     newQuestionContainer.classList.add("question-container");
@@ -54,16 +53,16 @@ function addQuestion(event) {
             <input type="text" placeholder="Untitled Question">
             <select onchange="updateQuestionContent(this)">
               <option value="multiple-choice">Multiple Choice</option>
+               <option value="checkbox">Checkbox</option>
               <option value="essay">Essay</option>
               <option value="rating">Rating</option>
-              <option value="true-false">True or False</option>
             </select>
           </div>
           <div class="options"></div>
           <div class="button-container" style="display: none;">
             <button class="option-button" onclick="addOption(this)">Add Option</button>
-            <span>or</span>
-            <button class="option-button" onclick="addOtherOption(this)">Add Other</button>
+            <span>or </span>
+            <button class="option-button-other" onclick="addOtherOption(this)">Add Other</button>
           </div>
         </div>
         <div class="side-buttons">
@@ -108,12 +107,16 @@ function updateQuestionContent(selectElement) {
     const questionType = selectElement.value;
 
     optionsContainer.innerHTML = '';
-    buttonContainer.style.display = questionType === 'multiple-choice' ? 'block' : 'none';
+    buttonContainer.style.display = questionType === 'multiple-choice' || `checkbox` ? 'block' : 'none';
 
     if (questionType === 'multiple-choice') {
         addOption(buttonContainer.querySelector(".option-button"));
-    } else if (questionType === 'essay') {
-        optionsContainer.innerHTML = `<textarea placeholder="Your answer here..." rows="4" cols="50" disabled></textarea>`;
+    } else if(questionType === `checkbox`){
+        addOption(buttonContainer.querySelector(".option-button"));
+    }
+    else if (questionType === 'essay') {
+        optionsContainer.innerHTML = `<textarea placeholder="Enter an answer here" rows="4" cols="50" disabled class="textarea"></textarea>`;
+
     } else if (questionType === 'rating') {
         const ratingContainer = document.createElement("div");
         ratingContainer.classList.add("rating-container");
@@ -146,7 +149,6 @@ function updateQuestionContent(selectElement) {
                 radio.name = "rating";
                 radio.value = i;
                 radio.style.marginRight = "5px";
-                radio.disabled = true;
 
                 label.appendChild(radio);
                 label.appendChild(document.createTextNode(i));
@@ -156,13 +158,6 @@ function updateQuestionContent(selectElement) {
 
         optionsContainer.appendChild(maxRatingSelect);
         optionsContainer.appendChild(ratingContainer);
-    } else if (questionType === 'true-false') {
-        optionsContainer.innerHTML = `
-          <div>
-            <input type="radio" name="trueFalse" value="true" disabled> True
-            <input type="radio" name="trueFalse" value="false" disabled> False
-          </div>
-        `;
     }
 }
 
