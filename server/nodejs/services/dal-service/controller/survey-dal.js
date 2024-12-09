@@ -1,6 +1,15 @@
 const pool = require('../db/mysql')
 
 class SurveyDAL{
+
+    static async getAllSurvey(){
+        try{
+            const [result] = await pool.query(`SELECT * FROM survey`)
+        }catch(Error){
+            console.log(Error.message)
+        }
+    }
+
     static async getAllPublishedSurvey(username){
         try{
             console.log("username: "+username)
@@ -126,6 +135,16 @@ class SurveyDAL{
         try{
             const[result] = pool.execute(query, values)
             return true
+        }catch(error){
+            throw new Error(error.message)
+        }
+    }
+
+    static async insertResponse(responseJSON, surveyID){
+        var query = `INSERT INTO responses (survey_id, response_json) VALUES(?,?)`
+        try{
+            const[result] = pool.execute(query, [surveyID, responseJSON])
+            return result
         }catch(error){
             throw new Error(error.message)
         }

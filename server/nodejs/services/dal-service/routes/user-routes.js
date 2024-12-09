@@ -1,5 +1,5 @@
 const express = require(`express`)
-const {UserDAL} = require(`../dal`)
+const {UserDAL} = require(`../controller`)
 const userRoutes = express.Router()
 
 userRoutes.use(express.json())
