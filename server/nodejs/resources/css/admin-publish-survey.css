@@ -1,15 +1,3 @@
-@font-face {
-    font-family: "CustomFont";
-    src: url("../../../php/public/resources/fonts/Istok_Web/IstokWeb-Regular.ttf") format("truetype");
-    font-weight: normal;
-    font-style: normal;
-}
-@font-face {
-    font-family: "CustomFont";
-    src: url("../../../php/public/resources/fonts/Istok_Web/IstokWeb-Bold.ttf") format("truetype");
-    font-weight: bold;
-    font-style: normal;
-}
 body {
     margin: 0;
 }

@@ -2,11 +2,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const surveyData = [
         {
             survey_id: 1,
-            survey_title: 'Sample Survey 1  ',
+            survey_title: 'Sample Survey 1',
             status: 'unpublished',
             program_id: 101,
-            period_start: '2024-11-01',
-            period_end: '2024-11-15',
+            period_start: '2024-11-01T08:00:00',
+            period_end: '2024-11-15T17:00:00',
             respondents: { current: 0, total: 50 }
         },
         {
@@ -14,8 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
             survey_title: 'Sample Survey 2',
             status: 'unpublished',
             program_id: 102,
-            period_start: '2024-11-10',
-            period_end: '2024-11-25',
+            period_start: '2024-11-10T08:00:00',
+            period_end: '2024-11-25T17:00:00',
             respondents: { current: 0, total: 50 }
         },
         {
@@ -23,8 +23,8 @@ document.addEventListener('DOMContentLoaded', () => {
             survey_title: 'Sample Survey 3',
             status: 'unpublished',
             program_id: 103,
-            period_start: '2024-10-01',
-            period_end: '2024-10-31',
+            period_start: '2024-10-01T08:00:00',
+            period_end: '2024-10-31T17:00:00',
             respondents: { current: 0, total: 30 }
         },
         {
@@ -32,8 +32,8 @@ document.addEventListener('DOMContentLoaded', () => {
             survey_title: 'Sample Survey 4',
             status: 'published',
             program_id: 103,
-            period_start: '2024-10-01',
-            period_end: '2024-10-31',
+            period_start: '2024-10-01T08:00:00',
+            period_end: '2024-10-31T17:00:00',
             respondents: { current: 50, total: 50 }
         },
         {
@@ -41,8 +41,8 @@ document.addEventListener('DOMContentLoaded', () => {
             survey_title: 'Sample Survey 5',
             status: 'published',
             program_id: 104,
-            period_start: '2024-09-15',
-            period_end: '2024-10-15',
+            period_start: '2024-09-15T08:00:00',
+            period_end: '2024-10-15T17:00:00',
             respondents: { current: 20, total: 40 }
         },
         {
@@ -50,8 +50,8 @@ document.addEventListener('DOMContentLoaded', () => {
             survey_title: 'Sample Survey 6',
             status: 'published',
             program_id: 104,
-            period_start: '2024-10-15',
-            period_end: '2024-11-15',
+            period_start: '2024-10-15T08:00:00',
+            period_end: '2024-11-15T17:00:00',
             respondents: { current: 30, total: 100 }
         }
     ];
@@ -162,11 +162,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const survey = surveyData.find(survey => survey.survey_id === parseInt(surveyId));
         if (!survey) return console.error('Survey not found');
 
+        const formatDateTime = (dateTimeString) => {
+            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+            return new Date(dateTimeString).toLocaleString(undefined, options);
+        };
+
         document.getElementById('previewSurveyTitle').textContent = survey.survey_title;
         document.getElementById('previewSurveyStatus').textContent = survey.status;
         document.getElementById('previewProgramId').textContent = survey.program_id;
-        document.getElementById('previewPeriodStart').textContent = survey.period_start;
-        document.getElementById('previewPeriodEnd').textContent = survey.period_end;
+
+        // Update these lines to show both date and time
+        document.getElementById('previewPeriodStart').textContent = formatDateTime(survey.period_start);
+        document.getElementById('previewPeriodEnd').textContent = formatDateTime(survey.period_end);
 
         document.getElementById('previewModal').showModal();
         document.getElementById('modalOverlay').style.display = 'block';
