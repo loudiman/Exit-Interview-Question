@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('welcome-message').textContent = `Welcome, ${sessionStorage.getItem('fname')}!`;
     const logoutBtn = document.getElementById('logout-button');
     if (logoutBtn) {
         console.log('Logout button found');
@@ -66,29 +67,42 @@ document.addEventListener('DOMContentLoaded', function () {
                 <div>
                     <div class="survey-title">${survey.survey_title}</div>
                     <div class="survey-info">
-                        ${survey.responded ? `Time Submitted: ${survey.period_end}` : `Valid Until: ${survey.period_end}`}
+                        ${survey.responded == 1? `Time Submitted: ${survey.submitted_at}` : survey.responded == 0 && new Date() < new Date(survey.period_end) ? `Valid Until: ${survey.period_end}` : `Submission Closed: ${survey.period_end}` }
                     </div>
                 </div>
                 <div class="survey-actions">
                     <button class="hide-button">Hide Survey</button>
-                    <a href="/student/survey?id=${survey.survey_id}" class="action-link">
+                    <button class="action-link">
                         ${survey.responded == 1 ? 'Check Details 📄' : survey.responded == 0 && new Date() < new Date(survey.period_end) ? 'Take Survey 📝' : 'Check Details 📄'}
-                    </a>
+                    </button>
                 </div>
             `;
 
-            // Handle anchor tag click to get data from db
-            surveyElement.querySelector('a').addEventListener('click', (function(survey) {
+            // Handle button tag click to get data from db
+            surveyElement.querySelector('.action-link').addEventListener('click', (function(survey) {
                 return function(event) {
                     event.preventDefault();
-                    fetch(`/student/survey?id=${survey.survey_id}`)
-                        .then(response => response.json())
+
+                    // This is a workaround solution to handle in frontend an expired survey
+                    if (survey.responded == 1 || new Date(survey.period_end) < new Date()) {
+                        window.location.href = '/student/survey/closedsurvey';
+                    }
+
+                    fetch(`/student/survey/viewsurvey?id=${survey.survey_id}`)
+                        .then(response => {
+                            // This is another solution handling an expired survey but with backend processing
+                            if (!response.ok) {
+                                window.location.href = '/student/survey/closedsurvey';
+                                throw new Error('Survey expired');
+                            }
+                            return response.json();
+                        })
                         .then(surveyData => {
                             sessionStorage.setItem('questionnaireData', JSON.stringify(surveyData));
                             // window.location.href = `/student/survey/questionaire?id=${surveyData.question_id}`;
                             window.location.href = '/student/survey/questionnaires';    
                         })
-                        .catch(error => console.error("Fetch error: ", error));
+                        // .catch(error => console.error("Fetch error: ", error));  
                 };
             })(survey)
                 // function(event) {
@@ -138,7 +152,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (filterType === 'completed') {
             filteredSurveys = surveyData.filter(survey => survey.responded);
         } else if (filterType === 'missed') {
-            filteredSurveys = surveyData.filter(survey => !survey.responded && new Date() > new Date(survey['period-end']));
+            filteredSurveys = surveyData.filter(survey => !survey.responded && new Date() > new Date(survey.period_end));
         } else if (filterType === 'hidden') {
             filteredSurveys = []; // subject for change
         }
@@ -150,16 +164,16 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // Another way to logout
-function logout() {
-    fetch('http://localhost:8888/session/logout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ '_method': 'DELETE' })
-    })
-        .then(response => response.text())
-        .then(data => {
-            console.log("Logout response:", data);
-            // window.location.href = 'http://localhost:8888/';
-        })
-        .catch(error => console.error("Logout error:", error));
-}
+// function logout() {
+//     fetch('http://localhost:8888/session/logout', {
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/json' },
+//         body: JSON.stringify({ '_method': 'DELETE' })
+//     })
+//         .then(response => response.text())
+//         .then(data => {
+//             console.log("Logout response:", data);
+//             // window.location.href = 'http://localhost:8888/';
+//         })
+//         .catch(error => console.error("Logout error:", error));
+// }
