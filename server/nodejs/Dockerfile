@@ -34,11 +34,10 @@ USER node
 COPY --chown=node:node . .
 
 RUN cd ./services/dal-service && npm install
-RUN cd ./runtimes/api && npm install
-RUN cd ./runtimes/main && npm install
 
 # Expose the port that the application listens on.
 EXPOSE 2020
+EXPOSE 2019
 
 # Run the application.
 CMD npm start
