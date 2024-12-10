@@ -26,34 +26,108 @@
     font-style: italic;
 }
 
+html *{
+    font-family: 'Istok Web';
+}
+
+.round{
+    border-radius: 10px;
+}
 
 .flex-container{
     display: flex;
-    flex-direction:column
 }
 
-.flex-container.row{
-    display: inherit;
-    flex-direction:row;
+.flex-container.v-align-center{
+    align-items: center;
 }
 
-.btn-prm-long{
-    background-color: #223C6BD6;
+.flex-container.h-align-center{
+    justify-content: center;
+}
+
+.flex-col{
+    flex-direction: column;
+}
+
+.spacer{
+    flex-grow: 1;
+}
+
+.bg-grey{
+    background-color: #A5A9B3;
+}
+
+.bg-primary{
+    background-color: #223C6B;
+}
+
+.bg-secondary{
+    background-color: #E1C319;
+}
+
+.color-primary{
+    color:#223C6B;
+}
+
+.color-grey{
+    color:#A5A9B3
+}
+
+.color-secondary{
+    color:#E1C319
+}
+
+.color-white{
     color:white;
-    padding:15px;
-    border:1px solid;
-    border-radius: 8px
 }
 
-.btn-prm-long.left-align{
-    text-align: left;
-    padding-left:10px;
+
+.btn-primary-l{
+    margin-top: 10px;
+    color:white;
+    background-color: #223C6B;
+    padding: 10px;
+    padding-left: 69px;
+    padding-right: 69px;
+    border-radius:10px;
+    font-size: large;
+    font-weight: bold;
+    border: 0px solid;
 }
 
-.btn-prm-long.txt-l{
+.btn-primary-m{
+    background-color: #223C6B;
+    color:white;
+    border-radius:10px;
+    border: 1px solid;
+    font-size:large;
+    padding:5px 10px;
+}
+
+.img-10-per{
+    width:10%;
+    height: auto;
+}
+
+.img-5-per{
+    width:5%;
+    height: auto;
+}
+
+.img-2-per{
+    width: 2%;
+    height: auto;
+}
+
+.txt-l{
     font-size: large;
 }
 
-.btn-prm-long.txt-m{
-    font-size: medium;
+.txt-xxl{
+    font-size: xx-large;
+}
+
+.bold{
+    font-weight: bold;
 }

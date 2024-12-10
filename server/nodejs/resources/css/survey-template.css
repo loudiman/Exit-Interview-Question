@@ -1,34 +1,13 @@
-
-@font-face {
-    font-family: "CustomFont";
-    src: url("../resource/fonts/Istok_Web/IstokWeb-Regular.ttf") format("truetype");
-    font-weight: normal;
-    font-style: normal;
-}
-@font-face {
-    font-family: "CustomFont";
-    src: url("../resource/fonts/Istok_Web/IstokWeb-Bold.ttf") format("truetype");
-    font-weight: bold;
-    font-style: normal;
-}
-@font-face {
-    font-family: "CustomFont";
-    src: url("../resource/fonts/Istok_Web/IstokWeb-Italic.ttf") format("truetype");
-    font-weight: normal;
-    font-style: italic;
-}
-@font-face {
-    font-family: "CustomFont";
-    src: url("../resource/fonts/Istok_Web/IstokWeb-BoldItalic.ttf") format("truetype");
-    font-weight: bold;
-    font-style: italic;
-}
-
 button{
   border: none;
   cursor: pointer;
   appearance: none;
   background-color: inherit;
+}
+
+html, body {
+    height: 100%;
+    overflow: hidden;
 }
 
 body{

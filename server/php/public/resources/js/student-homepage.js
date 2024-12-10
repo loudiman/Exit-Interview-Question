@@ -92,6 +92,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
             `;
 
+<<<<<<< HEAD
+            // Handle anchor tag click to get data from db
+            surveyElement.querySelector('a').addEventListener('click', function(event) {
+                event.preventDefault();
+                fetch(`/student/survey?id=${survey['survey-id']}`)
+                    .then(response => response.json())
+                    .then(surveyData => {
+                        sessionStorage.setItem('questionaireData', JSON.stringify(surveyData));
+                        window.location.href = `/student/survey/questionaire?id=${surveyData.question_id}`;
+                    })
+                    .catch(error => console.error("Fetch error: ", error));
+            });
+=======
             // Handle button tag click to get data from db
             surveyElement.querySelector('.action-link').addEventListener('click', (function(survey) {
                 return function(event) {
@@ -129,6 +142,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 //     })
                 //     .catch(error => console.error("Fetch error: ", error));}
             );
+>>>>>>> main
 
             // Hide button functionality
             surveyElement.querySelector('.hide-button').addEventListener('click', () => {
@@ -194,6 +208,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // Initial fetch
     fetchSurveys();
 });
+<<<<<<< HEAD
+=======
 
 function formatDateToStandardTime(dateInput) {
     // Handle both Date objects and date strings
@@ -227,3 +243,4 @@ function formatDateToStandardTime(dateInput) {
 //         })
 //         .catch(error => console.error("Logout error:", error));
 // }
+>>>>>>> main
