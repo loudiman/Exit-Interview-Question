@@ -4,55 +4,31 @@ document.addEventListener('DOMContentLoaded', () => {
             survey_id: 1,
             survey_title: 'Sample Survey 1',
             status: 'unpublished',
-            program_id: 101,
-            period_start: '2024-11-01T08:00:00',
-            period_end: '2024-11-15T17:00:00',
-            respondents: { current: 0, total: 50 }
+            program_id: 1,
+            period_start: '2023-12-31T16:00:00.000Z',
+            period_end: '2024-12-30T16:00:00.000Z',
+            total_responded: 1,
+            total_responders: 2
         },
         {
             survey_id: 2,
             survey_title: 'Sample Survey 2',
             status: 'unpublished',
-            program_id: 102,
-            period_start: '2024-11-10T08:00:00',
-            period_end: '2024-11-25T17:00:00',
-            respondents: { current: 0, total: 50 }
+            program_id: 2,
+            period_start: '2024-01-01T08:00:00.000Z',
+            period_end: '2024-01-31T17:00:00.000Z',
+            total_responded: 10,
+            total_responders: 50
         },
         {
             survey_id: 3,
             survey_title: 'Sample Survey 3',
-            status: 'unpublished',
-            program_id: 103,
-            period_start: '2024-10-01T08:00:00',
-            period_end: '2024-10-31T17:00:00',
-            respondents: { current: 0, total: 30 }
-        },
-        {
-            survey_id: 4,
-            survey_title: 'Sample Survey 4',
             status: 'published',
-            program_id: 103,
-            period_start: '2024-10-01T08:00:00',
-            period_end: '2024-10-31T17:00:00',
-            respondents: { current: 50, total: 50 }
-        },
-        {
-            survey_id: 5,
-            survey_title: 'Sample Survey 5',
-            status: 'published',
-            program_id: 104,
-            period_start: '2024-09-15T08:00:00',
-            period_end: '2024-10-15T17:00:00',
-            respondents: { current: 20, total: 40 }
-        },
-        {
-            survey_id: 6,
-            survey_title: 'Sample Survey 6',
-            status: 'published',
-            program_id: 104,
-            period_start: '2024-10-15T08:00:00',
-            period_end: '2024-11-15T17:00:00',
-            respondents: { current: 30, total: 100 }
+            program_id: 2,
+            period_start: '2023-02-03T08:00:00.000Z',
+            period_end: '2024-01-31T17:00:00.000Z',
+            total_responded: 20,
+            total_responders: 40
         }
     ];
 
@@ -61,7 +37,6 @@ document.addEventListener('DOMContentLoaded', () => {
         { title: 'Overall Missed <br> Surveys Deployed', data: 5 },
         { title: 'Surveys Deployed', data: 3 }
     ];
-
 
     const searchInput = document.querySelector('#searchInput');
     const unpublishedContainer = document.querySelector('#unpublishedSurveys');
@@ -79,21 +54,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Create the HTML content for each survey item
             surveyItem.innerHTML = `
-        <span class="survey-title">${survey.survey_title}</span>
-        <span class="survey-respondents">(${survey.respondents.current}/${survey.respondents.total})</span>
-        <div class="status ${survey.status === 'published' ? 'published' : ''}">
-            <span class="survey-status">${survey.status.charAt(0).toUpperCase() + survey.status.slice(1)}</span>
-        </div>
-        <button data-id="${survey.survey_id}" class="${survey.status === 'unpublished' ? 'edit-btn' : 'details-btn'}">
-            <img src="../../resources/images/${survey.status === 'unpublished' ? 'Edit' : 'Details'}.png" alt="${survey.status === 'unpublished' ? 'Edit' : 'Details'} Icon" />
-        </button>
+            <span class="survey-title">${survey.survey_title}</span>
+            <span class="survey-respondents">
+                (${survey.total_responded}/${survey.total_responders})
+            </span>
+            <div class="status ${survey.status === 'published' ? 'published' : ''}">
+                <span class="survey-status">
+                    ${survey.status.charAt(0).toUpperCase() + survey.status.slice(1)}
+                </span>
+            </div>
+            <button 
+                data-id="${survey.survey_id}" 
+                class="${survey.status === 'unpublished' ? 'edit-btn' : 'details-btn'}"
+            >
+                <img 
+                    src="../../resources/images/${survey.status === 'unpublished' ? 'Edit' : 'Details'}.png" 
+                    alt="${survey.status === 'unpublished' ? 'Edit' : 'Details'} Icon" 
+                />
+            </button>
     `;
 
             container.appendChild(surveyItem);
         });
     }
 
-    // TODO: Logic for the Three Cards (Below is just a test run)
     // Function to create and render cards
     function renderCards() {
         cardDashboard.innerHTML = ''; // Clear any previous cards
@@ -112,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (recentSurvey) {
                     // Display the current and total respondents for the most recent published survey
-                    displayData = `${recentSurvey.respondents.current}/${recentSurvey.respondents.total}`;
+                    displayData = `${recentSurvey.total_responded}/${recentSurvey.total_responders}`;
                 }
             }
 
@@ -184,16 +168,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('previewModal').close();
         document.getElementById('modalOverlay').style.display = 'none';
     });
-
-    // Sidebar toggle
-    document.getElementById('sidebarToggle').addEventListener('click', toggleSidebar);
-
-    function toggleSidebar() {
-        const sidebar = document.getElementById('sidebar');
-        const mainContent = document.getElementById('mainContent');
-        sidebar.classList.toggle('hidden');
-        mainContent.classList.toggle('full-width');
-    }
 
     renderSurveys(surveyData);
 });
