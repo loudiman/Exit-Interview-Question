@@ -1,16 +1,15 @@
 const express = require('express')
-const cors = require('cors')
 const app = express();
 
-const corsOptions = {
-    origin: '*' // This is a temp fix, for production running this server through a proxy should bypass cors
-}
-
-app.use(cors(corsOptions))
+app.use(express.json());
 
 const dalRoutes = require(`./services/dal-service`)
-
 app.use('/api', dalRoutes)
+
+const surveyRoutes = require(`./services/resource-service/routes/survey-routes`)
+app.use('/api', surveyRoutes)
+
+
 
 app.get('/',(req,res) => {
     res.send("This is the API endpoint")

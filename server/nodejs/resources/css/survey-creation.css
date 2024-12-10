@@ -1,29 +1,7 @@
-@font-face {
-    font-family: "CustomFont";
-    src: url("../../resources/fonts/Istok_Web/IstokWeb-Regular.ttf") format("truetype");
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: "CustomFont";
-    src: url("../../resources/fonts/Istok_Web/IstokWeb-Bold.ttf") format("truetype");
-    font-weight: bold;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: "CustomFont";
-    src: url("../../resources/fonts/Istok_Web/IstokWeb-Italic.ttf") format("truetype");
-    font-weight: normal;
-    font-style: italic;
-}
-
-@font-face {
-    font-family: "CustomFont";
-    src: url("../../resources/fonts/Istok_Web/IstokWeb-BoldItalic.ttf") format("truetype");
-    font-weight: bold;
-    font-style: italic;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
@@ -33,6 +11,7 @@ body {
 h2, p, a {
     color: black;
     font-family: "CustomFont", sans-serif;
+    padding: 8px;
 }
 
 
@@ -42,9 +21,8 @@ h2, p, a {
     padding: 20px;
     background-color: #FFFFFF;
     transition: all 0.3s ease;
-    height: 100vh;
     overflow-y: auto;
-    border: 2px solid #ccc;
+    overflow-x: hidden;
 }
 
 .main-content.full-width {
@@ -164,7 +142,6 @@ h2, p, a {
 .back-button {
     position: fixed;
     bottom: 20px;
-    left: calc(auto + var(--sidebar-width, 20px));
     transition: left 0.3s, background-color 0.3s;
 }
 

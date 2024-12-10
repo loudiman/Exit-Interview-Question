@@ -12,8 +12,11 @@ services:
     build:
       context: .
       target: final
-    ports:
-      - 8080:8080
+    # If your application exposes a port, uncomment the following lines and change
+    # the port numbers as needed. The first number is the host port and the second
+    # is the port inside the container.
+    # ports:
+    #   - 8080:8080
 
     # The commented out section below is an example of how to define a PostgreSQL
     # database that your application can use. `depends_on` tells Docker Compose to

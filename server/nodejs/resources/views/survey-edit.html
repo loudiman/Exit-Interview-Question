@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="../css/nav_bar.css">
     <link rel="stylesheet" href="../css/survey_edit.css">
     <link rel="stylesheet" href="../css/side_bar.css">
+    <script defer src="../js/survey-edit.js"></script>
+    <script defer src="../js/side-bar.js"></script>
 </head>
 <body>
 <!-- Navbar -->
@@ -32,8 +34,7 @@
         <!-- Survey Container -->
         <div class="survey-container">
             <div class="survey-title">
-                <h2 id="formTitle" onclick="makeEditable('formTitle')">Sample Title</h2>
-                <p id="formDescription" onclick="makeEditable('formDescription')">Form Description</p>
+                <h2 id="formTitle" contenteditable="true" onfocus="this.placeholder=''" onblur="this.placeholder='Enter survey title...'" placeholder="Enter survey title...">Sample Title</h2>
             </div>
 
             <!-- Questions Container -->
@@ -69,9 +70,5 @@
         <button class="back-button" onclick="window.history.back();">Back</button>
     </div>
 </div>
-
-<script src="../js/survey-navbar.js"></script>
-<script src="../js/survey-creation-editable.js"></script>
-<script src="../js/survey-creation-ui.js"></script>
 </body>
 </html>

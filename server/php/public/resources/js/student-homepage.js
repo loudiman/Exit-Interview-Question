@@ -1,32 +1,50 @@
 document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('welcome-message').textContent = `Welcome, ${sessionStorage.getItem('fname')}!`;
+    const logoutBtn = document.getElementById('logout-button');
+    if (logoutBtn) {
+        console.log('Logout button found');
+        // logoutBtn.addEventListener('click', logout);
+    }
+
     let surveyData = [];
+    let hiddenSurveys = []; // Array to track hidden survey IDs
 
     // Fetch surveys data from the server
     async function fetchSurveys() {
         try {
-            const jsonString = {
-                "surveys": [
-                    {
-                        "survey-id": 1,
-                        "survey-title": "marven",
-                        "responded": false,
-                        "period-start": "2024-09-25",
-                        "period-end": "2024-09-26"
-                    },
-                    {
-                        "survey-id": 2,
-                        "survey-title": "sample-title",
-                        "responded": true,
-                        "period-start": "2024-09-27",
-                        "period-end": "2024-09-29"
-                    }
-                ]
-            }
-
-            // const response = await fetch('http://localhost:8888/student/surveys');
-            // const jsonString = await response.text();
-            // const parsedData = JSON.parse(jsonString);
+            // const jsonString = {
+            //     "surveys": [
+            //         {
+            //             "survey_id": 4,
+            //             "survey_title": "Test 1",
+            //             "responded": 1,
+            //             "period-end": "2024-11-17 18:24:58"
+            //         },
+            //         {
+            //             "survey_id": 2,
+            //             "survey_title": "IT Department Evaluation 2024",
+            //             "responded": 1,
+            //             "period-end": "2024-11-18 23:00:00"
+            //         },
+            //         {
+            //             "survey_id": 3,
+            //             "survey_title": "CS Department Evaluation 2024",
+            //             "responded": 0,
+            //             "period-end": "2024-11-18 23:00:00"
+            //         },
+            //         {
+            //             "survey_id": 5,  // Updated ID for example hidden survey
+            //             "survey_title": "BMMA Department Evaluation 2024",
+            //             "responded": 0,
+            //             "period-end": "2024-12-18 23:00:00"
+            //         }
+            //     ]
+            // };
+            const response = await fetch('http://localhost:8888/student');
+            const jsonString = await response.json();
+            console.log(jsonString);
             surveyData = jsonString.surveys;
+            console.log(surveyData);
             renderSurveys(surveyData);
         } catch (error) {
             console.error('Error fetching surveys:', error);
@@ -34,35 +52,43 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Render surveys on the page
-    function renderSurveys(data) {
+    function renderSurveys(surveys) {
         const surveyList = document.getElementById('survey-list');
         surveyList.innerHTML = ''; // Clear the list
 
-        data.forEach(survey => {
+        surveys.forEach(survey => {
             const surveyElement = document.createElement('div');
             surveyElement.classList.add('survey-item');
+            if (hiddenSurveys.includes(survey.survey_id)) surveyElement.classList.add('hidden-survey'); // If survey is hidden, add class
 
-            // Set different colors based on survey status
-            if (survey.responded) {
+            const periodEndFormatted = formatDateToStandardTime(survey.period_end);
+            const submittedAtFormatted = survey.responded == 1 ? formatDateToStandardTime(survey.submitted_at) : '';
+
+            // Set different colors based on survey status and period end
+            if (survey.responded == 1) {
                 surveyElement.classList.add('green');
-            } else if (new Date() > new Date(survey['period-end'])) {
-                surveyElement.classList.add('red');
-            } else {
-                surveyElement.classList.add('yellow');
+            }
+
+            if (survey.responded == 0) {
+                if (new Date() > new Date(survey.period_end)) {
+                    surveyElement.classList.add('red'); // Missed
+                } else if (new Date() < new Date(survey.period_end)) {
+                    surveyElement.classList.add('yellow'); // Still valid
+                }
             }
 
             surveyElement.innerHTML = `
                 <div>
-                    <div class="survey-title">${survey['survey-title']}</div>
+                    <div class="survey-title">${survey.survey_title}</div>
                     <div class="survey-info">
-                        ${survey.responded ? `Time Submitted: ${survey['period-end']}` : `Valid Until: ${survey['period-end']}`}
+                        ${survey.responded == 1? `Time Submitted: ${submittedAtFormatted}` : survey.responded == 0 && new Date() < new Date(survey.period_end) ? `Valid Until: ${periodEndFormatted}` : `Submission Closed: ${periodEndFormatted}` }
                     </div>
                 </div>
                 <div class="survey-actions">
                     <button class="hide-button">Hide Survey</button>
-                    <a href="/student/survey?id=${survey['survey-id']}" class="action-link">
-                        ${survey.responded ? 'Check Details 📄' : 'Take The Survey ✎'}
-                    </a>
+                    <button class="action-link">
+                        ${survey.responded == 1 ? 'Check Details 📄' : survey.responded == 0 && new Date() < new Date(survey.period_end) ? 'Take Survey 📝' : 'Check Details 📄'}
+                    </button>
                 </div>
             `;
 
@@ -80,9 +106,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Hide button functionality
             surveyElement.querySelector('.hide-button').addEventListener('click', () => {
-                surveyElement.classList.add('hidden-survey');  // Subject for change
+                if (hiddenSurveys.includes(survey.survey_id)) {
+                    // Unhide survey
+                    hiddenSurveys = hiddenSurveys.filter(id => id !== survey.survey_id);
+                    sessionStorage.setItem('hiddenSurveys', JSON.stringify(hiddenSurveys)); // Save to sessionStorage
+                    surveyElement.classList.remove('hidden-survey');
+                    surveyElement.querySelector('.hide-button').textContent = 'Hide Survey';
+                } else {
+                    // Hide survey
+                    hiddenSurveys.push(survey.survey_id);
+                    sessionStorage.setItem('hiddenSurveys', JSON.stringify(hiddenSurveys)); // Save to sessionStorage
+                    surveyElement.classList.add('hidden-survey');
+                    surveyElement.querySelector('.hide-button').textContent = 'Unhide Survey';
+                }
+                filterSurveys(); // Reapply filters after hiding/unhiding
             });
-
             surveyList.appendChild(surveyElement);
         });
     }
@@ -101,25 +139,65 @@ document.addEventListener('DOMContentLoaded', function () {
         if (event.key === 'Enter') {  // Check if the key pressed is "Enter"
             const searchQuery = document.getElementById('search-input').value.toLowerCase();
             const filteredSurveys = surveyData.filter(survey =>
-                survey['survey-title'].toLowerCase().includes(searchQuery)
+                survey['survey_title'].toLowerCase().includes(searchQuery)
             );
             renderSurveys(filteredSurveys);
         }
     });
 
+    // Filter functionality
     document.getElementById('survey-filter').addEventListener('change', (event) => {
-        const filterType = event.target.value;
+        filterSurveys();
+    });
+
+    function filterSurveys() {
+        const filterType = document.getElementById('survey-filter').value;
         let filteredSurveys = surveyData;
+
         if (filterType === 'completed') {
             filteredSurveys = surveyData.filter(survey => survey.responded);
         } else if (filterType === 'missed') {
-            filteredSurveys = surveyData.filter(survey => !survey.responded && new Date() > new Date(survey['period-end']));
+            filteredSurveys = surveyData.filter(survey => !survey.responded && new Date() > new Date(survey.period_end));
         } else if (filterType === 'hidden') {
-            filteredSurveys = []; // subject for change
+            filteredSurveys = surveyData.filter(survey => hiddenSurveys.includes(survey.survey_id));
         }
+
         renderSurveys(filteredSurveys);
-    });
+    }
 
     // Initial fetch
     fetchSurveys();
 });
+
+function formatDateToStandardTime(dateInput) {
+    // Handle both Date objects and date strings
+    const dateToFormat = dateInput instanceof Date ? dateInput : new Date(dateInput);
+    
+    // Check if date is valid
+    return !isNaN(dateToFormat.getTime())
+        ? dateToFormat.toLocaleString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+            hour12: true
+        })
+        : 'Invalid Date';
+}
+
+// Another way to logout
+// function logout() {
+//     fetch('http://localhost:8888/session/logout', {
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/json' },
+//         body: JSON.stringify({ '_method': 'DELETE' })
+//     })
+//         .then(response => response.text())
+//         .then(data => {
+//             console.log("Logout response:", data);
+//             // window.location.href = 'http://localhost:8888/';
+//         })
+//         .catch(error => console.error("Logout error:", error));
+// }

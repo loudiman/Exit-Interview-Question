@@ -2,7 +2,7 @@
 
 namespace Core;
 
-use PDO;
+use mysqli;
 
 class Database
 {
@@ -11,14 +11,14 @@ class Database
 
     public function __construct($config, $username = 'root', $password = '')
     {
-        $dsn = 'mysql:' . http_build_query($config, '', ';');
+        // $dsn = 'mysql:' . http_build_query($config, '', ';');
 
-        // $mysqli = new mysqli($config['host'], $config['username'], $config['password'], $config['myweb'], $config['port']);
+        $this->connection = new mysqli($config['host'], $username, $password, $config['dbname'], $config['port']);
 
 
-        $this->connection = new PDO($dsn, $username, $password, [
-           PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-        ]);
+        // $this->connection = new PDO($dsn, $username, $password, [
+        //    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+        // ]);
     }
 
     public function query($query, $params = [])
@@ -30,14 +30,25 @@ class Database
         return $this;
     }
 
+    // Returns associative array having column names as keys
+    public function assoc_get()
+    {
+        // return $this->statement->fetchAll();
+        return $this->statement->get_result()->fetch_all(MYSQLI_ASSOC);
+        // return $this->statement->get_result()->fetch_all();
+    }
+
+    // Returns an array of arrays, where each sub-array is indexed numerically (i.e., by column number).
     public function get()
     {
-        return $this->statement->fetchAll();
+        // return $this->statement->fetchAll();
+        return $this->statement->get_result()->fetch_all();
     }
 
     public function find()
     {
-        return $this->statement->fetch();
+        // return $this->statement->fetch();
+        return $this->statement->get_result()->fetch_assoc();
     }
 
     public function findOrFail()
@@ -45,7 +56,7 @@ class Database
         $result = $this->find();
 
         if (! $result) {
-            abort();
+            abort(404);
         }
 
         return $result;

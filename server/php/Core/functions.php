@@ -17,11 +17,11 @@ function urlIs($value)
     return $_SERVER['REQUEST_URI'] === $value;
 }
 
-function abort($code = 404)
+function abort($code)
 {
     http_response_code($code);
 
-    require base_path("views/{$code}.php");
+    require base_path("public/resources/views/{$code}.html");
 
     die();
 }
@@ -56,7 +56,8 @@ function login($user)
 {
     $_SESSION['user'] = [
         'userType' => $user['userType'],
-        'username' => $user['username']
+        'username' => $user['username'],
+        'fname' => $user['fname']
     ];
 
     session_regenerate_id(true);

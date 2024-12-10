@@ -18,7 +18,11 @@ nav>div>p{
 
 form{
     margin-top:20px;
-    width: 80%;
+    width: 50%;
+}
+
+.flex-container.h-align-center {
+
 }
 
 .question{
@@ -38,6 +42,182 @@ form{
     padding: 10px;
 }
 
-.options{
+.textarea-container {
+    width: 100%;
+    display: flex;
+}
 
+.options{
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.option{
+    display: flex;
+    gap: 10px;
+}
+
+textarea {
+    width: 100%;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    padding: 1vw;
+}
+
+.char-counter{
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+    font-size: 12px;
+    color: gray;
+    pointer-events: none;
+}
+
+.flex-col {
+    align-items: center; /* Vertically center the items */
+    margin-bottom: 10px; /* Add some space between the radio buttons */
+}
+
+.rating {
+    display: flex;
+    justify-content: space-between;
+    padding: 1% 12% 1%;
+}
+
+/* Style for the container of each rating option */
+.flex-col {
+    display: flex;              /* Sorry lestat it seems to change when i use your styles.css's flex-col*/
+    flex-direction: column;     /* That's why I have to override it here. Find a fix if you can */
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+}
+
+/* Style for the custom radio button */
+.custom-radio {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 3px solid rgb(255, 255, 255);
+    background-color: #fff;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+/** Styling for the radio button when it is checked *!*/
+.custom-radio:checked {
+    background-color: #223C6B;
+}
+
+/* Style for the label */
+.custom-label {
+    margin-bottom: 5px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+}
+
+.custom-checkbox{
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+/* For very small screens (below 320px), ensure everything fits */
+@media screen and (max-width: 320px) {
+    .rating {
+        display: flex;
+        justify-content: space-between; /* Maintain row layout */
+        padding: 1% 3%; /* Adjust padding for tiny screens */
+    }
+
+    .flex-col {
+        display: flex;
+        justify-content: center; /* Keep content centered */
+        align-items: center;
+        margin: 5px 0; /* Reduce margin for very small screens */
+    }
+
+    /* Custom radio button size adjustment for 320px screens */
+    .custom-radio {
+        width: 15px; /* Make radio button smaller */
+        height: 15px;
+    }
+
+    /* Adjust label font size for 320px screens */
+    .custom-label {
+        font-size: 14px; /* Smaller font size */
+    }
+}
+
+/* For small screens (below 425px), ensure radio buttons and labels do not overflow */
+@media screen and (min-width: 321px) and (max-width: 425px) {
+    .rating {
+        display: flex;
+        justify-content: space-between; /* Keep items in a row */
+        padding: 2% 5%; /* Adjust padding for smaller screens */
+    }
+
+    .flex-col {
+        display: flex;
+        justify-content: center; /* Keep content centered */
+        align-items: center;
+        margin: 5px 0; /* Reduce margin for smaller screens */
+    }
+
+    /* Custom radio button size adjustment for small screens */
+    .custom-radio {
+        width: 24px; /* Adjust size of radio buttons */
+        height: 24px;
+    }
+
+    /* Adjust label font size for small screens */
+    .custom-label {
+        font-size: 16px; /* Smaller font size for labels */
+    }
+}
+
+/* For medium screens, starting from 426px to 539px (smartphones and larger phones) */
+@media screen and (min-width: 426px) and (max-width: 539px) {
+    .flex-col {
+        margin: 10px; /* Moderate margin for medium screens */
+        align-items: center; /* Center items horizontally */
+    }
+
+    .custom-label {
+        font-size: 16px; /* Default label size */
+    }
+
+    .custom-radio {
+        width: 26px; /* Medium radio button size */
+        height: 26px; /* Medium radio button size */
+    }
+}
+
+/* For larger mobile devices and smaller tablets (540px to 767px) */
+@media screen and (min-width: 540px) and (max-width: 767px) {
+    .flex-col {
+        margin: 10px; /* Standard margin for medium devices */
+        align-items: center; /* Center items horizontally */
+    }
+
+    .custom-label {
+        font-size: 18px; /* Default label size for medium screens */
+    }
+
+    .custom-radio {
+        width: 30px; /* Default radio button size for medium screens */
+        height: 30px;
+    }
 }

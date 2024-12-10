@@ -5,10 +5,13 @@ const path = require('path')
 
 const publicDir = path.join(__dirname, "resources")
 
-// Middleware that exposes the CSS resources statically
-app.use('/static/css', express.static(path.join(publicDir, "css")));
+//Middleware that exposes the css resources statically
+app.use('/static/css', express.static(path.join(__dirname,"resources","css")))
 
-// Middleware that exposes the JS resources statically
-app.use('/static/js', express.static(path.join(publicDir, "js")));
+//Middleware that exposes the js resources statically
+app.use('/static/js',express.static(path.join(__dirname,"resources","js")))
 
-module.exports = app;
+app.use(`/static/images`,express.static(path.join(__dirname,"resources","images")))
+
+
+module.exports = app

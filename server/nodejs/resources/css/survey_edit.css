@@ -1,31 +1,3 @@
-@font-face {
-    font-family: "CustomFont";
-    src: url("../../resources/fonts/Istok_Web/IstokWeb-Regular.ttf") format("truetype");
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: "CustomFont";
-    src: url("../../resources/fonts/Istok_Web/IstokWeb-Bold.ttf") format("truetype");
-    font-weight: bold;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: "CustomFont";
-    src: url("../../resources/fonts/Istok_Web/IstokWeb-Italic.ttf") format("truetype");
-    font-weight: normal;
-    font-style: italic;
-}
-
-@font-face {
-    font-family: "CustomFont";
-    src: url("../../resources/fonts/Istok_Web/IstokWeb-BoldItalic.ttf") format("truetype");
-    font-weight: bold;
-    font-style: italic;
-}
-
 html, body {
     height: 100%;
     overflow: hidden;
@@ -45,7 +17,7 @@ h2, p, a {
     padding: 20px;
     background-color: #FFFFFF;
     transition: all 0.3s ease;
-    height: 100vh;
+    height: 90vh;
     overflow-y: auto;
 }
 
@@ -61,16 +33,50 @@ h2, p, a {
     font-family: "CustomFont", sans-serif;
 }
 
+/* Survey Title Editing Styles */
 .survey-title {
     padding: 15px;
     border-radius: 10px;
     border: 2px solid #999;
     margin-bottom: 20px;
+    background-color: #f9f9f9;
 }
 
 .survey-title h2[contenteditable="true"],
 .survey-title p[contenteditable="true"] {
     outline: none;
+    padding: 10px;
+    min-height: 30px;
+    font-size: 24px;
+    font-weight: bold;
+    font-family: "CustomFont", sans-serif;
+    color: #333;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease;
+}
+
+/* Highlight editable field on focus */
+.survey-title h2[contenteditable="true"]:focus,
+.survey-title p[contenteditable="true"]:focus {
+    border-color: #223C6B;
+    background-color: #eef2f7;
+}
+
+/* Placeholder text when empty (doesn't work natively for contenteditable, so we use a fallback solution) */
+.survey-title h2[contenteditable="true"]:empty:before,
+.survey-title p[contenteditable="true"]:empty:before {
+    content: "Enter survey title...";
+    color: #aaa;
+    font-style: italic;
+}
+
+/* Ensure the cursor is a text cursor when focused */
+.survey-title h2[contenteditable="true"]:focus,
+.survey-title p[contenteditable="true"]:focus {
+    cursor: text;
 }
 
 /* Question container */
