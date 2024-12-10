@@ -1,14 +1,23 @@
-const express = require('express')
-const app = express()
+const express = require('express');
+const path = require('path');
+const adminProfileRoutes = require('./services/resource-service/admin-profile-submission/router-admin-profile'); // Import admin profile routes
 
-const path = require('path')
+const app = express(); // Initialize Express app
 
-const publicDir = path.join(__dirname, "resources")
+// Define static directories for serving CSS and JS
+const publicDir = path.join(__dirname, 'resources');
+app.use('/static/css', express.static(path.join(publicDir, 'css')));
+app.use('/static/js', express.static(path.join(publicDir, 'js')));
+app.use('/static/images', express.static(path.join(publicDir, 'images')));
 
-// Middleware that exposes the CSS resources statically
-app.use('/static/css', express.static(path.join(publicDir, "css")));
+// Use admin profile routes
+app.use(adminProfileRoutes); // Now app is defined and routes will be properly registered
 
-// Middleware that exposes the JS resources statically
-app.use('/static/js', express.static(path.join(publicDir, "js")));
+// Default route to serve admin profile HTML
+app.get('/', (req, res) => {
+    const html = path.join(__dirname, 'resources', 'views', 'admin-profile.html'); // Ensure this path and file exist
+    res.sendFile(html);
+});
 
+// Export the app for usage in the main server file
 module.exports = app;
