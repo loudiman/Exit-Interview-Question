@@ -1,0 +1,270 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+}
+
+/* Navbar Styles */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #2c3e50;
+    color: white;
+    padding: 10px 20px;
+}
+
+.navbar button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.navbar img {
+    border-radius: 50%;
+}
+
+/* Sidebar */
+.sidebar-container {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #34495e;
+    color: white;
+    padding-top: 1rem;
+    flex-shrink: 0;
+}
+
+.sidebar a {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    color: white;
+    font-weight: bold;
+}
+
+.sidebar a img {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+.sidebar a.active {
+    background-color: #2c3e50;
+}
+
+/* Main Content */
+main {
+    flex: 1;
+    padding: 1.5rem;
+    background-color: #ffffff;
+    overflow-y: auto;
+}
+
+/* Survey Container */
+.survey-container {
+    max-width: 1000px;
+    margin: auto;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    font-family: Arial, sans-serif;
+}
+/* Header */
+.survey-container h1 {
+    font-size: 2em;
+    color: black;
+    margin-bottom: 10px;
+    text-align: center;
+}
+.survey-container p{
+    font-size: 1.3em;
+}
+
+.tab-container {
+    width: 100%;
+    max-width: 2000px;
+    margin: 20px auto;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+}
+.tabs {
+    display: flex;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    text-decoration: none;
+}
+
+.tab{
+    font-size: 20px;
+    font-weight: bold;
+    color: #2c3e50;
+    flex: 1;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    background-color: #f4f4f4;
+    border-right: 1px solid #ddd;
+}
+
+.tab:hover {
+    background-color: #ddd;
+}
+
+.tab.active {
+    background-color: darkslateblue;
+    color: white;
+}
+
+.tab-content {
+    padding: 20px;
+    background-color: #fff;
+}
+
+.tab-pane {
+    display: none;
+}
+
+.tab-pane.active {
+    display: block;
+}
+form{
+    margin-top:20px;
+    width: 50%;
+}
+
+.flex-container.h-align-center {
+
+}
+
+.question{
+    background-color:#223C6B70;
+    border-radius: 10px;
+    margin-bottom:20px;
+}
+
+.question>.question-header>p{
+    margin:0px;
+    color:white;
+}
+
+.question-header{
+    background-color: #223C6B;
+    border-radius:10px 10px 0 0;
+    padding: 10px;
+}
+
+.textarea-container {
+    width: 100%;
+    display: flex;
+}
+
+.options{
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.option{
+    display: flex;
+    gap: 10px;
+}
+
+textarea {
+    width: 100%;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    padding: 1vw;
+}
+
+.char-counter{
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+    font-size: 12px;
+    color: gray;
+    pointer-events: none;
+}
+
+.flex-col {
+    align-items: center; /* Vertically center the items */
+    margin-bottom: 10px; /* Add some space between the radio buttons */
+}
+
+.rating {
+    display: flex;
+    justify-content: space-between;
+    padding: 1% 12% 1%;
+}
+
+/* Style for the container of each rating option */
+.flex-col {
+    display: flex;              /* Sorry lestat it seems to change when i use your styles.css's flex-col*/
+    flex-direction: column;     /* That's why I have to override it here. Find a fix if you can */
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+}
+
+/* Style for the custom radio button */
+.custom-radio {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 3px solid rgb(255, 255, 255);
+    background-color: #fff;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+/** Styling for the radio button when it is checked *!*/
+.custom-radio:checked {
+    background-color: #223C6B;
+}
+
+/* Style for the label */
+.custom-label {
+    margin-bottom: 5px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+}
+
+.custom-checkbox{
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .survey-container {
+        padding: 15px;
+    }
+
+    .radio-options, .checkbox-options {
+        flex-direction: column;
+    }
+}
