@@ -116,7 +116,7 @@ userRoutes.post('/user',checkPerm("admin"), async(req, res) => {
 
         if(type == 1){
             const {programID, sem, batch, gender} = req.body
-            const [rows1] = await UserDAL.addStudent(username, programID, sem, batch, gender)
+            const rows1 = await UserDAL.addStudent(username, programID, sem, batch, gender)
         }
 
 
