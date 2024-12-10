@@ -97,7 +97,7 @@ surveyRoutes.post('/survey/publish/:survey_id',authenticate("admin"), async(req,
     }
 })
 
-surveyRoutes.post('/response',authenticate(),async(req,res) => {
+surveyRoutes.post('/response',async(req,res) => {
     const {survey_id, response_json} = req.body
     try{
         const result = SurveyDAL.insertResponse(response_json, survey_id)
