@@ -92,7 +92,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
             `;
 
-<<<<<<< HEAD
             // Handle anchor tag click to get data from db
             surveyElement.querySelector('a').addEventListener('click', function(event) {
                 event.preventDefault();
@@ -104,45 +103,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     })
                     .catch(error => console.error("Fetch error: ", error));
             });
-=======
-            // Handle button tag click to get data from db
-            surveyElement.querySelector('.action-link').addEventListener('click', (function(survey) {
-                return function(event) {
-                    event.preventDefault();
-
-                    // This is a workaround solution to handle in frontend an expired survey
-                    if (survey.responded == 1 || new Date(survey.period_end) < new Date()) {
-                        window.location.href = '/student/survey/closedsurvey';
-                    }
-
-                    fetch(`/student/survey/viewsurvey?id=${survey.survey_id}`)
-                        .then(response => {
-                            // This is another solution handling an expired survey but with backend processing
-                            if (!response.ok) {
-                                window.location.href = '/student/survey/closedsurvey';
-                                throw new Error('Survey expired');
-                            }
-                            return response.json();
-                        })
-                        .then(surveyData => {
-                            sessionStorage.setItem('questionnaireData', JSON.stringify(surveyData));
-                            window.location.href = '/student/survey/questionnaires';
-                        })
-                        // .catch(error => console.error("Fetch error: ", error));  
-                };
-            })(survey)
-                // function(event) {
-                // event.preventDefault();
-                // fetch(`/student/survey?id=${survey.survey_id}`)
-                //     .then(response => response.json())
-                //     .then(surveyData => {
-                //         sessionStorage.setItem('questionaireData', JSON.stringify(surveyData));
-                //         // window.location.href = `/student/survey/questionaire?id=${surveyData.question_id}`;
-                //         window.location.href = '/student/survey/questionnaires';
-                //     })
-                //     .catch(error => console.error("Fetch error: ", error));}
-            );
->>>>>>> main
 
             // Hide button functionality
             surveyElement.querySelector('.hide-button').addEventListener('click', () => {
@@ -208,8 +168,6 @@ document.addEventListener('DOMContentLoaded', function () {
     // Initial fetch
     fetchSurveys();
 });
-<<<<<<< HEAD
-=======
 
 function formatDateToStandardTime(dateInput) {
     // Handle both Date objects and date strings
@@ -243,4 +201,3 @@ function formatDateToStandardTime(dateInput) {
 //         })
 //         .catch(error => console.error("Logout error:", error));
 // }
->>>>>>> main

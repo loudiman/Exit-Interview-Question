@@ -130,4 +130,34 @@ html *{
 
 .bold{
     font-weight: bold;
+
+.flex-container{
+    display: flex;
+    flex-direction:column
+}
+
+.flex-container.row{
+    display: inherit;
+    flex-direction:row;
+}
+
+.btn-prm-long{
+    background-color: #223C6BD6;
+    color:white;
+    padding:15px;
+    border:1px solid;
+    border-radius: 8px
+}
+
+.btn-prm-long.left-align{
+    text-align: left;
+    padding-left:10px;
+}
+
+.btn-prm-long.txt-l{
+    font-size: large;
+}
+
+.btn-prm-long.txt-m{
+    font-size: medium;
 }
