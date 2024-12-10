@@ -1,3 +1,3 @@
-const creationRoute = require('./survey-routes');
+const publishSurveyRoutes = require('./publish-survey');
 
-module.exports = creationRoute;
+module.exports = {publishSurveyRoutes};
