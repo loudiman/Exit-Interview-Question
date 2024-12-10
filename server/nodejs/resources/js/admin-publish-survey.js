@@ -32,11 +32,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Step 2: Fetch the data from the server
-    fetchFromServer().then(data => {
-        addOptions(data.availability, "program-dropdown"); // Add options for programs
-        addOptions(data.responders, "student-dropdown"); // Add options for responders
-        addOptions(["BSCS 3-1", "BSIT 2-2", "BSBA 1-1"], "batch-dropdown"); // Add options for batches
-    });
+    fetch('/api/fetch-data')
+        .then(response => {
+            if (!response.ok) throw new Error('Failed to fetch data');
+            return response.json();
+        })
+        .then(data => {
+            addOptions(data.availability, "program-dropdown");
+            addOptions(data.responders, "student-dropdown");
+            addOptions(["BSCS 3-1", "BSIT 2-2", "BSBA 1-1"], "batch-dropdown");
+        })
+        .catch(error => console.error('Error fetching data:', error));
 
     const publishButton = document.querySelectorAll(".publish-button")[1]; // Second button for 'Publish'
     if (publishButton) {
@@ -53,49 +59,30 @@ document.addEventListener("DOMContentLoaded", () => {
             surveyData.survey.period_start = `${fromDate}T${startTime}`;
             surveyData.survey.period_end = `${untilDate}T${endTime}`;
 
-            // Prepare and print the JSON data that will be sent to the server
-            console.log(`Survey Data to send: ${JSON.stringify(surveyData)}`);
-
-            // Step 4: Publish button logic to send data (commented for now)
-            /*
+            // Send survey data to the server
             fetch('/api/publish-survey', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(surveyData)
             })
-            .then(response => response.json())
-            .then(data => console.log('Success:', data))
-            .catch(error => console.error('Error:', error));
-            */
-
-            // Redirect to survey creation page
-            window.location.href = 'survey_templates.html';
+                .then(response => {
+                    if (!response.ok) throw new Error('Failed to publish survey');
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Survey published successfully:', data);
+                    // Redirect to survey creation page
+                    window.location.href = 'survey_templates.html';
+                })
+                .catch(error => {
+                    console.error('Error publishing survey:', error);
+                    alert('Failed to publish survey. Please try again.');
+                });
         });
     } else {
         console.error("Publish button not found.");
     }
 });
-
-function fetchFromServer() {
-    // Simulate fetching data from the server
-    return new Promise(resolve => {
-        setTimeout(() => {
-            resolve({
-                availability: [
-                    "Bachelor of Science in Accountancy",
-                    "Bachelor of Science in Information Technology",
-                    "Bachelor of Science in Computer Science",
-                    "Bachelor of Multimedia Arts"
-                ],
-                responders: [
-                    "Lou Diamond Morados",
-                    "Jane Doe",
-                    "John Smith"
-                ]
-            });
-        }, 1000);
-    });
-}
 
 function addOptions(data, containerId) {
     const container = document.getElementById(containerId);
@@ -109,12 +96,6 @@ function addOptions(data, containerId) {
         label.appendChild(document.createTextNode(item));
         container.appendChild(label);
     });
-}
-
-function toggleDropdown(containerId) {
-    const dropdown = document.getElementById(containerId);
-    const isVisible = dropdown.style.display === 'block';
-    dropdown.style.display = isVisible ? 'none' : 'block';
 }
 
 function getSelectedValues(containerId) {
