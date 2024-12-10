@@ -35,7 +35,7 @@ const surveyData = {
     ]
 };
 
-// Function to fetch survey data from the server/API
+// Fetch survey data from the server/API
 function fetchSurveyData() {
     return fetch('/path/to/your/api')  // Replace with your API endpoint
         .then(response => {
@@ -46,45 +46,38 @@ function fetchSurveyData() {
         })
         .catch(error => {
             console.error('Error fetching survey data from server:', error);
-            return null;  // Return null if the fetch fails
+            return null;
         });
 }
 
-// Function to render the survey from JSON data
-function renderSurvey(surveyData) {
-    const formTitle = document.getElementById('formTitle');
-    const questionsContainer = document.getElementById('questionsContainer');
-
-    // Clear existing questions
-    questionsContainer.innerHTML = '';
-
-    // Set the title from the JSON data
-    formTitle.textContent = surveyData.survey_title;
-
-    // Iterate over the questions and add them to the DOM
-    surveyData.questions.forEach((questionData) => {
-        addQuestionFromData(questionData, questionsContainer);
-    });
-}
-
-// Function to initialize the survey rendering process
+// Initialize the survey rendering process
 function initializeSurvey() {
     const questionsContainer = document.getElementById('questionsContainer');
 
-    // Try to fetch survey data from the server/API first
     fetchSurveyData().then(data => {
         if (data && data.survey_title) {
-            // If data is available from the server, render it
             renderSurvey(data);
         } else {
-            // If no data from server, use fallback local JSON data
             console.log('Using fallback data from local JSON');
             renderSurvey(surveyData);
         }
     });
 }
 
-// Function to create a new question container
+// Function to render the survey
+function renderSurvey(surveyData) {
+    const formTitle = document.getElementById('formTitle');
+    const questionsContainer = document.getElementById('questionsContainer');
+
+    questionsContainer.innerHTML = '';
+    formTitle.textContent = surveyData.survey_title;
+
+    surveyData.questions.forEach(questionData => {
+        addQuestionFromData(questionData, questionsContainer);
+    });
+}
+
+// Create a new question container
 function createQuestionContainer(questionData) {
     const newQuestionContainer = document.createElement("div");
     newQuestionContainer.classList.add("question-container");
@@ -116,11 +109,10 @@ function createQuestionContainer(questionData) {
     return newQuestionContainer;
 }
 
-// Function to render a question from the JSON structure
+// Add question to DOM
 function addQuestionFromData(questionData, container) {
     const newQuestionContainer = createQuestionContainer(questionData);
 
-    // Render based on question type
     switch(questionData.question_type) {
         case 'multiple_choice':
             renderMultipleChoiceOptions(newQuestionContainer, questionData.options);
@@ -140,13 +132,11 @@ function addQuestionFromData(questionData, container) {
 // Render multiple choice options
 function renderMultipleChoiceOptions(questionContainer, options = []) {
     const optionsContainer = questionContainer.querySelector('.options');
-    optionsContainer.innerHTML = ''; // Clear existing options
+    optionsContainer.innerHTML = '';
 
     if (options.length === 0) {
-        // Add a default option if no options exist
         addOptionToQuestion(questionContainer);
     } else {
-        // Render existing options
         options.forEach(option => {
             addOptionToQuestion(questionContainer, option);
         });
@@ -158,9 +148,7 @@ function renderEssayQuestion(questionContainer) {
     const optionsContainer = questionContainer.querySelector('.options');
     const buttonContainer = questionContainer.querySelector('.button-container');
 
-    optionsContainer.innerHTML = `
-        <textarea placeholder="Enter an answer here" rows="4" cols="50" disabled class="textarea"></textarea>
-    `;
+    optionsContainer.innerHTML = `<textarea placeholder="Enter an answer here" rows="4" cols="50" disabled class="textarea"></textarea>`;
     buttonContainer.style.display = 'none';
 }
 
@@ -187,14 +175,13 @@ function renderRatingQuestion(questionContainer, scale = 5) {
     buttonContainer.style.display = 'none';
 }
 
-// Change question type
+// Change question type handler
 function changeQuestionType(selectElement) {
     const questionContainer = selectElement.closest('.question-container');
+    const newType = selectElement.value;
     const optionsContainer = questionContainer.querySelector('.options');
     const buttonContainer = questionContainer.querySelector('.button-container');
-    const newType = selectElement.value;
 
-    // Reset options based on new type
     switch(newType) {
         case 'multiple_choice':
             buttonContainer.style.display = 'block';
@@ -209,38 +196,7 @@ function changeQuestionType(selectElement) {
     }
 }
 
-// Make the title editable
-function makeEditable(id) {
-    const titleElement = document.getElementById(id);
-
-    // If it's already an input, save the value and revert back
-    if (titleElement.tagName === 'INPUT') {
-        const newTitle = titleElement.value;
-        titleElement.replaceWith(createTitleElement(newTitle));  // Revert back to the title
-    } else {
-        // Create an input field for editing
-        const inputElement = document.createElement('input');
-        inputElement.type = 'text';
-        inputElement.value = titleElement.textContent;
-        inputElement.addEventListener('blur', () => {
-            const newTitle = inputElement.value;
-            titleElement.replaceWith(createTitleElement(newTitle));  // Revert back to the title
-        });
-        titleElement.replaceWith(inputElement);
-        inputElement.focus();  // Focus on the input field for immediate editing
-    }
-}
-
-// Helper function to create the title element (either h2 or input)
-function createTitleElement(titleText) {
-    const titleElement = document.createElement('h2');
-    titleElement.id = 'formTitle';
-    titleElement.textContent = titleText;
-    titleElement.onclick = () => makeEditable('formTitle');  // Re-enable click-to-edit
-    return titleElement;
-}
-
-// Add option to a multiple choice question
+// Add option to multiple choice question
 function addOptionToQuestion(questionContainer, optionText = '') {
     const optionsContainer = questionContainer.querySelector('.options');
     const optionElement = document.createElement('div');
@@ -250,7 +206,6 @@ function addOptionToQuestion(questionContainer, optionText = '') {
         <input type="text" class="option-input" value="${optionText}" onchange="updateOptionText(this)">
         <button class="remove-button" onclick="removeOption(this)">Remove</button>
     `;
-
     optionsContainer.appendChild(optionElement);
 }
 
@@ -260,23 +215,21 @@ function addOption(buttonElement) {
     addOptionToQuestion(questionContainer);
 }
 
-// Add "Other" option
+// Add "Other" option handler
 function addOtherOption(buttonElement) {
     const questionContainer = buttonElement.closest('.question-container');
     addOptionToQuestion(questionContainer, 'Other');
 }
 
-// Remove an option
+// Remove option
 function removeOption(removeButton) {
     const optionContainer = removeButton.closest('.option-container');
     optionContainer.remove();
 }
 
-// Remove a question
+// Remove question
 function removeQuestion(removeButton) {
     const questionContainer = removeButton.closest('.question-container');
-
-    // Prevent removing the last question
     const questionsContainer = document.getElementById('questionsContainer');
     if (questionsContainer.children.length > 1) {
         questionContainer.remove();
@@ -285,7 +238,7 @@ function removeQuestion(removeButton) {
     }
 }
 
-// Add a new question
+// Add new question
 function addNewQuestion(addButton) {
     const questionsContainer = document.getElementById('questionsContainer');
     const newQuestionData = {
@@ -296,27 +249,20 @@ function addNewQuestion(addButton) {
     };
 
     const newQuestionContainer = createQuestionContainer(newQuestionData);
-
-    // Get the closest question to the 'Add' button
     const questionContainer = addButton.closest('.question-container');
-    // Insert the new question after the current question
     questionContainer.insertAdjacentElement('afterend', newQuestionContainer);
 
-    // Ensure the new question is rendered properly
     renderMultipleChoiceOptions(newQuestionContainer, newQuestionData.options);
-
     questionIndex++;
 }
 
 // Update question text
 function updateQuestionText(inputElement) {
-    // You can add additional logic here if needed
     console.log('Question text updated:', inputElement.value);
 }
 
 // Update option text
 function updateOptionText(inputElement) {
-    // You can add additional logic here if needed
     console.log('Option text updated:', inputElement.value);
 }
 
@@ -327,7 +273,7 @@ function updateRatingScale(selectElement) {
     renderRatingQuestion(questionContainer, newScale);
 }
 
-// Collect survey data
+// Collect survey data from DOM
 function collectSurveyData() {
     const surveyData = {
         survey_title: document.getElementById('formTitle').textContent,
@@ -344,17 +290,12 @@ function collectSurveyData() {
             scale: null
         };
 
-        switch(questionData.question_type) {
+        switch (questionData.question_type) {
             case 'multiple_choice':
-                questionData.options = Array.from(
-                    container.querySelectorAll('.option-input')
-                ).map(input => input.value);
+                questionData.options = Array.from(container.querySelectorAll('.option-input')).map(input => input.value);
                 break;
             case 'rating':
-                questionData.scale = parseInt(
-                    container.querySelector('.max-rating-select').value,
-                    10
-                );
+                questionData.scale = parseInt(container.querySelector('.max-rating-select').value, 10);
                 break;
         }
 
@@ -364,18 +305,25 @@ function collectSurveyData() {
     return surveyData;
 }
 
-// Publish survey (example function)
-function publishSurvey() {
-    const surveyData = collectSurveyData();
-    console.log('Survey data to be published:', surveyData);
-    // Add your publishing logic here (e.g., send to backend)
-    alert('Survey data collected and ready to be published!');
+// Save survey data (example)
+function saveSurveyData() {
+    const data = collectSurveyData();
+    console.log('Survey data:', JSON.stringify(data));
+
+    // Example: Save to API
+    fetch('/path/to/your/api/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    })
+        .then(response => response.json())
+        .then(result => {
+            console.log('Survey saved:', result);
+        })
+        .catch(error => {
+            console.error('Error saving survey:', error);
+        });
 }
 
-// Initial render or add first question on page load
-window.onload = function() {
-    initializeSurvey();
-
-    // Attach publish button event
-    document.querySelector('.publish-button').addEventListener('click', publishSurvey);
-};
+// Initialize the survey when the page loads
+window.onload = initializeSurvey;
