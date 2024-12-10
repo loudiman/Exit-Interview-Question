@@ -1,5 +1,6 @@
 const express = require(`express`)
 const {UserDAL} = require(`../controller`)
+const authenticate = require(`../auth`)
 const userRoutes = express.Router()
 
 userRoutes.use(express.json())
@@ -20,7 +21,7 @@ userRoutes.get('/',(req, res) =>[
 ])
 
 
-userRoutes.get('/users',checkPerm("admin") ,async (req,res) => {
+userRoutes.get('/users',authenticate("admin") ,async (req,res) => {
     try{
         console.log("processing")
         const rows = await UserDAL.getAllUsers()
@@ -31,7 +32,7 @@ userRoutes.get('/users',checkPerm("admin") ,async (req,res) => {
     }
 })
 
-userRoutes.get('/users/filtered', checkPerm("admin"), async(req,res)=>{
+userRoutes.get('/users/filtered', authenticate("admin"), async(req,res)=>{
     const{filters} = req.body
     var notJSON = filters[0]
     var equalJSON = filters[1]
@@ -79,7 +80,7 @@ function createStatement(type , jsonObject, output){
     }
 }
 
-userRoutes.get('/user/:username',checkPerm("admin") ,async(req, res)=>{
+userRoutes.get('/user/:username',authenticate("admin") ,async(req, res)=>{
     const {username} = req.params
     console.log(username)
     try{
@@ -104,7 +105,7 @@ userRoutes.post('/user/:username', async(req, res) => {
     }
 })
 
-userRoutes.post('/user',checkPerm("admin"), async(req, res) => {
+userRoutes.post('/user',authenticate("admin"), async(req, res) => {
     const {username, password, last_name, given_name, type} = req.body
     var data
     try{

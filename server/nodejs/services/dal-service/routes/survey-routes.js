@@ -1,22 +1,14 @@
 const express = require(`express`)
 const {SurveyDAL} = require(`../controller/index`)
+const authenticate = require(`../auth`)
 const surveyRoutes = express.Router()
-
-function checkPerm(req,res,next){
-    const{userType} = req.body
-    if(userType != "admin"){
-        res.status(403).json({error:"Invalid body"})
-        return
-    }
-    next()
-}
 
 
 surveyRoutes.get('/',(req,res)=>{
     res.send("Hello there, This is the survey endpoint")
 })
 
-surveyRoutes.get("/survey",async(req, res)=>{
+surveyRoutes.get("/survey",authenticate("admin"),async(req, res)=>{
     try{
         const rows = await SurveyDAL.getAllSurvey()
         res.status(200).json(rows)
@@ -62,7 +54,7 @@ surveyRoutes.get('/survey/:username', async(req, res)=>{
     }
 })
 
-surveyRoutes.post('/survey', async (req, res) => {
+surveyRoutes.post('/survey',authenticate("admin") ,async (req, res) => {
     const {surveyReq, questions, users} = req.body
     
     
@@ -89,7 +81,7 @@ surveyRoutes.post('/survey', async (req, res) => {
     
 })
 
-surveyRoutes.post('/survey/publish/:survey_id', async(req, res) => {
+surveyRoutes.post('/survey/publish/:survey_id',authenticate("admin"), async(req, res) => {
     const {survey_id} = req.params
     const {status} = req.body
     let survey = {
@@ -105,7 +97,7 @@ surveyRoutes.post('/survey/publish/:survey_id', async(req, res) => {
     }
 })
 
-surveyRoutes.post('/response',async(req,res) => {
+surveyRoutes.post('/response',authenticate(),async(req,res) => {
     const {survey_id, response_json} = req.body
     try{
         const result = SurveyDAL.insertResponse(response_json, survey_id)
