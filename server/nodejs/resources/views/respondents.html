@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Respondents</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/nav_bar.css">
+    <link rel="stylesheet" href="../css/respondents.css">
+    <link rel="stylesheet" href="../css/side_bar.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <button aria-label="Toggle Sidebar" id="sidebarToggle">☰</button>
+        <img alt="Profile" height="30" src="../../resources/images/male_user.png" width="30">
+    </header>
+
+    <!-- Sidebar -->
+    <div class="sidebar-container">
+        <nav class="sidebar" id="sidebar">
+            <a aria-label="Home" href="#">
+                <img alt="Home Icon" src="../../resources/images/home_icon.png"> Home
+            </a>
+            <a aria-label="Create" href="#">
+                <img alt="Create Icon" src="../../resources/images/create_icon.png"> Create
+            </a>
+            <a aria-label="View" class="active" href="#">
+                <img alt="View Icon" src="../../resources/images/view_icon.png"> View
+            </a>
+            <a aria-label="Respondents" href="#">
+                <img alt="Respondents Icon" src="../../resources/images/respondents_icon.png"> Respondents
+            </a>
+            <a aria-label="Profile" href="#">
+                <img alt="Profile Icon" src="../../resources/images/male_user.png"> Profile
+            </a>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Search Bar -->
+        <section class="search-bar">
+            <label for="searchInput"></label><input id="searchInput" placeholder="Search" type="text">
+            <button aria-label="Search Surveys" id="searchButton">
+                <img src="../../resources/images/Search.png" alt="Search Icon">
+            </button>
+        </section>
+
+        <!-- Respondents Section -->
+        <div class="respondents-section">
+            <h2>Respondents</h2>
+        </div>
+        <div class="respondents-table">
+            <div class="table-header">
+                <span>ID Number</span>
+                <span>Name</span>
+                <span>Surveys Responded To</span>
+            </div>
+            <div class="table-body">
+                <div class="table-row">
+                    <span>1234567</span>
+                    <span>Marven Luis</span>
+                    <span>
+                        <select>
+                            <option value="survey1">Sample Title 1</option>
+                            <option value="survey2">Sample Title 2</option>
+                            <option value="survey3">Sample Title 3</option>
+                        </select>
+                    </span>
+                </div>
+                <div class="table-row">
+                    <span>1234567</span>
+                    <span>Lou Morados</span>
+                    <span>
+                        <select>
+                            <option value="survey1">Sample Title 1</option>
+                            <option value="survey2">Sample Title 2</option>
+                            <option value="survey3">Sample Title 3</option>
+                        </select>
+                    </span>
+                </div>
+                <div class="table-row">
+                    <span>1234567</span>
+                    <span>Lenar Domingo</span>
+                    <span>
+                        <select>
+                            <option value="survey1">Sample Title 1</option>
+                            <option value="survey2">Sample Title 2</option>
+                            <option value="survey3">Sample Title 3</option>
+                        </select>
+                    </span>
+                </div>
+                <div class="table-row">
+                    <span>1234567</span>
+                    <span>Gebreyl Rabang</span>
+                    <span>
+                        <select>
+                            <option value="survey1">Sample Title 1</option>
+                            <option value="survey2">Sample Title 2</option>
+                            <option value="survey3">Sample Title 3</option>
+                        </select>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+<!-- Response Analytics Section -->
+<div class="response-analytics">
+    <h2>Response Analytics</h2>
+    <div class="analytics-card">
+        <div class="response-summary">
+            <span>Sample Title</span>
+            <span>60/70</span>
+        </div>
+        <p class="survey-description">Survey description</p>
+        <div class="response-details">
+            <div class="response-row">
+                <span>ID Number</span>
+                <span>Name</span>
+                <span>Status</span>
+            </div>
+            <div class="response-row">
+                <span>1234567</span>
+                <span>Gebreyl Rabang</span>
+                <span>Responded</span>
+            </div>
+            <div class="response-row">
+                <span>1234567</span>
+                <span>Lou Morados</span>
+                <span>Pending</span>
+            </div>
+        </div>
+    </div>
+    <div class="analytics-card">
+        <div class="response-summary">
+            <span>Sample Title</span>
+            <span>60/70</span>
+        </div>
+        <p class="survey-description">Survey description</p>
+        <div class="response-details">
+            <div class="response-row">
+                <span>ID Number</span>
+                <span>Name</span>
+                <span>Status</span>
+            </div>
+            <div class="response-row">
+                <span>1234567</span>
+                <span>Gebreyl Rabang</span>
+                <span>Responded</span>
+            </div>
+            <div class="response-row">
+                <span>1234567</span>
+                <span>Lou Morados</span>
+                <span>Pending</span>
+            </div>
+        </div>
+    </div>
+</div>
+    </div>
+<script src="../js/survey_creation_navbar.js"></script>
+</body>
+</html>

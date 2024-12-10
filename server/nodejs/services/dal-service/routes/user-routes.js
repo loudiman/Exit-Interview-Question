@@ -95,9 +95,12 @@ userRoutes.get('/user/:username',authenticate("admin") ,async(req, res)=>{
 })
 
 userRoutes.post('/user/:username', async(req, res) => {
-    const {username, password, newPassword} = req.body
+    const {username, oldPassword, newPassword} = req.body
     try{
-        const [rows] = await UserDAL.changePass(username, password, newPassword)
+        console.log(username)
+        console.log(oldPassword)
+        console.log(newPassword)
+        const rows = await UserDAL.changePass(username, oldPassword, newPassword)
         res.status(200).json(rows)
     }catch(error){
         console.log(error)
@@ -109,12 +112,12 @@ userRoutes.post('/user',authenticate("admin"), async(req, res) => {
     const {username, password, last_name, given_name, type} = req.body
     var data
     try{
-        const [rows] = await UserDAL.addUser(username,password,last_name,given_name, type)
+        const rows = await UserDAL.addUser(username,password,last_name,given_name, type)
         data = rows
 
         if(type == 1){
             const {programID, sem, batch, gender} = req.body
-            const [rows1] = await UserDAL.addStudent(username, programID, sem, batch, gender)
+            const rows1 = await UserDAL.addStudent(username, programID, sem, batch, gender)
         }
 
 

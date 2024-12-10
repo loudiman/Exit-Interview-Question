@@ -107,4 +107,15 @@ surveyRoutes.post('/response',async(req,res) => {
     }
 })
 
+surveyRoutes.get('/survey-summary', async(req, res) => {
+    console.log("hit")
+    try{
+        const result = await SurveyDAL.getSurveySummary()
+        console.log(`Result: ${result}`)
+        res.status(200).json(result)
+    }catch(error){
+        res.status(500)
+    }
+})
+
 module.exports = surveyRoutes

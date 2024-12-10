@@ -8,7 +8,6 @@
 
 /* Sidebar */
 .sidebar {
-    flex-basis: 220px;
     background-color: #9EA9BE;
     padding: 20px 15px;
     display: flex;
@@ -56,4 +55,9 @@
   .sidebar img {
     width: 24px;
     height: 24px;
+  }
+
+  main{
+    flex: 1;
+    margin: 10px;
   }

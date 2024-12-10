@@ -1,31 +1,34 @@
 @font-face {
     font-family: 'Istok Web';
-    src: url(/resources/fonts/Istok_Web/IstokWeb-Regular.ttf) format('truetype');
+    src: url("../fonts/Istok_Web/IstokWeb-Regular.ttf") format('truetype');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'Istok Web';
-    src: url(/resources/fonts/Istok_Web/IstokWeb-Bold.ttf) format('truetype');
+    src: url("../fonts/Istok_Web/IstokWeb-Bold.ttf") format('truetype');
     font-weight: bold;
     font-style:normal;
 }
 
 @font-face {
     font-family: 'Istok Web';
-    src: url(/resources/fonts/Istok_Web/IstokWeb-Italic.ttf) format('truetype');
+    src: url("../fonts/Istok_Web/IstokWeb-Italic.ttf") format('truetype');
     font-weight: normal;
     font-style: italic;
 }
 
 @font-face {
     font-family: 'Istok Web';
-    src: url(/resources/fonts/Istok_Web/IstokWeb-BoldItalic.ttf) format('truetype');
+    src: url("../fonts/Istok_Web/IstokWeb-BoldItalic.ttf") format('truetype');
     font-weight: normal;
     font-style: italic;
 }
 
+html{
+    font-family: 'Istok Web';
+}
 
 .flex-container{
     display: flex;
@@ -35,6 +38,10 @@
 .flex-container.row{
     display: inherit;
     flex-direction:row;
+}
+
+.spacer{
+    flex-grow: 1;
 }
 
 .btn-prm-long{
@@ -56,4 +63,36 @@
 
 .btn-prm-long.txt-m{
     font-size: medium;
+}
+
+.bolder{
+    font-weight: bolder;
+}
+
+.bg-grey{
+    background-color: #A5A9B3;
+}
+
+.bg-primary{
+    background-color: #223C6B;
+}
+
+.bg-secondary{
+    background-color: #E1C319;
+}
+
+.color-primary{
+    color:#223C6B;
+}
+
+.color-grey{
+    color:#A5A9B3
+}
+
+.color-secondary{
+    color:#E1C319
+}
+
+.color-white{
+    color:white;
 }
