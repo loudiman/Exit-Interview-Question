@@ -10,6 +10,7 @@ return [
     "host" => "127.0.0.1",
     "port" => 3306,
     "dbname" => "amalgam",
+    "password" => "secret",
     "charset" => "utf8mb4"
     ],
 ];

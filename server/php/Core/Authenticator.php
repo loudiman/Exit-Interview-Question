@@ -10,9 +10,9 @@ class Authenticator
 
     public function attempt($username, $password)
     {
-        $user = App::resolve(Database::class)->query("SELECT * from user WHERE username = :username",
+        $user = App::resolve(Database::class)->query("SELECT * from user WHERE username = ?",
         [
-            'username' => $username
+            $username
         ])->find();
 
         if ($user) 
@@ -22,7 +22,8 @@ class Authenticator
             {
                 login([
                     'userType' => $user['type'],
-                    'username' => $username
+                    'username' => $user['username'],
+                    'fname' => $user['given_name'],
                 ]);
 
                 return true;

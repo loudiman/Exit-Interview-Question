@@ -1,23 +1,249 @@
 body {
     margin: 0;
+    font-family: "CustomFont", Arial, sans-serif;
+    height: 100%;
+    padding: 0;
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #223C6B;
+    padding: 10px 20px;
+    color: white;
+}
+
+.navbar button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
 }
 
 .main-content {
     flex-grow: 1;
     padding: 20px;
     background-color: #FFFFFF;
-    height: 100vh;
-    overflow-y: auto;
-    border: 2px solid #ccc;
+    border: 1px solid #ccc;
+    align-items: center;
+    height: max-content;
+    border: none;
 }
-.publish-button, .review-button, .back-button {
+
+.survey-header-container,
+.survey-details-container {
+    width: 100%;
+    max-width: 1000px;
+    height: auto;
+    text-align: center;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: justify;
+}
+
+.survey-header-container h2{
+    font-size: 18px;
+    font-weight: bold;
+    color: #223C6B;
+    
+}
+
+.survey-header-container h1 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.survey-header-container p {
+    font-size: 16px;
+    color: #666;
+}
+
+.button-container {
+    display: flex;
+    justify-content:end; 
+    margin-top: 20px;
+}
+
+
+.publish-button {
     padding: 10px 15px;
     background-color: #223C6B;
     color: white;
     border: none;
     border-radius: 5px;
+    font-size: 14px;
     cursor: pointer;
+    /* flex: 1; */
+    margin-right: 10px;
+    display: flex;
+    justify-content: center;
 }
-.review-button:hover, .back-button:hover, .publish-button:hover {
+.publish-button:last-child {
+    margin-right: 0;
+}
+
+.publish-button:hover {
     background-color: #0c5ac0;
 }
+
+.survey-details-container {
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    gap: 15px;
+}
+
+.survey-details-container span {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.survey-details-container input,
+.survey-details-container select {
+    width: 60%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+ input[type="date"], input[type="time"]{
+    background-color: #223C6B;
+    color: white;
+    border: none;
+    outline: none;
+    font-size: 18px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+     text-align: left;
+     border-radius: 5px;
+     }
+
+.survey-details-container{
+    background-color: white;
+    color: white;
+}
+
+.date-time-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.date-time-row label {
+    width: fit-content!important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #223C6B;
+    color: white; 
+    padding: 5px;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 14px;
+    flex: 1;
+    height: 50px;
+    gap: 10px;
+}
+
+
+.restriction-row {
+    display: flex;
+    flex-direction: row; 
+    justify-content: space-between; 
+    align-items: center;
+    gap: 10px; 
+    margin-bottom: 15px;
+    width: 100%; 
+}
+
+.restriction-row select {
+    flex: 2; 
+    width: 100%; 
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #223C6B;
+    color: white;
+    font-size: 14px;
+    height: 50px;
+}
+
+.dropdown {
+    background-color: #223C6B;
+    color: white;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 100%;
+}
+
+.dropdown option{
+    color: white;
+}
+
+.dropdown option:disabled{
+    color: #aaa;
+}
+
+.dropdown-multiselect {
+    position: relative;
+    width: 100%;
+}
+
+.dropdown-toggle {
+    width: 100%;
+    height: 50px;
+    background-color: #223C6B;
+    color: white;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: left;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.dropdown-options {
+    display: none;
+    position: absolute;
+    background-color: #223C6A;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1;
+}
+
+.dropdown-options label {
+    display: block;
+    padding: 8px;
+    cursor: pointer;
+}
+
+.dropdown-options label:hover {
+    background-color: #223C5B;
+}
+
+.dropdown-options input {
+    margin-right: 8px;
+}
+input[type="checkbox" i] {
+    background-color: initial;
+    cursor: default;
+    appearance: auto;
+    margin: 0px;
+    height: 20px;
+    width: 80px;
+}
+
