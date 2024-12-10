@@ -58,7 +58,7 @@ class UserDAL {
     }
 
     static async addStudent(username, programID, sem, batch, gender){
-        query = "INSERT INTO student (username, program_id, sem, batch, gender) VALUES(?,?,?,?,?)"
+        var query = "INSERT INTO student (username, program_id, sem, batch, gender) VALUES(?,?,?,?,?)"
         try{
             const[result] = pool.execute(query, [username, programID, sem, batch, gender])
             return result
