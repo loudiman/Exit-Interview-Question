@@ -38,26 +38,33 @@
     </nav>
 
     <main>
+        <div class="flex-container row">
+            <img src="../images/black-img.png" alt="ICON" id="profile-icon">
+            <h2>Mark Lestat Agustin</h2>
+        </div>
         <div class="flex-container">
-            <div class="flex-container row">
-                <img src="../images/black-img.png" alt="ICON" id="profile-icon">
-                <h2>Mark Lestat Agustin</h2>
-            </div>
-
             <div class="password-box">
                 <h3>Create Admin Account</h3>
                 <form>
-                    <label for="email" class="color-white">Email</label>
-                    <input type="email" name="email" id="email" class="password-input" placeholder="Enter email" required>
+                    <label for="username" class="color-white">Username</label>
+                    <input type="username" name="thisUsername" id="username" class="password-input" placeholder="Enter username" required>
 
                     <label for="password" class="color-white">Password</label>
-                    <input type="password" name="password" id="password" class="password-input" placeholder="Enter password" required>
+                    <input type="password" name="thisPassword" id="password" class="password-input" placeholder="Enter password" required>
+
+                    <label for="last_name" class="color-white">Last Name</label>
+                    <input type="last_name" name="thisLast_name" id="last_name" class="password-input" placeholder="Enter Last Name" required>
+
+                    <label for="given_name" class="color-white">Given Name</label>
+                    <input type="given_name" name="thisGiven_name" id="given_name" class="password-input" placeholder="Enter Given Name" rqequried>
 
                     <button type="submit" class="save-button">Create</button>
                 </form>
             </div>
+            <a href="admin-profile.html" class="cancel-btn">Back</a>
         </div>
     </main>
 </div>
+    <script defer src="../js/admin-profile-createacc.js"></script>
 </body>
 </html>
