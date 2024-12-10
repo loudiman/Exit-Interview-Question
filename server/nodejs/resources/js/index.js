@@ -190,4 +190,37 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     renderSurveys(surveyData);
+
+    // Selecting all the anchor tags
+    const navLinks = document.querySelectorAll('#sidebar a');
+
+    // Adding event listeners for each link
+    navLinks.forEach(link => {
+        link.addEventListener('click', (event) => {
+            event.preventDefault(); // Prevent the default anchor behavior
+
+            const label = link.getAttribute('aria-label'); // Get the aria-label to determine the destination
+
+            switch (label) {
+                case 'Home':
+                    window.location.href = '/';  // Navigate to Home
+                    break;
+                case 'Create':
+                    window.location.href = '/survey-create'; // Navigate to Survey Creation
+                    break;
+                case 'View':
+                    window.location.href = '/survey-view'; // Navigate to Survey View
+                    break;
+                case 'Respondents':
+                    window.location.href = '/respondents'; // Navigate to Respondents
+                    break;
+                case 'Profile':
+                    window.location.href = '/profile'; // Navigate to Profile
+                    break;
+                default:
+                    console.log('Unknown navigation item');
+                    break;
+            }
+        });
+    });
 });

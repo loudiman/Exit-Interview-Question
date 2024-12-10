@@ -39,4 +39,40 @@ app.get('/', authenticateToken, (req, res) => {
       res.status(403).send('Access denied: Admins only');
    }
 });
+
+//Serve survey_creation.html
+app.get('/survey-create', authenticateToken, (req, res) => {
+   if (req.user.userType === 0) {
+      res.sendFile(path.join(__dirname, 'resources', 'views', 'survey_creation.html'));
+   } else {
+      res.status(403).send('Access denied: Admins only');
+   }
+});
+
+//Serve respondents.html
+app.get('/respondents', authenticateToken, (req, res) => {
+   if (req.user.userType === 0) {
+      res.sendFile(path.join(__dirname, 'resources', 'views', 'respondents.html'));
+   } else {
+      res.status(403).send('Access denied: Admins only');
+   }
+});
+
+//Serve survey_view.html
+app.get('/survey-view', authenticateToken, (req, res) => {
+   if (req.user.userType === 0) {
+      res.sendFile(path.join(__dirname, 'resources', 'views', 'survey_view.html'));
+   } else {
+      res.status(403).send('Access denied: Admins only');
+   }
+});
+
+//Serve admin-profile.html
+app.get('/profile', authenticateToken, (req, res) => {
+   if (req.user.userType === 0) {
+      res.sendFile(path.join(__dirname, 'resources', 'views', 'admin-profile.html'));
+   } else {
+      res.status(403).send('Access denied: Admins only');
+   }
+});
 module.exports = app
