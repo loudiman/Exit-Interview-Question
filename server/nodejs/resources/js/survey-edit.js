@@ -152,26 +152,39 @@ function renderEssayQuestion(questionContainer) {
     buttonContainer.style.display = 'none';
 }
 
-// Render rating question
+// Render a rating question with a dynamic scale of options.
 function renderRatingQuestion(questionContainer, scale = 5) {
+    // Get the container elements for the options and the button
     const optionsContainer = questionContainer.querySelector('.options');
     const buttonContainer = questionContainer.querySelector('.button-container');
 
+    // Set the HTML content inside the optionsContainer
     optionsContainer.innerHTML = `
+        <!-- Dropdown to select the maximum rating scale -->
         <select class="max-rating-select" onchange="updateRatingScale(this)">
-            ${[...Array(10)].map((_, i) =>
-        `<option value="${i+1}" ${i+1 === scale ? 'selected' : ''}>${i+1}</option>`
-    ).join('')}
+            ${[...Array(10)] // Creates an array of 10 elements (for a scale of 1-10)
+        .map((_, i) =>
+            // For each item in the array (i = index 0 to 9), create an option tag
+            `<option value="${i+1}" ${i+1 === scale ? 'selected' : ''}>${i+1}</option>`
+        )
+        .join('')} <!-- Join options into a single string -->
         </select>
+
+        <!-- Container for the rating options (radio buttons) -->
         <div class="rating-container">
-            ${[...Array(scale)].map((_, i) =>
-        `<label>
-                    <input type="radio" name="rating" value="${i+1}">
-                    ${i+1}
-                </label>`
-    ).join('')}
+            ${[...Array(scale)] // Creates an array based on the scale (e.g., 5 for 1-5 rating)
+        .map((_, i) =>
+            // For each item in the array (i = index 0 to scale-1), create a radio button
+            `<label>
+                        <input type="radio" name="rating" value="${i+1}">
+                        ${i+1}
+                    </label>`
+        )
+        .join('')} <!-- Join radio buttons into a single string -->
         </div>
     `;
+
+    // Hide the button container (not used in this function)
     buttonContainer.style.display = 'none';
 }
 
