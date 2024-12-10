@@ -22,7 +22,8 @@ class Authenticator
             {
                 login([
                     'userType' => $user['type'],
-                    'username' => $user['username']
+                    'username' => $user['username'],
+                    'fname' => $user['given_name'],
                 ]);
 
                 return true;

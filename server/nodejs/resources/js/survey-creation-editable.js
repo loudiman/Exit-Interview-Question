@@ -106,58 +106,85 @@ function updateQuestionContent(selectElement) {
     const buttonContainer = questionContent.querySelector(".button-container");
     const questionType = selectElement.value;
 
+    // Reset options container and button container display
     optionsContainer.innerHTML = '';
-    buttonContainer.style.display = questionType === 'multiple-choice' || `checkbox` ? 'block' : 'none';
+    buttonContainer.style.display =
+        questionType === 'multiple-choice' || questionType === 'checkbox'
+            ? 'block'
+            : 'none';
 
-    if (questionType === 'multiple-choice') {
-        addOption(buttonContainer.querySelector(".option-button"));
-    } else if(questionType === `checkbox`){
-        addOption(buttonContainer.querySelector(".option-button"));
-    }
-    else if (questionType === 'essay') {
-        optionsContainer.innerHTML = `<textarea placeholder="Enter an answer here" rows="4" cols="50" disabled class="textarea"></textarea>`;
-
-    } else if (questionType === 'rating') {
-        const ratingContainer = document.createElement("div");
-        ratingContainer.classList.add("rating-container");
-        ratingContainer.style.display = "flex";
-        ratingContainer.style.gap = "10px";
-        ratingContainer.style.marginBottom = "10px";
-
-        const maxRatingSelect = document.createElement("select");
-        maxRatingSelect.classList.add("max-rating-select");
-        maxRatingSelect.style.marginBottom = "10px";
-
-        for (let i = 1; i <= 10; i++) {
-            const option = document.createElement("option");
-            option.value = i;
-            option.textContent = i;
-            maxRatingSelect.appendChild(option);
+    switch (questionType) {
+        case 'multiple-choice':
+        case 'checkbox': {
+            // Add option for both 'multiple-choice' and 'checkbox'
+            addOption(buttonContainer.querySelector(".option-button"));
+            break;
         }
 
-        maxRatingSelect.addEventListener("change", () => {
-            const maxRating = parseInt(maxRatingSelect.value, 10);
-            ratingContainer.innerHTML = "";
+        case 'essay': {
+            // Add a textarea for essay type
+            optionsContainer.innerHTML = `
+                <textarea 
+                    placeholder="Enter an answer here" 
+                    rows="4" 
+                    cols="50" 
+                    disabled 
+                    class="textarea">
+                </textarea>`;
+            break;
+        }
 
-            for (let i = 1; i <= maxRating; i++) {
-                const label = document.createElement("label");
-                label.style.display = "flex";
-                label.style.alignItems = "center";
+        case 'rating': {
+            // Create a rating system
+            const ratingContainer = document.createElement("div");
+            ratingContainer.classList.add("rating-container");
+            ratingContainer.style.display = "flex";
+            ratingContainer.style.gap = "10px";
+            ratingContainer.style.marginBottom = "10px";
 
-                const radio = document.createElement("input");
-                radio.type = "radio";
-                radio.name = "rating";
-                radio.value = i;
-                radio.style.marginRight = "5px";
+            const maxRatingSelect = document.createElement("select");
+            maxRatingSelect.classList.add("max-rating-select");
+            maxRatingSelect.style.marginBottom = "10px";
 
-                label.appendChild(radio);
-                label.appendChild(document.createTextNode(i));
-                ratingContainer.appendChild(label);
+            // Populate the max rating select
+            for (let i = 1; i <= 10; i++) {
+                const option = document.createElement("option");
+                option.value = i;
+                option.textContent = i;
+                maxRatingSelect.appendChild(option);
             }
-        });
 
-        optionsContainer.appendChild(maxRatingSelect);
-        optionsContainer.appendChild(ratingContainer);
+            // Handle change event to create rating options dynamically
+            maxRatingSelect.addEventListener("change", () => {
+                const maxRating = parseInt(maxRatingSelect.value, 10);
+                ratingContainer.innerHTML = "";
+
+                for (let i = 1; i <= maxRating; i++) {
+                    const label = document.createElement("label");
+                    label.style.display = "flex";
+                    label.style.alignItems = "center";
+
+                    const radio = document.createElement("input");
+                    radio.type = "radio";
+                    radio.name = "rating";
+                    radio.value = i;
+                    radio.style.marginRight = "5px";
+
+                    label.appendChild(radio);
+                    label.appendChild(document.createTextNode(i));
+                    ratingContainer.appendChild(label);
+                }
+            });
+
+            // Append to the options container
+            optionsContainer.appendChild(maxRatingSelect);
+            optionsContainer.appendChild(ratingContainer);
+            break;
+        }
+
+        default:
+            console.warn(`Unsupported question type: ${questionType}`);
+            break;
     }
 }
 

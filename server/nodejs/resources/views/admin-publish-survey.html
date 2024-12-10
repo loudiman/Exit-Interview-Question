@@ -1,86 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Create</title>
-  <link rel="stylesheet" href="../css/nav_bar.css">
-  <link rel="stylesheet" href="../css/side_bar.css">
-  <link rel="stylesheet" href="../css/admin-publish-survey.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create</title>
+    <link rel="stylesheet" href="../css/nav_bar.css">
+    <link rel="stylesheet" href="../css/side-bar.css">
+    <link rel="stylesheet" href="../css/admin-publish-survey.css">
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
 <!-- Navbar -->
 <div class="navbar">
-  <button onclick="toggleSidebar()">☰</button>
-  <img src="../images/male_user.png" alt="Profile" width="30" height="30">
+    <button onclick="toggleSidebar()">☰</button>
+    <img src="../images/male_user.png" alt="Profile" width="30" height="30">
 </div>
 
 <!-- Sidebar and main content container -->
 <div class="sidebar-container">
-  <!-- Sidebar -->
-  <nav class="sidebar" id="sidebar">
-    <a href="#"><img src="../images/home_icon.png" alt="Home Icon"> Home</a>
-    <a href="#" class="active"><img src="../images/create_icon.png" alt="Create Icon"> Create</a>
-    <a href="#"><img src="../images/view_icon.png" alt="View Icon"> View</a>
-    <a href="#"><img src="../images/respondents_icon.png" alt="Respondents Icon"> Respondents</a>
-    <a href="#"><img src="../images/male_user.png" alt="Profile Icon"> Profile</a>
-  </nav>
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <a href="#"><img src="../images/home_icon.png" alt="Home Icon"> Home</a>
+        <a href="#" class="active"><img src="../images/create_icon.png" alt="Create Icon"> Create</a>
+        <a href="#"><img src="../images/view_icon.png" alt="View Icon"> View</a>
+        <a href="#"><img src="../images/respondents_icon.png" alt="Respondents Icon"> Respondents</a>
+        <a href="#"><img src="../images/male_user.png" alt="Profile Icon"> Profile</a>
+    </nav>
 
-  <!-- Main content -->
-  <div class="main-content" id="mainContent">
-
-    <div class="survey-header-container">
-      <h1>Survey Title</h1>
-      <p>Description.</p>
-    </div>
-
-    <!-- Survey Details -->
-    <div class="survey-details-container">
-        <!-- Date Range -->
-        <div class="date-time-row">
-          <label>From: <input type="date" value="2024-11-04"></label>
-          <label>Until: <input type="date" value="2024-11-12"></label>
-          <label>Time: <input type="time" value="23:59"></label>
+    <!-- Main content -->
+    <div class="main-content" id="mainContent">
+        <div class="survey-header-container">
+            <h1>Survey Title</h1>
+            <p>Description.</p>
         </div>
-      
-        <!-- Restrictions -->
-        <div class="restriction-row">
-          <select id="program-dropdown" class="dropdown">
-              <option value="" disabled selected>Make available for</option>
-              <option>Bachelor of Science in Accountancy</option>
-              <option>Bachelor of Science in Information Technology</option>
-              <option>Bachelor of Science in Computer Science</option>
-          </select>
-      </div>
-      
-      <div class="restriction-row">
-          <select id="student-dropdown" class="dropdown">
-              <option value="" disabled selected>Student/s Restricted</option>
-              <option>Lou Diamond Morados</option>
-              <option>Jane Doe</option>
-              <option>John Smith</option>
-          </select>
-      </div>
-      
-      <div class="restriction-row">
-          <select id="block-dropdown" class="dropdown">
-              <option value="" disabled selected>Class Restricted</option>
-              <option>BSCS 3-1</option>
-              <option>BSIT 2-2</option>
-              <option>BSBA 1-1</option>
-          </select>
-      </div>
-      <!-- Publish Buttons -->
-    <div class="button-container">
-      <button class="publish-button">Publish Now</button>
-      <button class="publish-button">Publish Later</button>
-    </div>
-    </div>
 
-    
-  </div>
+        <!-- Survey Details -->
+        <div class="survey-details-container">
+            <!-- Date Range -->
+            <div class="date-time-row">
+                <label>From: <input type="date" value="2024-11-04"></label>
+                <label>Start: <input type="time" value="23:59"></label>
+                <label>Until: <input type="date" value="2024-11-12"></label>
+                <label>End: <input type="time" value="23:59"></label>
+            </div>
+
+            <!-- Restrictions -->
+            <!-- Dropdown with multiple selection -->
+            <div class="restriction-row">
+                <div class="dropdown-multiselect">
+                    <button class="dropdown-toggle" onclick="toggleDropdown('program-dropdown')">Make available for</button>
+                    <div id="program-dropdown" class="dropdown-options">
+                        <!-- Options will be dynamically added here -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="restriction-row">
+                <div class="dropdown-multiselect">
+                    <button class="dropdown-toggle" onclick="toggleDropdown('student-dropdown')">Student/s Restricted</button>
+                    <div id="student-dropdown" class="dropdown-options">
+                        <!-- Options will be dynamically added here -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="restriction-row">
+                <div class="dropdown-multiselect">
+                    <button class="dropdown-toggle" onclick="toggleDropdown('batch-dropdown')">Class Restricted</button>
+                    <div id="batch-dropdown" class="dropdown-options">
+                        <!-- Options will be dynamically added here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Publish Buttons -->
+            <div class="button-container">
+                <button class="publish-button">Back</button>
+                <button class="publish-button">Publish</button>
+            </div>
+        </div>
+    </div>
 </div>
 
-<script src="../js/survey_navbar.js"></script>
+<script src="../js/survey-navbar.js"></script>
+<script src="../js/survey-navbar.js"></script>
+<script src="../js/admin-publish-survey.js"></script>
 </body>
 </html>
