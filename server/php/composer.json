@@ -1,5 +1,5 @@
 {
-    "name": "loudi/team02",
+    "name": "loudi/localhost",
     "authors": [
         {
             "name": "Lou",
@@ -7,6 +7,7 @@
         }
     ],
     "require": {
+            "firebase/php-jwt": "^6.10"
     },
     "autoload": {
         "psr-4": {

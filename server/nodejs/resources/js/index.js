@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <span class="survey-status">${survey.status.charAt(0).toUpperCase() + survey.status.slice(1)}</span>
         </div>
         <button data-id="${survey.survey_id}" class="${survey.status === 'unpublished' ? 'edit-btn' : 'details-btn'}">
-            <img src="../../resources/images/${survey.status === 'unpublished' ? 'Edit' : 'Details'}.png" alt="${survey.status === 'unpublished' ? 'Edit' : 'Details'} Icon" />
+            <img src="/static/images/${survey.status === 'unpublished' ? 'Edit' : 'Details'}.png" alt="${survey.status === 'unpublished' ? 'Edit' : 'Details'} Icon" />
         </button>
     `;
 

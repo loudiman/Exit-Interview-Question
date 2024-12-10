@@ -10,7 +10,6 @@ const surveyRoutes = require(`./services/resource-service/routes/survey-routes`)
 app.use('/api', surveyRoutes)
 
 
-
 app.get('/',(req,res) => {
     res.send("This is the API endpoint")
 })
