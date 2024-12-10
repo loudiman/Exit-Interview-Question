@@ -78,7 +78,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Function to create and render cards
     function renderCards() {
         cardDashboard.innerHTML = ''; // Clear any previous cards
 
@@ -86,16 +85,17 @@ document.addEventListener('DOMContentLoaded', () => {
             const cardElement = document.createElement('div');
             cardElement.className = 'card';
 
-            // If it's card 1 (index 0), display dynamic current/total respondents for the most recent survey
+            // Default display data is the card's own data
             let displayData = card.data;
+
             if (index === 0) {
                 // Find the most recent published survey
                 const recentSurvey = surveyData
                     .filter(survey => survey.status === 'published') // Only published surveys
                     .sort((a, b) => new Date(b.period_end) - new Date(a.period_end))[0]; // Sort by most recent end date
 
-                if (recentSurvey) {
-                    // Display the current and total respondents for the most recent published survey
+                // If a recent survey is found, update the display data with respondents count
+                if (recentSurvey !== undefined && recentSurvey !== null) {
                     displayData = `${recentSurvey.total_responded}/${recentSurvey.total_responders}`;
                 }
             }
