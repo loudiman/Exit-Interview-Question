@@ -1,11 +1,11 @@
-const mainRuntime = require(`./main-runtime`)
-const apiRuntime = require(`./api-runtime`)
+const main = require(`./main-runtime`)
+const api = require(`./api-runtime`)
 
 
-apiRuntime.listen(2020, () => {
+api.listen(2020, () => {
   console.log("Server is running")
 })
 
-mainRuntime.listen(2021, () =>{
+main.listen(2021, () =>{
   console.log("Resource Server is running")
 })
