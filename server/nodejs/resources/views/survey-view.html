@@ -5,36 +5,36 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Survey View</title>
 
-    <link href="../css/style.css" rel="stylesheet">
-    <link href="../css/nav_bar.css" rel="stylesheet">
-    <link href="../css/survey_view.css" rel="stylesheet">
-    <link href="../css/side_bar.css" rel="stylesheet">
-    <script defer src="../js/survey-view.js"></script>
-    <script defer src="../js/side-bar.js"></script>
+    <link href="/static/css/style.css" rel="stylesheet">
+    <link href="/static/css/nav-bar.css" rel="stylesheet">
+    <link href="/static/css/survey_view.css" rel="stylesheet">
+    <link href="/static/css/side-bar.css" rel="stylesheet">
+    <script defer src="/static/js/survey-view.js"></script>
+    <script defer src="/static/js/side-bar.js"></script>
 </head>
 <body>
 <header class="navbar">
     <button aria-label="Toggle Sidebar" id="sidebarToggle">☰</button>
-    <img alt="Profile" height="30" src="../../resources/images/male_user.png" width="30">
+    <img alt="Profile" height="30" src="/static/images/male_user.png" width="30">
 </header>
 
 <div class="container">
     <!-- Sidebar -->
     <nav aria-label="Main Navigation" class="sidebar" id="sidebar">
-        <a aria-label="Home" href="#">
-            <img alt="Home Icon" src="../../resources/images/home_icon.png"> Home
+        <a href="/admin">
+            <img src="/static/images/home_icon.png" alt="Home Icon"> Home
         </a>
-        <a aria-label="Create" href="#">
-            <img alt="Create Icon" src="../../resources/images/create_icon.png"> Create
+        <a href="/admin/create">
+            <img src="/static/images/create_icon.png" alt="Create Icon"> Create
         </a>
-        <a aria-label="View" class="active" href="#">
-            <img alt="View Icon" src="../../resources/images/view_icon.png"> View
+        <a href="/admin/surveys" class="active">
+            <img src="/static/images/view_icon.png" alt="View Icon"> View
         </a>
-        <a aria-label="Respondents" href="#">
-            <img alt="Respondents Icon" src="../../resources/images/respondents_icon.png"> Respondents
+        <a href="/admin/respondents">
+            <img src="/static/images/respondents_icon.png" alt="Respondents Icon"> Respondents
         </a>
-        <a aria-label="Profile" href="#">
-            <img alt="Profile Icon" src="../../resources/images/male_user.png"> Profile
+        <a href="/admin/profile">
+            <img src="/static/images/male_user.png" alt="Profile Icon"> Profile
         </a>
     </nav>
 
@@ -43,7 +43,7 @@
         <section class="search-bar">
             <label for="searchInput"></label><input id="searchInput" placeholder="Search" type="text">
             <button aria-label="Search Surveys" id="searchButton">
-                <img src="../../resources/images/Search.png" alt="Search Icon">
+                <img src="/static/images/Search.png" alt="Search Icon">
             </button>
         </section>
 
