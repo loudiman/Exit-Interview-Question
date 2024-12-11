@@ -11,6 +11,15 @@ class ProgramDAL{
             throw new Error(error.message)
         }
     }
+
+    static async getAllPrograms(){
+        try{
+            const [result] = await pool.query("SELECT * FROM programs")
+            return result
+        } catch (error) {
+            throw new Error(error.message)
+        }
+    }
 }
 
 module.exports = ProgramDAL

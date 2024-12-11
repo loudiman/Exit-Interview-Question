@@ -4,17 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Profile</title>
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/admin-profile.css">
-    <link rel="stylesheet" href="../css/nav_bar.css">
-    <link rel="stylesheet" href="../css/side_bar.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/admin-profile.css">
+    <link rel="stylesheet" href="/static/css/nav-bar.css">
+    <link rel="stylesheet" href="/static/css/side-bar.css">
 </head>
 <body>
 
 <!-- Navbar -->
 <div class="navbar">
     <button onclick="toggleSidebar()">☰</button>
-    <img src="../images/male_user.png" alt="Profile" width="30" height="30">
+    <img src="/static/images/male_user.png" alt="Profile" width="30" height="30">
 </div>
 
 <!-- Sidebar and main content container -->
@@ -22,30 +22,31 @@
     <!-- Sidebar -->
     <nav class="sidebar" id="sidebar">
         <a href="#">
-            <img src="../images/home_icon.png" alt="Home Icon"> Home
+            <img src="/static/images/home_icon.png" alt="Home Icon"> Home
         </a>
         <a href="#">
-            <img src="../images/create_icon.png" alt="Create Icon"> Create
+            <img src="/static/images/create_icon.png" alt="Create Icon"> Create
         </a>
         <a href="#">
-            <img src="../images/view_icon.png" alt="View Icon"> View
+            <img src="/static/images/view_icon.png" alt="View Icon"> View
         </a>
         <a href="#">
-            <img src="../images/respondents_icon.png" alt="Respondents Icon"> Respondents
+            <img src="/static/images/respondents_icon.png" alt="Respondents Icon"> Respondents
         </a>
         <a href="#" class="active">
-            <img src="../images/male_user.png" alt="Profile Icon"> Profile
+            <img src="/static/images/male_user.png" alt="Profile Icon"> Profile
         </a>
     </nav>
+
     <!-- Main Content -->
     <main>
         <div class="flex-container">
             <div class="flex-container row">
-                <img src="../images/black-img.png" alt="ICON" id="profile-icon">
+                <img src="/static/images/black-img.png" alt="ICON" id="profile-icon">
                 <h2>Mark Lestat Agustin</h2>
             </div>
-            <a href="admin-profile-changepass.html" class="btn-prm-long">Change Password</a>
-            <a href="admin-profile-createacc.html" class="btn-prm-long">Create Admin Account</a>
+            <a href="/admin-profile-changepass" class="btn-prm-long">Change Password</a>
+            <a href="/admin-profile-createacc" class="btn-prm-long">Create Admin Account</a>
             <button class="logout-button" onclick="showLogoutPrompt()">Log Out</button>
             <!-- Logout Prompt -->
             <div class="logout-prompt" id="logout-prompt">
@@ -60,6 +61,6 @@
         </div>
     </main>
 </div>
-<script src="../js/survey_creation_navbar.js"></script>
+<script src="/static/js/survey_creation_navbar.js"></script>
 </body>
 </html>

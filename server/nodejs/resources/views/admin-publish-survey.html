@@ -4,27 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create</title>
-    <link rel="stylesheet" href="../css/nav_bar.css">
-    <link rel="stylesheet" href="../css/side-bar.css">
-    <link rel="stylesheet" href="../css/admin-publish-survey.css">
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="/static/css/nav-bar.css">
+    <link rel="stylesheet" href="/static/css/side-bar.css">
+    <link rel="stylesheet" href="/static/css/admin-publish-survey.css">
+    <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
 <!-- Navbar -->
 <div class="navbar">
     <button onclick="toggleSidebar()">☰</button>
-    <img src="../images/male_user.png" alt="Profile" width="30" height="30">
+    <img src="/static/images/male_user.png" alt="Profile" width="30" height="30">
 </div>
 
 <!-- Sidebar and main content container -->
 <div class="sidebar-container">
     <!-- Sidebar -->
     <nav class="sidebar" id="sidebar">
-        <a href="#"><img src="../images/home_icon.png" alt="Home Icon"> Home</a>
-        <a href="#" class="active"><img src="../images/create_icon.png" alt="Create Icon"> Create</a>
-        <a href="#"><img src="../images/view_icon.png" alt="View Icon"> View</a>
-        <a href="#"><img src="../images/respondents_icon.png" alt="Respondents Icon"> Respondents</a>
-        <a href="#"><img src="../images/male_user.png" alt="Profile Icon"> Profile</a>
+        <a href="#"><img src="/static/images/home_icon.png" alt="Home Icon"> Home</a>
+        <a href="#" class="active"><img src="/static/images/create_icon.png" alt="Create Icon"> Create</a>
+        <a href="#"><img src="/static/images/view_icon.png" alt="View Icon"> View</a>
+        <a href="#"><img src="/static/images/respondents_icon.png" alt="Respondents Icon"> Respondents</a>
+        <a href="#"><img src="/static/images/male_user.png" alt="Profile Icon"> Profile</a>
     </nav>
 
     <!-- Main content -->
@@ -75,15 +75,20 @@
 
             <!-- Publish Buttons -->
             <div class="button-container">
-                <button class="publish-button">Back</button>
-                <button class="publish-button">Publish</button>
+
+                <a href="/admin/survey/creation" class="btn-prm-long">
+                    <button class="publish-button" >Back</button>
+                </a>>
+                <a href="/admin/survey/templates" class = "btn btn-prm-long">
+                    <button class="publish-button">Publish</button>
+                </a>
+
             </div>
         </div>
     </div>
 </div>
 
-<script src="../js/survey_creation_navbar.js"></script>
-<script src="../js/admin-publish-survey.js"></script>
-<script src="../js/survey_navbar.js"></script>
+<script src="/static/js/survey_creation_navbar.js"></script>
+<script src="/static/js/admin-publish-survey.js"></script>
 </body>
 </html>

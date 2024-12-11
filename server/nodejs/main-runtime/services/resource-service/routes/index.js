@@ -1,3 +1,3 @@
-const creationRoute = require('./survey-routes');
+const adminRoutes = require('./admin-routes\'');
 
-module.exports = creationRoute;
+module.exports = adminRoutes;
