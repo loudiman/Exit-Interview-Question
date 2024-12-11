@@ -54,6 +54,9 @@ router.get('/admin/surveys/edit', (req, res) => {
     res.sendFile(path.join(baseDir, 'survey-edit.html'));
 });
 
+router.get('/admin/surveys/publish', (req, res) => {
+    res.sendFile(path.join(baseDir, 'admin-publish-edit.html'));
+});
 
 
 
