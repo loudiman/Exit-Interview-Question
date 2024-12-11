@@ -124,7 +124,7 @@ main {
     box-sizing: border-box;
 }
 
-.save-button {
+.create-button {
     background-color: #FFFFFF;
     color: black;
     border: none;
@@ -137,11 +137,11 @@ main {
     margin-left: 940px;
 }
 
-.save-button:hover {
+.create-button:hover {
     background-color: #9B9898;
 }
 
-.cancel-btn{
+.back-button{
     background-color:#223C6B ;
     color: white;
     text-decoration: none;
@@ -155,6 +155,6 @@ main {
     margin-right: auto;
 }
 
-.cancel-btn:hover{
+.back-button:hover{
     background-color: #9B9898;
 }

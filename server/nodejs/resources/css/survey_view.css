@@ -174,7 +174,7 @@ body {
 }
 
 /* Ensure both buttons have the same size */
-.cancel-btn, .delete-btn2 {
+.back-button, .delete-btn2 {
     background-color: #b0b0b0;
     color: white;
     border: none;
@@ -195,7 +195,7 @@ body {
 }
 
 /* Hover effect */
-.cancel-btn:hover, .delete-btn2:hover {
+.back-button:hover, .delete-btn2:hover {
     transform: scale(1.1);
 }
 
