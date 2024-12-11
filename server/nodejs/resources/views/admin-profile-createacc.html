@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Admin Account</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin-profile-createacc.css">
+    <link rel="stylesheet" href="../css/nav_bar.css">
+    <link rel="stylesheet" href="../css/side_bar.css">
+</head>
+<body>
+<!-- Navbar -->
+<div class="navbar">
+    <button onclick="toggleSidebar()">☰</button>
+    <img src="../images/male_user.png" alt="Profile" width="30" height="30">
+</div>
+
+<!-- Sidebar and main content container -->
+<div class="sidebar-container">
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <a href="#">
+            <img src="../images/home_icon.png" alt="Home Icon"> Home
+        </a>
+        <a href="#">
+            <img src="../images/create_icon.png" alt="Create Icon"> Create
+        </a>
+        <a href="#">
+            <img src="../images/view_icon.png" alt="View Icon"> View
+        </a>
+        <a href="#">
+            <img src="../images/respondents_icon.png" alt="Respondents Icon"> Respondents
+        </a>
+        <a href="#" class="active">
+            <img src="../images/male_user.png" alt="Profile Icon"> Profile
+        </a>
+    </nav>
+
+    <main>
+        <div class="flex-container">
+            <div class="flex-container row">
+                <img src="../images/black-img.png" alt="ICON" id="profile-icon">
+                <h2>Mark Lestat Agustin</h2>
+            </div>
+
+            <div class="password-box">
+                <h3>Create Admin Account</h3>
+                <form>
+                    <label for="email" class="color-white">Email</label>
+                    <input type="email" name="email" id="email" class="password-input" placeholder="Enter email" required>
+
+                    <label for="password" class="color-white">Password</label>
+                    <input type="password" name="password" id="password" class="password-input" placeholder="Enter password" required>
+
+                    <button type="submit" class="save-button">Create</button>
+                </form>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+</html>
