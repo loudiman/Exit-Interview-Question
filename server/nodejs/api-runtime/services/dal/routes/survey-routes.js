@@ -1,118 +1,22 @@
 const express = require(`express`)
 const {SurveyDAL} = require(`../controller/index`)
+const SurveyController = require('../controller/survey-controller')
 const surveyRoutes = express.Router()
-
-function checkPerm(req,res,next){
-    const{userType} = req.body
-    if(userType != "admin"){
-        res.status(403).json({error:"Invalid body"})
-        return
-    }
-    next()
-}
-
 
 surveyRoutes.get('/',(req,res)=>{
     res.send("Hello there, This is the survey endpoint")
 })
 
-surveyRoutes.get("/survey",async(req, res)=>{
-    try{
-        const rows = await SurveyDAL.getAllSurvey()
-        res.status(200).json(rows)
-    }catch(error){
-        console.log(error)
-        res.status(500)
-    }
-})
+surveyRoutes.get("/survey", SurveyController.handleGetAllSurvey)
 
-surveyRoutes.get("/questions/:survey_id",async (req,res)=>{
-    const{survey_id} = req.params
-    console.log(survey_id)
-    try{
-        const rows = await SurveyDAL.getQuestions(survey_id)
-        console.log(rows)
-        res.status(200).json({"questions":rows})
-    }catch(error){
-        res.status(400).json("server error")
-    }
-})
+surveyRoutes.get("/questions/:survey_id", SurveyController.handleGetQuestionsOnId)
 
-surveyRoutes.get('/survey/:username', async(req, res)=>{
-    const {username} = req.params
-    try{
-        const rows = await SurveyDAL.getAllPublishedSurvey(username)
+surveyRoutes.get('/survey/:username', SurveyController.handleGetSurveysOfUser)
 
-        console.log(rows)
-        
-        // Ensure `rows` is an array and add `isCompleted` to each survey
-        const updatedRows = Array.isArray(rows) 
-        ? rows.map(row => ({ ...row, isComplete: false })) 
-        : [{ ...rows, isCompleted: false }];
+surveyRoutes.post('/survey', SurveyController.handlePostSurvey)
 
-        // Wrap the updated rows in an object with the `survey` key
-        const result = {
-            surveys: updatedRows
-        };
+surveyRoutes.post('/survey/publish/:survey_id', SurveyController.handlePostUpdateSurvey)
 
-        res.status(200).json(result)
-    }catch(error){
-        console.log(error)
-        res.status(500).json({error:'something went wrong'})
-    }
-})
-
-surveyRoutes.post('/survey', async (req, res) => {
-    const {surveyReq, questions, users} = req.body
-    
-    
-
-    let survey = {
-        survey_title: surveyReq.survey_title,
-        program_id: surveyReq.program_id,
-        period_start: surveyReq.period_start,
-        period_end: surveyReq.perios_end,
-        status: surveyReq.status
-    }
-
-    try{
-        const surveyID = await SurveyDAL.insertSurvey(survey)
-        const questionIDS = await SurveyDAL.insertQuestions(questions)
-        const questionnaireResult = await SurveyDAL.insertQuestionnaire(questionIDS, surveyID)
-        const respondersResult = await SurveyDAL.insertResponders(users, surveyID)
-        
-        res.status(200)
-    }catch(error){
-        console.log(error)
-        res.status(500)
-    }
-    
-})
-
-surveyRoutes.post('/survey/publish/:survey_id', async(req, res) => {
-    const {survey_id} = req.params
-    const {status} = req.body
-    let survey = {
-        status:status,
-        survey_id: survey_id
-    }
-
-    try{
-        const result = await SurveyDAL.updateSurveyStatus(survey)
-        res.status(200)
-    }catch(error){
-        res.status(500)
-    }
-})
-
-surveyRoutes.post('/response',async(req,res) => {
-    const {survey_id, response_json} = req.body
-    try{
-        const result = SurveyDAL.insertResponse(response_json, survey_id)
-        res.status(200)
-    }catch(error){
-       res.status(500) 
-    }
-})
+surveyRoutes.post('/response', SurveyController.handlePostResponse)
 
 module.exports = surveyRoutes
