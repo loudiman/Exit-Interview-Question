@@ -9,8 +9,6 @@ const corsOptions = {
 app.use(cors(corsOptions))
 
 const dalRoutes = require(`./services/dal-service`)
-
-const dalRoutes = require(`./services/dal-service`)
 app.use('/api', dalRoutes)
 
 
