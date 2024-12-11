@@ -497,7 +497,7 @@ function gatherResponses(surveyId) {
             }
             console.log("Response saved successfully:", data);
             alert("Survey submitted successfully!");
-            window.location.href = 'http://localhost:8888/student/surveys/viewsurvey';
+            window.location.href = 'http://localhost:8888/student/surveys';
         })
         .catch((error) => {
             console.error("Error details:", error);
