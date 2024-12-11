@@ -5,6 +5,7 @@ class SurveyDAL{
     static async getAllSurvey(){
         try{
             const [result] = await pool.query(`SELECT * FROM survey`)
+            return result
         }catch(Error){
             console.log(Error.message)
         }
