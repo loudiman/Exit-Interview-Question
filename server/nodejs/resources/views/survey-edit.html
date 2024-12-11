@@ -4,29 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View</title>
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/nav_bar.css">
-    <link rel="stylesheet" href="../css/survey_edit.css">
-    <link rel="stylesheet" href="../css/side_bar.css">
-    <script defer src="../js/survey-edit.js"></script>
-    <script defer src="../js/side-bar.js"></script>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/nav-bar.css">
+    <link rel="stylesheet" href="/static/css/survey_edit.css">
+    <link rel="stylesheet" href="/static/css/side-bar.css">
+    <script defer src="/static/js/survey-edit.js"></script>
+    <script defer src="/static/js/side-bar.js"></script>
 </head>
 <body>
 <!-- Navbar -->
 <div class="navbar">
     <button onclick="toggleSidebar()">☰</button>
-    <img src="../../resources/images/male_user.png" alt="Profile" width="30" height="30">
+    <img src="/static/images/male_user.png" alt="Profile" width="30" height="30">
 </div>
 
 <!-- Sidebar and main content container -->
 <div class="sidebar-container">
     <!-- Sidebar -->
     <nav class="sidebar" id="sidebar">
-        <a href="#"><img src="../../resources/images/home_icon.png" alt="Home Icon"> Home</a>
-        <a href="#"><img src="../../resources/images/create_icon.png" alt="Create Icon"> Create</a>
-        <a href="#" class="active"><img src="../../resources/images/view_icon.png" alt="View Icon"> View</a>
-        <a href="#"><img src="../../resources/images/respondents_icon.png" alt="Respondents Icon"> Respondents</a>
-        <a href="#"><img src="../../resources/images/male_user.png" alt="Profile Icon"> Profile</a>
+        <a href="/admin">
+            <img src="/static/images/home_icon.png" alt="Home Icon"> Home
+        </a>
+        <a href="/admin/create">
+            <img src="/static/images/create_icon.png" alt="Create Icon"> Create
+        </a>
+        <a href="/admin/surveys" class="active">
+            <img src="/static/images/view_icon.png" alt="View Icon"> View
+        </a>
+        <a href="/admin/respondents">
+            <img src="/static/images/respondents_icon.png" alt="Respondents Icon"> Respondents
+        </a>
+        <a href="/admin/profile">
+            <img src="/static/images/male_user.png" alt="Profile Icon"> Profile
+        </a>
     </nav>
 
     <!-- Main content -->
