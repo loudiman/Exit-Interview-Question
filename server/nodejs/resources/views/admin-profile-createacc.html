@@ -32,8 +32,8 @@
         <a href="/admin/respondents">
             <img src="/static/images/respondents_icon.png" alt="Respondents Icon"> Respondents
         </a>
-        <a href="/admin/profile" class="active">
-            <img src="/static/images/male_user.png" alt="Profile Icon"> Profile
+        <a href="#" class="active">
+            <img src="../images/male_user.png" alt="Profile Icon"> Profile
         </a>
     </nav>
 
@@ -53,14 +53,17 @@
                     <input type="password" name="thisPassword" id="password" class="password-input" placeholder="Enter password" required>
 
                     <label for="last_name" class="color-white">Last Name</label>
-                    <input type="text" name="thisLast_name" id="last_name" class="password-input" placeholder="Enter Last Name" required>
+                    <input type="last_name" name="thisLast_name" id="last_name" class="password-input" placeholder="Enter Last Name" required>
 
                     <label for="given_name" class="color-white">Given Name</label>
-                    <input type="text" name="thisGiven_name" id="given_name" class="password-input" placeholder="Enter Given Name" required>
+                    <input type="given_name" name="thisGiven_name" id="given_name" class="password-input" placeholder="Enter Given Name" rqequried>
 
-                    <button type="submit" class="save-button">Create</button>
                 </form>
+                <div>
+                    <button type="submit" class="create-button">Create</button>
+                </div>
             </div>
+            <a href="/admin/profile" class="back-btn">Back</a>
         </div>
     </main>
 </div>
