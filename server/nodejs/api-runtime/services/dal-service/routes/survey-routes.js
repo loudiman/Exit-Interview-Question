@@ -18,4 +18,6 @@ surveyRoutes.post('/survey/publish/:survey_id', SurveyController.handlePostUpdat
 
 surveyRoutes.post('/response', SurveyController.handlePostResponse)
 
+surveyRoutes.get('/survey-summary', SurveyController.handleGetSurveySummary)
+
 module.exports = surveyRoutes

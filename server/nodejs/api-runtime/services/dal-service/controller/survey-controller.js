@@ -103,6 +103,20 @@ class SurveyController{
            res.status(500) 
         }
     }
+
+    static async handleGetSurveySummary(req,res){
+        console.log("hit")
+        try{
+            const result = await SurveyDAL.getSurveySummary()
+            console.log(`Result: ${result}`)
+            res.status(200).json(result)
+        }catch(error){
+            res.status(500)
+        }
+    }
+       
+
 }
+
 
 module.exports = SurveyController
