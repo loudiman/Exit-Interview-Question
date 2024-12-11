@@ -54,7 +54,4 @@ router.get('/admin/surveys/edit', (req, res) => {
     res.sendFile(path.join(baseDir, 'survey-edit.html'));
 });
 
-
-
-
 module.exports = router;
