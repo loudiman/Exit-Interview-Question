@@ -6,6 +6,8 @@ use Core\Database;
 // Run the query to fetch survey data and associated questions
 $surveyData = App::resolve(Database::class)->query("
     SELECT 
+        s.period_start,
+        s.period_end,
         s.survey_id,
         s.survey_title,
         q.question_id,
@@ -24,6 +26,13 @@ $surveyData = App::resolve(Database::class)->query("
     ORDER BY 
         q.question_id;", [$_GET['id']]
         )->assoc_get();
+
+// This is a bandaid fix to prevent users from accessing the survey after the end date
+if (new DateTime($surveyData[0]['period_end']) < new DateTime()) {
+    http_response_code(400);
+    // redirect('/student/survey/closedsurvey');
+    exit;
+}
 
 // Initialize the survey structure. These are the parent items
 $survey = [

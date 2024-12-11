@@ -4,50 +4,32 @@ document.addEventListener('DOMContentLoaded', () => {
             survey_id: 1,
             survey_title: 'Sample Survey 1',
             status: 'unpublished',
-            program_id: 101,
-            period_start: '2024-11-01',
-            period_end: '2024-11-15'
+            program_id: 1,
+            period_start: '2023-12-31T16:00:00.000Z',
+            period_end: '2024-12-30T16:00:00.000Z',
+            total_responded: 1,
+            total_responders: 2
         },
         {
             survey_id: 2,
             survey_title: 'Sample Survey 2',
             status: 'unpublished',
-            program_id: 102,
-            period_start: '2024-11-10',
-            period_end: '2024-11-25'
+            program_id: 2,
+            period_start: '2024-01-01T08:00:00.000Z',
+            period_end: '2024-01-31T17:00:00.000Z',
+            total_responded: 10,
+            total_responders: 50
         },
         {
             survey_id: 3,
             survey_title: 'Sample Survey 3',
-            status: 'unpublished',
-            program_id: 103,
-            period_start: '2024-10-01',
-            period_end: '2024-10-31'
-        },
-        {
-            survey_id: 4,
-            survey_title: 'Sample Survey 4',
             status: 'published',
-            program_id: 103,
-            period_start: '2024-10-01',
-            period_end: '2024-10-31'
-        },
-        {
-            survey_id: 5,
-            survey_title: 'Sample Survey 5',
-            status: 'published',
-            program_id: 104,
-            period_start: '2024-09-15',
-            period_end: '2024-10-15'
-        },
-        {
-            survey_id: 6,
-            survey_title: 'Sample Survey 6',
-            status: 'published',
-            program_id: 104,
-            period_start: '2024-10-15',
-            period_end: '2024-23-15'
-        },
+            program_id: 2,
+            period_start: '2023-02-03T08:00:00.000Z',
+            period_end: '2024-01-31T17:00:00.000Z',
+            total_responded: 20,
+            total_responders: 40
+        }
     ];
 
     const searchInput = document.querySelector('#searchInput');
@@ -94,28 +76,55 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    /**
+     * Filters surveys based on the search input and renders the filtered results.
+     */
     function searchSurveys() {
         const query = searchInput.value.toLowerCase();
-        const filtered = surveyData.filter(survey => survey.survey_title.toLowerCase().includes(query));
+        const filtered = surveyData.filter(survey =>
+            survey.survey_title.toLowerCase().includes(query)
+        );
         renderSurveys(filtered);
     }
 
+// Add a debounce listener to the search input
     searchInput.addEventListener('input', debounce(searchSurveys, 300));
 
+    /**
+     * Handles button clicks on the survey list using a switch statement.
+     */
     document.body.addEventListener('click', event => {
+        // Find the closest button element from the click event target
         const button = event.target.closest('button');
-        if (!button) return;
+        if (!button) return; // Exit if the click is not on a button
 
+        // Retrieve the survey ID from the button's dataset
         const surveyId = button.dataset.id;
-        if (button.classList.contains('details-btn')) {
-            showPreview(surveyId);
-        } else if (button.classList.contains('view-btn')) {
-            // TODO: Redirect to Viewing
-        } else if (button.classList.contains('edit-btn')) {
-            // Redirect to survey edit page
-            window.location.href = `survey-edit.html?survey_id=${surveyId}`;
-        } else if (button.classList.contains('delete-btn')) {
-            showDeleteModal(surveyId);
+
+        // Use a switch statement to handle button actions based on their class
+        switch (true) {
+            case button.classList.contains('details-btn'):
+                showPreview(surveyId);
+                break;
+
+            case button.classList.contains('view-btn'):
+                // TODO: Redirect to Viewing
+                console.log(`View survey ${surveyId}`); // Placeholder for viewing functionality
+                break;
+
+            case button.classList.contains('edit-btn'):
+                // Redirect to the survey edit page
+                window.location.href = `survey-edit.html?survey_id=${surveyId}`;
+                break;
+
+            case button.classList.contains('delete-btn'):
+                // Show the delete confirmation modal
+                showDeleteModal(surveyId);
+                break;
+
+            default:
+                console.warn('Unhandled button action:', button.className);
+                break;
         }
     });
 
@@ -176,16 +185,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('deleteModal').close();
         document.getElementById('modalOverlay').style.display = 'none';
     });
-
-    // Sidebar toggle
-    document.getElementById('sidebarToggle').addEventListener('click', toggleSidebar);
-
-    function toggleSidebar() {
-        const sidebar = document.getElementById('sidebar');
-        const mainContent = document.getElementById('mainContent');
-        sidebar.classList.toggle('hidden');
-        mainContent.classList.toggle('full-width');
-    }
 
     renderSurveys(surveyData);
 });
