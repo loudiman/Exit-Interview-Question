@@ -6,8 +6,8 @@
     <title>Create Admin Account</title>
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/admin-profile-createacc.css">
-    <link rel="stylesheet" href="../css/nav_bar.css">
-    <link rel="stylesheet" href="../css/side_bar.css">
+    <link rel="stylesheet" href="../css/nav-bar.css">
+    <link rel="stylesheet" href="../css/side-bar.css">
 </head>
 <body>
 <!-- Navbar -->
@@ -57,11 +57,16 @@
 
                     <label for="given_name" class="color-white">Given Name</label>
                     <input type="given_name" name="thisGiven_name" id="given_name" class="password-input" placeholder="Enter Given Name" rqequried>
-
-                    <button type="submit" class="save-button">Create</button>
                 </form>
+                <div>
+                    <button type="submit" class="create-button">Create</button>
+                </div>
             </div>
-            <a href="admin-profile.html" class="cancel-btn">Back</a>
+            <div class="spacer"></div>
+            <div class="flex-container row">
+                <a href="admin-profile.html" class="back-btn">Back</a>
+                <div class="spacer"></div>
+            </div>
         </div>
     </main>
 </div>
