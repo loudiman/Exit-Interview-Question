@@ -5,25 +5,29 @@ const router = express.Router();
 // Base directory adjusted to locate "../../../resources/views"
 const baseDir = path.join(__dirname, '../../../../resources/views');
 
-// Route for admin-profile-createacc
-router.get('/admin-profile-createacc', (req, res) => {
-    res.sendFile(path.join(baseDir, 'admin-profile-createacc.html'));
-});
+/**
+ * Main Pages:
+ */
 
-// Route for admin-profile
-router.get('/admin-profile', (req, res) => {
-    res.sendFile(path.join(baseDir, 'admin-profile.html'));
-});
+router.get('/admin/surveys', (req, res) => {
+    res.sendFile(path.join(baseDir, 'survey-view.html'));
+})
 
-// Route for admin-profile-changepass
-router.get('/admin-profile-changepass', (req, res) => {
-    res.sendFile(path.join(baseDir, 'admin-profile-changepass.html'));
-});
-
-router.get('/admin/survey/templates', (req, res) => {
+router.get('/admin/create', (req, res) => {
     res.sendFile(path.join(baseDir, 'survey-templates.html'));
 })
 
+router.get('/admin/respondents', (req, res) => {
+    res.sendFile(path.join(baseDir, 'respondents.html'));
+})
+
+router.get('/admin/profile', (req, res) => {
+    res.sendFile(path.join(baseDir, 'admin-profile.html'));
+});
+
+/*
+  Creation Subpages:
+ */
 router.get('/admin/survey/creation', (req, res) => {
     res.sendFile(path.join(baseDir, 'survey-creation.html'));
 })
@@ -31,5 +35,26 @@ router.get('/admin/survey/creation', (req, res) => {
 router.get('/admin/survey/publish', (req, res) => {
     res.sendFile(path.join(baseDir, 'admin-publish-survey.html'));
 })
+
+/*
+  Profile Subpages:
+ */
+router.get('/admin/profile/create', (req, res) => {
+    res.sendFile(path.join(baseDir, 'admin-profile-createacc.html'));
+});
+
+router.get('/admin/profile/edit', (req, res) => {
+    res.sendFile(path.join(baseDir, 'admin-profile-changepass.html'));
+});
+
+/*
+  View Subpages:
+ */
+router.get('/admin/surveys/edit', (req, res) => {
+    res.sendFile(path.join(baseDir, 'survey-edit.html'));
+});
+
+
+
 
 module.exports = router;
