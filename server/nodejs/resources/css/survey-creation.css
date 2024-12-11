@@ -117,7 +117,7 @@ h2, p, a {
     background-color: #0c5ac0;
 }
 
-.review-button, .back-button {
+.publish-button, .back-button {
     padding: 10px 15px;
     font-size: 16px;
     height: 50px;
@@ -132,7 +132,7 @@ h2, p, a {
     z-index: 1000;
 }
 
-.review-button {
+.publish-button {
     position: fixed;
     bottom: 20px;
     right: 20px;
@@ -145,7 +145,7 @@ h2, p, a {
     transition: left 0.3s, background-color 0.3s;
 }
 
-.review-button:hover, .back-button:hover {
+.publish-button:hover, .back-button:hover {
     background-color: #0c5ac0;
 }
 
