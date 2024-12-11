@@ -1,0 +1,160 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+}
+
+/* Navbar Styles */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #2c3e50;
+    color: white;
+    padding: 10px 20px;
+}
+
+.navbar button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.navbar img {
+    border-radius: 50%;
+}
+
+/* Sidebar Styles */
+.sidebar-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 200px;
+    background-color: #34495e;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: white;
+    padding: 10px;
+    margin: 5px 0;
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+}
+
+.sidebar a img {
+    margin-right: 10px;
+}
+
+.sidebar a.active, .sidebar a:hover {
+    background-color: #1abc9c;
+}
+
+/* Main Content Styles */
+main {
+    flex: 1;
+    padding: 20px;
+}
+/* Centering Password Box */
+.flex-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px; /* Spacing between elements */
+}
+
+/* Profile Section */
+.flex-container.row {
+    display: flex;
+    align-items: center;
+    margin-right: 1300px;
+    margin-bottom: 20px;
+}
+
+#profile-icon {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px; /* Spacing between icon and name */
+}
+
+.flex-container row h2{
+    font-weight: bold;
+    color: black;
+    text-align: left;
+}
+
+/* Password Box Styles */
+.password-box {
+    background-color: #223C6B;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 1000px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.password-box h3 {
+    font-size: 30px;
+    margin-top: 0;
+    text-align: center;
+}
+
+.password-box form{
+    font-size: 20px;
+}
+
+.password-input {
+    width: 100%;
+    padding: 15px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.save-button {
+    background-color: #FFFFFF;
+    color: black;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: auto;
+    font-size: 16px;
+    margin-top: 10px;
+    margin-left: 940px;
+}
+
+.save-button:hover {
+    background-color: #9B9898;
+}
+
+.cancel-btn{
+    background-color:#223C6B ;
+    color: white;
+    text-decoration: none;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: auto;
+    font-size: 16px;
+    margin-top: 350px;
+    margin-right: auto;
+}
+
+.cancel-btn:hover{
+    background-color: #9B9898;
+}

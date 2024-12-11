@@ -1,3 +1,8 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 body {
     margin: 0;
     font-family: "CustomFont", Arial, sans-serif;
@@ -26,10 +31,9 @@ body {
     flex-grow: 1;
     padding: 20px;
     background-color: #FFFFFF;
-    border: 1px solid #ccc;
-    align-items: center;
-    height: max-content;
-    border: none;
+    transition: all 0.3s ease;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .survey-header-container,
@@ -47,7 +51,7 @@ body {
     font-size: 18px;
     font-weight: bold;
     color: #223C6B;
-    
+
 }
 
 .survey-header-container h1 {
@@ -63,7 +67,7 @@ body {
 
 .button-container {
     display: flex;
-    justify-content:end; 
+    justify-content:end;
     margin-top: 20px;
 }
 
@@ -112,7 +116,7 @@ body {
     border-radius: 5px;
 }
 
- input[type="date"], input[type="time"]{
+input[type="date"], input[type="time"]{
     background-color: #223C6B;
     color: white;
     border: none;
@@ -121,9 +125,9 @@ body {
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
-     text-align: left;
-     border-radius: 5px;
-     }
+    text-align: left;
+    border-radius: 5px;
+}
 
 .survey-details-container{
     background-color: white;
@@ -144,7 +148,7 @@ body {
     justify-content: center;
     align-items: center;
     background-color: #223C6B;
-    color: white; 
+    color: white;
     padding: 5px;
     border-radius: 5px;
     font-weight: bold;
@@ -157,17 +161,17 @@ body {
 
 .restriction-row {
     display: flex;
-    flex-direction: row; 
-    justify-content: space-between; 
+    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
-    gap: 10px; 
+    gap: 10px;
     margin-bottom: 15px;
-    width: 100%; 
+    width: 100%;
 }
 
 .restriction-row select {
-    flex: 2; 
-    width: 100%; 
+    flex: 2;
+    width: 100%;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 5px;

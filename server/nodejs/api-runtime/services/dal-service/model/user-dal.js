@@ -40,7 +40,7 @@ class UserDAL {
     //Adds a user
     static async addUser(username, password, lastName, givenName, type, ...addtional){
         try{
-            const [result] = await pool.execute('INSERT INTO user (username,hashed_password,last_name,first_name,type) VALUES(?,?,?,?,?)',[username, password, lastName, givenName,type])
+            const [result] = await pool.execute('INSERT INTO user (username,hashed_password,last_name,given_name,type) VALUES(?,?,?,?,?)',[username, password, lastName, givenName,type])
             return result
         }catch(error){
             throw new Error("Error adding user: "+error.message)
@@ -58,7 +58,7 @@ class UserDAL {
     }
 
     static async addStudent(username, programID, sem, batch, gender){
-        query = "INSERT INTO student (username, program_id, sem, batch, gender) VALUES(?,?,?,?,?)"
+        var query = "INSERT INTO student (username, program_id, sem, batch, gender) VALUES(?,?,?,?,?)"
         try{
             const[result] = pool.execute(query, [username, programID, sem, batch, gender])
             return result
