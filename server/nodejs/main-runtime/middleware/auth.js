@@ -12,4 +12,4 @@ async function authorize(req,res, next){
 }
 
 
-module.exports = {authorize, generateToken}
+module.exports = {authorize}
