@@ -4,43 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Change Password</title>
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/admin-profile-changepass.css">
-    <link rel="stylesheet" href="../css/nav-bar.css">
-    <link rel="stylesheet" href="../css/side-bar.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/admin-profile-changepass.css">
+    <link rel="stylesheet" href="/static/css/nav-bar.css">
+    <link rel="stylesheet" href="/static/css/side-bar.css">
 </head>
 <body>
 
 <!-- Navbar -->
 <div class="navbar">
     <button onclick="toggleSidebar()">☰</button>
-    <img src="../images/male_user.png" alt="Profile" width="30" height="30">
+    <img src="/static/images/male_user.png" alt="Profile" width="30" height="30">
 </div>
 
 <!-- Sidebar and main content container -->
 <div class="sidebar-container">
     <!-- Sidebar -->
     <nav class="sidebar" id="sidebar">
-        <a href="#">
-            <img src="../images/home_icon.png" alt="Home Icon"> Home
+        <a href="/admin">
+            <img src="/static/images/home_icon.png" alt="Home Icon"> Home
         </a>
-        <a href="#">
-            <img src="../images/create_icon.png" alt="Create Icon"> Create
+        <a href="/admin/create">
+            <img src="/static/images/create_icon.png" alt="Create Icon"> Create
         </a>
-        <a href="#">
-            <img src="../images/view_icon.png" alt="View Icon"> View
+        <a href="/admin/surveys">
+            <img src="/static/images/view_icon.png" alt="View Icon"> View
         </a>
-        <a href="#">
-            <img src="../images/respondents_icon.png" alt="Respondents Icon"> Respondents
+        <a href="/admin/respondents">
+            <img src="/static/images/respondents_icon.png" alt="Respondents Icon"> Respondents
         </a>
-        <a href="#" class="active">
-            <img src="../images/male_user.png" alt="Profile Icon"> Profile
+        <a href="/admin/profile" class="active">
+            <img src="/static/images/male_user.png" alt="Profile Icon"> Profile
         </a>
     </nav>
 
     <main>
         <div class="flex-container row">
-            <img src="../images/black-img.png" alt="ICON" id="profile-icon">
+            <img src="/static/images/black-img.png" alt="ICON" id="profile-icon">
             <h2>Mark Lestat Agustin</h2>
         </div>
         <div class="flex-container">
@@ -56,11 +56,11 @@
                     <button class="save-button" id="save_button">Save</button>
                 </form>
             </div>
-            <a href="admin-profile.html" class="cancel-btn">Back</a>
+            <a href="/admin/profile" class="cancel-btn">Back</a>
         </div>
     </main>
 </div>
-<script src="../js/admin-change-password.js" defer></script>
-<script src="../js/survey-navbar.js"></script>
+<script src="/static/js/admin-change-password.js" defer></script>
+<script src="/static/js/survey-navbar.js"></script>
 </body>
 </html>

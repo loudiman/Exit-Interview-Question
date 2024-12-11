@@ -49,25 +49,25 @@ function addQuestion(event) {
 
     newQuestionContainer.innerHTML = `
         <div class="question-content">
-          <div class="question-header">
-            <input type="text" placeholder="Untitled Question">
-            <select onchange="updateQuestionContent(this)">
-              <option value="multiple-choice">Multiple Choice</option>
-               <option value="checkbox">Checkbox</option>
-              <option value="essay">Essay</option>
-              <option value="rating">Rating</option>
-            </select>
-          </div>
-          <div class="options"></div>
-          <div class="button-container" style="display: none;">
-            <button class="option-button" onclick="addOption(this)">Add Option</button>
-            <span>or </span>
-            <button class="option-button-other" onclick="addOtherOption(this)">Add Other</button>
-          </div>
+            <div class="question-header">
+                <input type="text" placeholder="Untitled Question">
+                <select onchange="updateQuestionContent(this)">
+                    <option value="multiple-choice">Multiple Choice</option>
+                    <option value="checkbox">Checkbox</option>
+                    <option value="essay">Essay</option>
+                    <option value="rating">Rating</option>
+                </select>
+            </div>
+            <div class="options"></div>
+            <div class="button-container" style="display: none;">
+                <button class="option-button" onclick="addOption(this)">Add Option</button>
+                <span>or </span>
+                <button class="option-button-other" onclick="addOtherOption(this)">Add Other</button>
+            </div>
         </div>
         <div class="side-buttons">
-          <button class="side-button" id="addQuestionButton">+</button>
-          <button class="side-button" onclick="removeQuestion(this)">x</button>
+            <button class="side-button" id="addQuestionButton">+</button>
+            <button class="side-button" onclick="removeQuestion(this)">x</button>
         </div>
     `;
 
@@ -94,7 +94,7 @@ function reindexQuestions() {
     const questions = document.querySelectorAll(".question-container");
     questionIndex = 1;
 
-    questions.forEach((question, index) => {
+    questions.forEach((question) => {
         question.setAttribute("data-id", questionIndex);
         questionIndex++;
     });
@@ -106,36 +106,21 @@ function updateQuestionContent(selectElement) {
     const buttonContainer = questionContent.querySelector(".button-container");
     const questionType = selectElement.value;
 
-    // Reset options container and button container display
     optionsContainer.innerHTML = '';
-    buttonContainer.style.display =
-        questionType === 'multiple-choice' || questionType === 'checkbox'
-            ? 'block'
-            : 'none';
+    buttonContainer.style.display = 'none'; // Default to hide buttons
 
     switch (questionType) {
         case 'multiple-choice':
-        case 'checkbox': {
-            // Add option for both 'multiple-choice' and 'checkbox'
+        case 'checkbox':
+            buttonContainer.style.display = 'block';
             addOption(buttonContainer.querySelector(".option-button"));
             break;
-        }
 
-        case 'essay': {
-            // Add a textarea for essay type
-            optionsContainer.innerHTML = `
-                <textarea 
-                    placeholder="Enter an answer here" 
-                    rows="4" 
-                    cols="50" 
-                    disabled 
-                    class="textarea">
-                </textarea>`;
+        case 'essay':
+            optionsContainer.innerHTML = `<textarea placeholder="Enter an answer here" rows="4" cols="50" disabled class="textarea"></textarea>`;
             break;
-        }
 
-        case 'rating': {
-            // Create a rating system
+        case 'rating':
             const ratingContainer = document.createElement("div");
             ratingContainer.classList.add("rating-container");
             ratingContainer.style.display = "flex";
@@ -146,7 +131,6 @@ function updateQuestionContent(selectElement) {
             maxRatingSelect.classList.add("max-rating-select");
             maxRatingSelect.style.marginBottom = "10px";
 
-            // Populate the max rating select
             for (let i = 1; i <= 10; i++) {
                 const option = document.createElement("option");
                 option.value = i;
@@ -154,7 +138,6 @@ function updateQuestionContent(selectElement) {
                 maxRatingSelect.appendChild(option);
             }
 
-            // Handle change event to create rating options dynamically
             maxRatingSelect.addEventListener("change", () => {
                 const maxRating = parseInt(maxRatingSelect.value, 10);
                 ratingContainer.innerHTML = "";
@@ -166,7 +149,7 @@ function updateQuestionContent(selectElement) {
 
                     const radio = document.createElement("input");
                     radio.type = "radio";
-                    radio.name = "rating";
+                    radio.name = `rating-${selectElement.closest('.question-container').getAttribute('data-id')}`;
                     radio.value = i;
                     radio.style.marginRight = "5px";
 
@@ -176,14 +159,11 @@ function updateQuestionContent(selectElement) {
                 }
             });
 
-            // Append to the options container
             optionsContainer.appendChild(maxRatingSelect);
             optionsContainer.appendChild(ratingContainer);
             break;
-        }
 
         default:
-            console.warn(`Unsupported question type: ${questionType}`);
             break;
     }
 }
@@ -220,6 +200,7 @@ function removeOption(button) {
     button.parentElement.remove();
     updateOptionLabels(optionsContainer);
 }
+
 function updateOptionLabels(optionsContainer) {
     const optionContainers = optionsContainer.querySelectorAll(".option-container");
 
@@ -228,3 +209,65 @@ function updateOptionLabels(optionsContainer) {
         input.placeholder = `Option ${index + 1}`;
     });
 }
+
+document.addEventListener("DOMContentLoaded", function() {
+    const publishButton = document.querySelector(".publish-button");
+    if (publishButton) {
+        publishButton.addEventListener("click", function() {
+            // Extract Survey Title and Description
+            const surveyTitle = document.getElementById("formTitle").textContent.trim();
+            const surveyDescription = document.getElementById("formDescription").textContent.trim();
+
+            // Extract Questions
+            const questionContainers = document.querySelectorAll(".question-container");
+            const questions = Array.from(questionContainers).map(container => {
+                const questionText = container.querySelector(".question-header input")?.value.trim() || "";
+                const questionType = container.querySelector(".question-header select")?.value.trim() || "";
+
+                let options = [];
+                if (questionType === "multiple-choice" || questionType === "checkbox") {
+                    const optionInputs = container.querySelectorAll(".options input");
+                    options = Array.from(optionInputs).map(input => input.value.trim());
+                }
+
+                let scale = [];
+                if (questionType === "rating") {
+                    const radios = container.querySelectorAll(".rating-container input[type='radio']");
+                    scale = Array.from(radios).map(radio => parseInt(radio.value, 10));
+                }
+
+                return {
+                    question_json: {
+                        question: questionText,
+                        options: options,
+                        scale: scale
+                    },
+                    question_type: questionType
+                };
+            });
+
+            // Create JSON Object
+            const surveyData = {
+                survey: {
+                    survey_title: surveyTitle || "",
+                    survey_description: surveyDescription || "",
+                    program_id: "",
+                    period_start: "",
+                    period_end: "",
+                    status: ""
+                },
+                questions: questions,
+                restrict_students: []
+            };
+
+            console.log(`Survey Data: ${JSON.stringify(surveyData)}`);
+            // Store in sessionStorage
+            sessionStorage.setItem("surveyData", JSON.stringify(surveyData));
+
+            // Redirect to the publish Page
+            window.location.href = "admin-publish-survey.html";
+        });
+    } else {
+        console.error("Publish button not found.");
+    }
+});

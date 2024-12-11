@@ -52,21 +52,23 @@ document.addEventListener('DOMContentLoaded', () => {
             if (survey.status === 'unpublished') {
                 buttonsHtml = `
                 <span>${survey.survey_title}</span>
-                <button data-id="${survey.survey_id}" class="edit-btn">
-                    <img src="../../resources/images/Edit.png" alt="Edit" />
-                </button>
+                <a href="/admin/surveys/edit">
+                    <button data-id="${survey.survey_id}" class="edit-btn">
+                        <img src="/static/images/Edit.png" alt="Edit" />
+                    </button>              
+                </a>
                 <button data-id="${survey.survey_id}" class="delete-btn">
-                    <img src="../../resources/images/Delete.png" alt="Delete" />
+                    <img src="/static/images/Delete.png" alt="Delete" />
                 </button>
             `;
             } else if (survey.status === 'published') {
                 buttonsHtml = `
                 <span>${survey.survey_title}</span>
                 <button data-id="${survey.survey_id}" class="view-btn">
-                    <img src="../../resources/images/Eye.png" alt="View" />
+                    <img src="/static/images/Eye.png" alt="View" />
                 </button>
                 <button data-id="${survey.survey_id}" class="details-btn">
-                    <img src="../../resources/images/Details.png" alt="Delete" />
+                    <img src="/static/images/Details.png" alt="Delete" />
                 </button>
             `;
             }
