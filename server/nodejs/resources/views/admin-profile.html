@@ -21,19 +21,19 @@
 <div class="sidebar-container">
     <!-- Sidebar -->
     <nav class="sidebar" id="sidebar">
-        <a href="#">
+        <a href="/admin">
             <img src="/static/images/home_icon.png" alt="Home Icon"> Home
         </a>
-        <a href="#">
+        <a href="/admin/create">
             <img src="/static/images/create_icon.png" alt="Create Icon"> Create
         </a>
-        <a href="#">
+        <a href="/admin/surveys">
             <img src="/static/images/view_icon.png" alt="View Icon"> View
         </a>
-        <a href="#">
+        <a href="/admin/respondents">
             <img src="/static/images/respondents_icon.png" alt="Respondents Icon"> Respondents
         </a>
-        <a href="#" class="active">
+        <a href="/admin/profile" class="active">
             <img src="/static/images/male_user.png" alt="Profile Icon"> Profile
         </a>
     </nav>
@@ -45,8 +45,8 @@
                 <img src="/static/images/black-img.png" alt="ICON" id="profile-icon">
                 <h2>Mark Lestat Agustin</h2>
             </div>
-            <a href="/admin-profile-changepass" class="btn-prm-long">Change Password</a>
-            <a href="/admin-profile-createacc" class="btn-prm-long">Create Admin Account</a>
+            <a href="/admin/profile/edit" class="btn-prm-long">Change Password</a>
+            <a href="/admin/profile/create" class="btn-prm-long">Create Admin Account</a>
             <button class="logout-button" onclick="showLogoutPrompt()">Log Out</button>
             <!-- Logout Prompt -->
             <div class="logout-prompt" id="logout-prompt">
