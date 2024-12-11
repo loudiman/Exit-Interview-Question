@@ -89,64 +89,61 @@ main {
 .survey-container p{
     font-size: 1.3em;
 }
-
 .tab-container {
     width: 100%;
+    text-decoration: none;
+    background-color: #2c3e50;
     max-width: 2000px;
     margin: 20px auto;
     border: 1px solid #ddd;
     border-radius: 10px;
     overflow: hidden;
 }
+.tab-container a.active {
+    background-color: #2c3e50;
+    text-decoration: none;
+    color:#ffffff;
+    padding-top:10px;
+    padding-bottom: 10px;
+    font-size: 20px;
+    font-weight:bold ;
+}
+.tab-container a{
+    text-decoration: none;
+    color: #2c3e50;
+    padding: 10px 325px;
+    border-radius: 5px;
+    margin-right: 10px;
+    font-size: 20px;
+    font-weight: bold;
+}
 .tabs {
     display: flex;
-    background-color: #f4f4f4;
     margin: 0;
-    padding: 0;
+    padding: 20px;
     list-style-type: none;
     text-decoration: none;
-}
-
-.tab{
     font-size: 20px;
     font-weight: bold;
     color: #2c3e50;
     flex: 1;
-    padding: 10px;
     text-align: center;
     cursor: pointer;
-    background-color: #f4f4f4;
+    background-color: #9EA9BE;
     border-right: 1px solid #ddd;
 }
 
-.tab:hover {
+.tab-container a:hover {
     background-color: #ddd;
 }
 
-.tab.active {
-    background-color: darkslateblue;
-    color: white;
+.tab-container a.active:hover {
+    background-color: #2c3e50;
 }
 
-.tab-content {
-    padding: 20px;
-    background-color: #fff;
-}
-
-.tab-pane {
-    display: none;
-}
-
-.tab-pane.active {
-    display: block;
-}
 form{
     margin-top:20px;
     width: 50%;
-}
-
-.flex-container.h-align-center {
-
 }
 
 .question{
@@ -257,6 +254,23 @@ textarea {
     position: relative;
     transition: all 0.3s ease;
 }
+.back-button {
+    display: block;
+    text-decoration: none;
+    background-color: #223C6B;
+    color: white;
+    border: none;
+    padding: 1rem 1rem;
+    font-size: 1rem;
+    text-align: right;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-left: 20px;
+}
+
+.back-button:hover {
+    background-color: #9B9898;
+}
 
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -268,3 +282,4 @@ textarea {
         flex-direction: column;
     }
 }
+

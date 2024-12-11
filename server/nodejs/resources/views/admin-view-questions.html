@@ -41,8 +41,8 @@
     <main>
         <div class="tab-container">
             <ul class="tabs">
-                <li class="tab active" onclick="openTab('questions')">Questions</li>
-                <li class="tab" onclick="openTab('responses')">Responses</li>
+                <a href="admin-view-questions.html" class="active" onclick="openTab('questions')">Questions</a>
+                <a href="admin-view-responses.html" onclick="openTab('responses')">Responses</a>
             </ul>
         </div>
         <div class="survey-container">
@@ -57,6 +57,9 @@
                     </div>
                 </form> <!--I got this block of code from student-survey.html from geb's page-->
             </div>
+        </div>
+        <div>
+            <button class="back-button" id="back_button">Back</button>
         </div>
     </main>
 </div>
