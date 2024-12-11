@@ -114,6 +114,25 @@ class SurveyController{
             res.status(500)
         }
     }
+
+    static async handlePutSurvey(req, res){
+        try{
+            const {survey_id, survey_title, status, program_id, period_start, period_end} = req.body
+
+            try{
+                const { rowsAffected } = await SurveyDAL.putNewSurveyData(survey_id, survey_title, status, program_id, period_start, period_end)
+                if(rowsAffected == 0){
+                    res.status(400).json({message:"Survey is already published cannot edit"})
+                }
+                res.status(200).json({message:"success"})
+            }catch(Error){
+                console.log(Error.message)
+                res.status(500).json({message:"server error"})
+            }
+        }catch(Error){
+            res.status(400).json({message:"JSON has missing data"})
+        }
+    }
        
 
 }

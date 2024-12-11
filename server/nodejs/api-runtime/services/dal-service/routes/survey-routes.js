@@ -20,4 +20,6 @@ surveyRoutes.post('/response', SurveyController.handlePostResponse)
 
 surveyRoutes.get('/survey-summary', SurveyController.handleGetSurveySummary)
 
+surveyRoutes.put('/survey', SurveyController.handlePutSurvey)
+
 module.exports = surveyRoutes
