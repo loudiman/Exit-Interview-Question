@@ -1,3 +1,3 @@
-const adminRoutes = require('./admin-routes\'');
+const adminRoutes = require('./admin-routes');
 
 module.exports = adminRoutes;
