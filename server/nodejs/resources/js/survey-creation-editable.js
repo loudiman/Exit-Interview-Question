@@ -260,7 +260,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
             // Create JSON Object
             const surveyData = {
-                survey: {
+                surveyReq: {
                     survey_title: surveyTitle || "",
                     survey_description: surveyDescription || "",
                     program_id: "",
@@ -269,15 +269,13 @@ document.addEventListener("DOMContentLoaded", function() {
                     status: ""
                 },
                 questions: questions,
-                restrict_students: []
+                users: []
             };
 
             console.log(`Survey Data: ${JSON.stringify(surveyData)}`);
-            // Store in sessionStorage
             sessionStorage.setItem("surveyData", JSON.stringify(surveyData));
 
-            // Redirect to the publish Page
-            window.location.href = "admin-publish-survey.html";
+            window.location.href = "/admin/survey/publish";
         });
     } else {
         console.error("Publish button not found.");

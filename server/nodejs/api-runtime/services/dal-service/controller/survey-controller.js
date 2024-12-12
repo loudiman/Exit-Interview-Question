@@ -53,15 +53,17 @@ class SurveyController{
 
     //For POST '/survey'
     static async handlePostSurvey(req,res){
+        console.log(JSON.stringify(req.body))
         const {surveyReq, questions, users} = req.body
     
     
 
         let survey = {
             survey_title: surveyReq.survey_title,
+            survey_description:surveyReq.survey_description,
             program_id: surveyReq.program_id,
             period_start: surveyReq.period_start,
-            period_end: surveyReq.perios_end,
+            period_end: surveyReq.period_end,
             status: surveyReq.status
         }
     
@@ -71,10 +73,10 @@ class SurveyController{
             const questionnaireResult = await SurveyDAL.insertQuestionnaire(questionIDS, surveyID)
             const respondersResult = await SurveyDAL.insertResponders(users, surveyID)
             
-            res.status(200)
+            res.status(200).json({message:"success"})
         }catch(error){
             console.log(error)
-            res.status(500)
+            res.status(500).json({message:error.message})
         }
     }
 

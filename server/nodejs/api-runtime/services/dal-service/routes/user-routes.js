@@ -20,9 +20,9 @@ userRoutes.get('/',(req, res) =>[
 ])
 
 
-userRoutes.get('/users',checkPerm("admin") , UserController.handleGetAllUsers)
+userRoutes.get('/users', UserController.handleGetAllUsers)
 
-userRoutes.get('/users/filtered', checkPerm("admin"), UserController.handleGetFilteredUsers)
+userRoutes.put('/users/filtered', UserController.handleGetFilteredUsers)
 
 userRoutes.get('/user/:username',checkPerm("admin") ,UserController.handleGetByUsername)
 
