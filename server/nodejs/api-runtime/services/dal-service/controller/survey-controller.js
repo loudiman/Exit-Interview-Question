@@ -98,9 +98,9 @@ class SurveyController{
         const {survey_id, response_json} = req.body
         try{
             const result = SurveyDAL.insertResponse(response_json, survey_id)
-            res.status(200)
+            res.status(200).json({message:"success"})
         }catch(error){
-           res.status(500) 
+           res.status(500).json({message:"error"}) 
         }
     }
 
@@ -111,16 +111,16 @@ class SurveyController{
             console.log(`Result: ${result}`)
             res.status(200).json(result)
         }catch(error){
-            res.status(500)
+            res.status(500).json(error.message)
         }
     }
 
     static async handlePutSurvey(req, res){
         try{
-            const {survey_id, survey_title, status, program_id, period_start, period_end} = req.body
+            const {survey_id, survey_title, survey_description,status, program_id, period_start, period_end} = req.body
 
             try{
-                const { rowsAffected } = await SurveyDAL.putNewSurveyData(survey_id, survey_title, status, program_id, period_start, period_end)
+                const { rowsAffected } = await SurveyDAL.putNewSurveyData(survey_id, survey_title, survey_description,status, program_id, period_start, period_end)
                 if(rowsAffected == 0){
                     res.status(400).json({message:"Survey is already published cannot edit"})
                 }

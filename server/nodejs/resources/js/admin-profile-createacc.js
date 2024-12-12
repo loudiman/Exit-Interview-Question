@@ -1,81 +1,57 @@
-// Sidebar toggle function
-function toggleSidebar() {
-    const sidebar = document.getElementById("sidebar");
-    if (sidebar.style.display === "block") {
-        sidebar.style.display = "none";
-    } else {
-        sidebar.style.display = "block";
+async function callAPI() {
+    console.log("Function has been called");
+    const userType = 0
+    const username = document.getElementById("username").value
+    const password = document.getElementById("password").value
+    const last_name = document.getElementById("last_name").value
+    const given_name = document.getElementById("given_name").value
+
+
+    console.log(username, password, last_name, given_name);
+
+    if (!validateUsername(username)) {
+        return;
+    }
+
+    try {
+        console.log("Triggering fetch")
+        const response = await fetch(`http://localhost:2020/api/user-service/user`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                type: userType,
+                username: username,
+                password: password,
+                last_name: last_name,
+                given_name: given_name
+            })
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            alert(`Error: ${errorData.message || "Account was not created"}`);
+            return;
+        }
+
+        alert("Admin Account created successfully");
+    } catch (error) {
+        console.error("Error during API call:", error);
+        alert("An unexpected error occurred.");
     }
 }
 
-// Handle form submission for creating an admin account
-document.addEventListener("DOMContentLoaded", () => {
-    const form = document.querySelector("form");
-
-    form.addEventListener("submit", (event) => {
-        event.preventDefault(); // Prevent default form submission
-
-        // Gather form data
-        const admin= document.getElementById("userType").value.trim();
-        const thisUsername = document.getElementById("email").value.trim();
-        const thisPassword = document.getElementById("password").value.trim();
-        const thisLast_name= document.getElementById("last_name").value.trim();
-        const thisGiven_name=document.getElementById("given_name").value.trim();
-        // Validate inputs
-        if (!thisUsername || !thisPassword || !thisLast_name || !thisGiven_name) {
-            alert("Please fill in all fields.");
-            return;
-        }
-
-        if (!validateUsername(thisUsername)) {
-            alert("Please enter a valid username.");
-            return;
-        }
-
-        // Prepare payload for submission
-        const payload = {
-            userType:admin,
-            username:thisUsername,
-            password:thisPassword,
-            last_name:thisLast_name,
-            given_name:thisGiven_name,
-            type:0
-        };
-
-        console.log("Submitting admin account creation request:", payload);
-
-        // Simulate API call
-        fetch('http://localhost:2019/api/user-service/user', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error("Failed to create account. Please try again.");
-                }
-                return response.json();
-            })
-            .then((data) => {
-                console.log("Account creation response:", data);
-                alert("Admin account created successfully!");
-                form.reset(); // Reset the form
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-                alert("An error occurred. Please try again.");
-            });
-    });
-});
-
 // Validate username format
-function validateUsername(thisUsername) {
+function validateUsername(username) {
     const regex = /^\d{7}$/;
-    return regex.test(thisUsername);
+    return regex.test(username);
 }
 
-// Example usage
-console.log(validateUsername("1234567")); // true
-console.log(validateUsername("abcdefg")); // false
-console.log(validateUsername("123456"));  // false
-console.log(validateUsername("12345678")); // false
+const createButton = document.getElementById("create-button");
+console.log(createButton)
+createButton.addEventListener("submit", (e) => {
+    e.preventDefault();
+    console.log("Event Triggered")
+    callAPI();
+});

@@ -1,20 +1,24 @@
+/* Reset default margin and padding */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+html, body {
+    height: 100%;
+    overflow: hidden;
+}
+
 body {
-    margin: 0;
+    display: flex;
+    flex-direction: column;
 }
 
-h2, p, a {
-    color: black;
-    font-family: "CustomFont", sans-serif;
-    padding: 8px;
+/* Container for Sidebar and Content */
+.container {
+    display: flex;
 }
-
-
 
 .main-content {
     flex-grow: 1;

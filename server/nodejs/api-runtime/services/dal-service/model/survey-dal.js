@@ -28,7 +28,7 @@ class SurveyDAL{
     static async getAllPublishedSurvey(username){
         try{
             console.log("username: "+username)
-            var query = 'SELECT s.survey_id, s.survey_title FROM survey as s LEFT JOIN student as stud ON s.program_id = stud.program_id WHERE stud.username = ? AND s.status = "published"'
+            var query = 'SELECT s.survey_id, s.survey_title, s.survey_description FROM survey as s LEFT JOIN student as stud ON s.program_id = stud.program_id WHERE stud.username = ? AND s.period_start < CURDATE()'
             const [result] = await pool.query(query,[username])
             return result
         }catch(error){
@@ -89,14 +89,15 @@ class SurveyDAL{
 
     static async insertSurvey(surveyDAO){
         var surveyTitle = surveyDAO.survey_title
+        var surveyDescription =surveyDAO.survey_description
         var programID = surveyDAO.program_id
         var periodStart = surveyDAO.survey_start
         var periodEnd = surveyDAO.survey_end
         var status = surveyDAO.status
 
         try{
-            var query = "INSERT INTO survey(survey_title, status, program_id, period_start, period_end) VALUES(?,?,?,?,?)"
-            const[result] = await pool.execute(query,[surveyTitle, status, programID, periodStart, periodEnd])
+            var query = "INSERT INTO survey(survey_title,survey_description, status, program_id, period_start, period_end) VALUES(?,?,?,?,?,?)"
+            const[result] = await pool.execute(query,[surveyTitle, surveyDescription, status, programID, periodStart, periodEnd])
             return result.insertId
         }catch(error){
             throw new Error(error.message)
@@ -168,7 +169,7 @@ class SurveyDAL{
     static async getSurveySummary(){
         console.log("Getting summary")
         const query = `
-        SELECT s.survey_id, s.survey_title, s.status, s.program_id, s.period_start, s.period_end,
+        SELECT s.survey_id, s.survey_title,s.survey_description, s.status, s.program_id, s.period_start, s.period_end,
         COUNT(CASE WHEN r.responded = TRUE THEN 1 END) AS total_responded,
         COUNT(*) AS total_responders
         FROM survey s
@@ -186,12 +187,12 @@ class SurveyDAL{
         }
     }
 
-    static async putNewSurveyData(survey_id, survey_title, status, program_id, period_start, period_end) {
-        const query = "UPDATE survey SET survey_title = ?, status = ?, program_id = ?, period_start = ?, period_end = ? WHERE survey_id = ? AND period_start > CURDATE();";
+    static async putNewSurveyData(survey_id, survey_title, survey_description,status, program_id, period_start, period_end) {
+        const query = "UPDATE survey SET survey_title = ?, survey_description,status = ?, program_id = ?, period_start = ?, period_end = ? WHERE survey_id = ? AND period_start > CURDATE();";
 
         try {
             // Await the query execution and handle the result
-            const [results] = await pool.execute(query, [survey_title, status, program_id, period_start, period_end, survey_id]);
+            const [results] = await pool.execute(query, [survey_title, survey_description,status, program_id, period_start, period_end, survey_id]);
             console.log('Query executed successfully:', results);
         } catch (error) {
             // Log and throw the error with a helpful message

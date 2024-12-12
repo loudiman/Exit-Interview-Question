@@ -1,13 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // DOM Element Caching
     const searchInput = document.querySelector('#searchInput');
     const unpublishedContainer = document.querySelector('#unpublishedSurveys');
     const publishedContainer = document.querySelector('#publishedSurveys');
 
-    // Global variable to store surveys and current survey for deletion
-    let surveys = [];
-    let currentSurveyToDelete = null;
-
+    // Improved Render Surveys Function
     function renderSurveys(data) {
+        // Clear containers more efficiently
         unpublishedContainer.innerHTML = '';
         publishedContainer.innerHTML = '';
 
@@ -16,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const surveyItem = document.createElement('div');
             surveyItem.className = 'survey-item';
 
+            // Simplified button HTML generation
             const buttonsHtml = survey.status === 'unpublished'
                 ? createUnpublishedSurveyHTML(survey)
                 : createPublishedSurveyHTML(survey);
@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Helper functions for HTML generation
     function createUnpublishedSurveyHTML(survey) {
         return `
             <span>${survey.survey_title}</span>
@@ -33,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <img src="/static/images/Edit.png" alt="Edit" />
                 </button>              
             </a>
-            <button data-survey-id="${survey.survey_id}" class="delete-btn">
+            <button data-id="${survey.survey_id}" class="delete-btn">
                 <img src="/static/images/Delete.png" alt="Delete" />
             </button>
         `;
@@ -51,59 +52,79 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
     }
 
-    function showDeleteModal(survey) {
-        currentSurveyToDelete = survey;
+    // Optimized Search Function
+    function searchSurveys(surveys) {
+        const query = searchInput.value.toLowerCase();
+        const filtered = surveys.filter(survey =>
+            survey.survey_title.toLowerCase().includes(query)
+        );
+        renderSurveys(filtered);
+    }
+
+    // Improved Debounce Function
+    function debounce(func, delay) {
+        let timer;
+        return function (...args) {
+            clearTimeout(timer);
+            timer = setTimeout(() => func.apply(this, args), delay);
+        };
+    }
+
+    // Existing Modal Preview Function
+    function showPreview(surveyId, surveys) {
+        const survey = surveys.find(survey => survey.survey_id === parseInt(surveyId));
+        if (!survey) return console.error('Survey not found');
+
+        document.getElementById('previewSurveyTitle').textContent = survey.survey_title;
+        document.getElementById('previewSurveyStatus').textContent = survey.status;
+        document.getElementById('previewProgramId').textContent = survey.program_id;
+        document.getElementById('previewPeriodStart').textContent = survey.period_start;
+        document.getElementById('previewPeriodEnd').textContent = survey.period_end;
+
+        document.getElementById('previewModal').showModal();
+        document.getElementById('modalOverlay').style.display = 'block';
+    }
+
+    function showDeleteModal(surveyId, surveys) {
+        const survey = surveys.find(survey => survey.survey_id === parseInt(surveyId));
+        if (!survey) return console.error('Survey not found');
 
         document.getElementById('surveyTitle').textContent = survey.survey_title;
         document.getElementById('deleteModal').showModal();
         document.getElementById('modalOverlay').style.display = 'block';
+
+        const confirmHandler = () => {
+            deleteSurvey(surveyId, surveys);
+            document.getElementById('deleteModal').close();
+            document.getElementById('modalOverlay').style.display = 'none';
+            document.getElementById('confirmDelete').removeEventListener('click', confirmHandler);
+        };
+
+        document.getElementById('confirmDelete').addEventListener('click', confirmHandler);
     }
 
-    async function deleteSurvey() {
-        if (!currentSurveyToDelete) {
-            console.error('No survey selected for deletion');
-            return;
-        }
-
-        const surveyId = currentSurveyToDelete.survey_id;
-
+    async function deleteSurvey(surveyId, surveys) {
         try {
             const response = await fetch(`http://localhost:2020/api/survey-service/survey/${surveyId}`, {
                 method: 'DELETE',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json'
                 }
             });
 
             if (!response.ok) {
-                const errorData = await response.json().catch(() => null);
-                throw new Error(errorData?.message || `HTTP error! status: ${response.status}`);
+                throw new Error(`Response status: ${response.status}`);
             }
 
-            // Remove the survey from the local array
-            surveys = surveys.filter(survey => survey.survey_id !== surveyId);
-
-            // Re-render surveys
-            renderSurveys(surveys);
-
-            // Close modal
-            document.getElementById('deleteModal').close();
-            document.getElementById('modalOverlay').style.display = 'none';
-
-            // Show success message
-            const successMessage = document.createElement('div');
-            successMessage.className = 'alert alert-success';
-            successMessage.textContent = 'Survey deleted successfully';
-            document.body.insertBefore(successMessage, document.body.firstChild);
-
-            setTimeout(() => successMessage.remove(), 3000);
-
+            const index = surveys.findIndex(survey => survey.survey_id === parseInt(surveyId));
+            if (index !== -1) {
+                surveys.splice(index, 1);
+                renderSurveys(surveys);
+                console.log(`Survey with ID ${surveyId} deleted.`);
+            }
         } catch (error) {
-            console.error('Error deleting survey:', error);
-
-            const errorMessage = document.createElement('div');
-
-            setTimeout(() => errorMessage.remove(), 5000);
+            console.error('Failed to delete survey:', error.message);
+            alert('Failed to delete survey. Please try again.');
         }
     }
 
@@ -115,7 +136,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error(`Response status: ${response.status}`);
             }
 
-            surveys = await response.json();
+            const surveys = await response.json();
+            console.log(surveys);
             return surveys;
         } catch (error) {
             console.error('Failed to fetch surveys:', error.message);
@@ -123,43 +145,37 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Initialize the application
     (async () => {
-        surveys = await fetchSurveys();
-
+        const surveys = await fetchSurveys();
         if (surveys.length) {
-            // Event delegation for survey interactions
+            // Restore search event listener
+            searchInput.addEventListener('input', debounce(() => searchSurveys(surveys), 300));
+
             document.body.addEventListener('click', (event) => {
                 const button = event.target.closest('button');
                 if (!button) return;
 
-                if (button.classList.contains('delete-btn')) {
-                    const surveyId = button.getAttribute('data-survey-id');
-                    const survey = surveys.find(s => s.survey_id === parseInt(surveyId));
-                    if (survey) {
-                        showDeleteModal(survey);
-                    }
-                } else if (button.classList.contains('details-btn')) {
-                    const surveyId = button.dataset.id;
-                    window.location.href = `/admin/survey/details?id=${surveyId}`;
+                const surveyId = button.dataset.id;
+
+                if (button.classList.contains('details-btn')) {
+                    showPreview(surveyId, surveys);
                 } else if (button.classList.contains('view-btn')) {
-                    const surveyId = button.dataset.id;
                     window.location.href = `/admin/surveys/view?survey_id=${surveyId}`;
                 } else if (button.classList.contains('edit-btn')) {
-                    const surveyId = button.dataset.id;
                     window.location.href = `/admin/surveys/edit?survey_id=${surveyId}`;
+                } else if (button.classList.contains('delete-btn')) {
+                    showDeleteModal(surveyId, surveys);
                 }
             });
 
-            document.getElementById('confirmDelete').addEventListener('click', deleteSurvey);
+            document.getElementById('closePreview').addEventListener('click', () => {
+                document.getElementById('previewModal').close();
+                document.getElementById('modalOverlay').style.display = 'none';
+            });
 
             document.getElementById('cancelDelete').addEventListener('click', () => {
                 document.getElementById('deleteModal').close();
-                const modalOverlay = document.getElementById('modalOverlay');
-                if (modalOverlay) {
-                    modalOverlay.style.display = 'none';
-                }
-                currentSurveyToDelete = null;
+                document.getElementById('modalOverlay').style.display = 'none';
             });
 
             renderSurveys(surveys);
