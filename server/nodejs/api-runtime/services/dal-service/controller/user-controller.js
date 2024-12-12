@@ -98,7 +98,7 @@ class UserController{
         const {username, password, last_name, given_name, type} = req.body
         var data
         try{
-            const [rows] = await UserDAL.addUser(username,password,last_name,given_name, type)
+            const rows= await UserDAL.addUser(username,password,last_name,given_name, type)
             data = rows
     
             if(type == 1){

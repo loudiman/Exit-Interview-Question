@@ -28,7 +28,7 @@ userRoutes.get('/user/:username',checkPerm("admin") ,UserController.handleGetByU
 
 userRoutes.post('/user/:username', UserController.handlePostNewPass)
 
-userRoutes.post('/user',checkPerm("admin"),UserController.handlePostAddNewUser)
+userRoutes.post('/user',UserController.handlePostAddNewUser)
 
 
 module.exports = userRoutes
