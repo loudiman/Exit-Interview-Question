@@ -6,6 +6,8 @@ async function callAPI(){
     console.log("function has been called")
     const old_password = document.getElementById("old_password").value
     const new_password = document.getElementById("new_password").value
+    console.log(old_password)
+    console.log(new_password)
 
     // Guard clause for new password being the same for the old password
     if(!verifyPassword(old_password, new_password)){
@@ -14,7 +16,7 @@ async function callAPI(){
 
     const localUsername = sessionStorage.getItem("username")
     //This makes a POST request to the api
-    const response = await fetch(`http://localhost:2019/api/user-service/user/${localUsername}`,{
+    const response = await fetch(`http://localhost:2020/api/user-service/user/${localUsername}`,{
         method: "POST",
         headers: {
             "Content-Type": "application/json"

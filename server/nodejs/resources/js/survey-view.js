@@ -1,37 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const surveyData = [
-        {
-            survey_id: 1,
-            survey_title: 'Sample Survey 1',
-            status: 'unpublished',
-            program_id: 1,
-            period_start: '2023-12-31T16:00:00.000Z',
-            period_end: '2024-12-30T16:00:00.000Z',
-            total_responded: 1,
-            total_responders: 2
-        },
-        {
-            survey_id: 2,
-            survey_title: 'Sample Survey 2',
-            status: 'unpublished',
-            program_id: 2,
-            period_start: '2024-01-01T08:00:00.000Z',
-            period_end: '2024-01-31T17:00:00.000Z',
-            total_responded: 10,
-            total_responders: 50
-        },
-        {
-            survey_id: 3,
-            survey_title: 'Sample Survey 3',
-            status: 'published',
-            program_id: 2,
-            period_start: '2023-02-03T08:00:00.000Z',
-            period_end: '2024-01-31T17:00:00.000Z',
-            total_responded: 20,
-            total_responders: 40
-        }
-    ];
-
     const searchInput = document.querySelector('#searchInput');
     const unpublishedContainer = document.querySelector('#unpublishedSurveys');
     const publishedContainer = document.querySelector('#publishedSurveys');
@@ -45,90 +12,48 @@ document.addEventListener('DOMContentLoaded', () => {
             const surveyItem = document.createElement('div');
             surveyItem.className = 'survey-item';
 
-            // Create the HTML content for each survey item
-            let buttonsHtml = '';
-
-            // Add the appropriate buttons based on the survey's status
-            if (survey.status === 'unpublished') {
-                buttonsHtml = `
-                <span>${survey.survey_title}</span>
-                <a href="/admin/surveys/edit">
-                    <button data-id="${survey.survey_id}" class="edit-btn">
-                        <img src="/static/images/Edit.png" alt="Edit" />
-                    </button>              
-                </a>
-                <button data-id="${survey.survey_id}" class="delete-btn">
-                    <img src="/static/images/Delete.png" alt="Delete" />
-                </button>
-            `;
-            } else if (survey.status === 'published') {
-                buttonsHtml = `
-                <span>${survey.survey_title}</span>
-                <button data-id="${survey.survey_id}" class="view-btn">
-                    <img src="/static/images/Eye.png" alt="View" />
-                </button>
-                <button data-id="${survey.survey_id}" class="details-btn">
-                    <img src="/static/images/Details.png" alt="Delete" />
-                </button>
-            `;
-            }
+            const buttonsHtml = survey.status === 'unpublished'
+                ? createUnpublishedSurveyHTML(survey)
+                : createPublishedSurveyHTML(survey);
 
             surveyItem.innerHTML = buttonsHtml;
             container.appendChild(surveyItem);
         });
     }
 
-    /**
-     * Filters surveys based on the search input and renders the filtered results.
-     */
-    function searchSurveys() {
+    function createUnpublishedSurveyHTML(survey) {
+        return `
+            <span>${survey.survey_title}</span>
+            <a href="/admin/surveys/edit?survey_id=${survey.survey_id}">
+                <button data-id="${survey.survey_id}" class="edit-btn">
+                    <img src="/static/images/Edit.png" alt="Edit" />
+                </button>              
+            </a>
+            <button data-id="${survey.survey_id}" class="delete-btn">
+                <img src="/static/images/Delete.png" alt="Delete" />
+            </button>
+        `;
+    }
+
+    function createPublishedSurveyHTML(survey) {
+        return `
+            <span>${survey.survey_title}</span>
+            <button data-id="${survey.survey_id}" class="view-btn">
+                <img src="/static/images/Eye.png" alt="View" />
+            </button>
+            <button data-id="${survey.survey_id}" class="details-btn">
+                <img src="/static/images/Details.png" alt="Details" />
+            </button>
+        `;
+    }
+
+    function searchSurveys(surveys) {
         const query = searchInput.value.toLowerCase();
-        const filtered = surveyData.filter(survey =>
+        const filtered = surveys.filter(survey =>
             survey.survey_title.toLowerCase().includes(query)
         );
         renderSurveys(filtered);
     }
-
-// Add a debounce listener to the search input
-    searchInput.addEventListener('input', debounce(searchSurveys, 300));
-
-    /**
-     * Handles button clicks on the survey list using a switch statement.
-     */
-    document.body.addEventListener('click', event => {
-        // Find the closest button element from the click event target
-        const button = event.target.closest('button');
-        if (!button) return; // Exit if the click is not on a button
-
-        // Retrieve the survey ID from the button's dataset
-        const surveyId = button.dataset.id;
-
-        // Use a switch statement to handle button actions based on their class
-        switch (true) {
-            case button.classList.contains('details-btn'):
-                showPreview(surveyId);
-                break;
-
-            case button.classList.contains('view-btn'):
-                // TODO: Redirect to Viewing
-                console.log(`View survey ${surveyId}`); // Placeholder for viewing functionality
-                break;
-
-            case button.classList.contains('edit-btn'):
-                // Redirect to the survey edit page
-                window.location.href = `survey-edit.html?survey_id=${surveyId}`;
-                break;
-
-            case button.classList.contains('delete-btn'):
-                // Show the delete confirmation modal
-                showDeleteModal(surveyId);
-                break;
-
-            default:
-                console.warn('Unhandled button action:', button.className);
-                break;
-        }
-    });
 
     function debounce(func, delay) {
         let timer;
@@ -138,8 +63,8 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    function showPreview(surveyId) {
-        const survey = surveyData.find(survey => survey.survey_id === parseInt(surveyId));
+    function showPreview(surveyId, surveys) {
+        const survey = surveys.find(survey => survey.survey_id === parseInt(surveyId));
         if (!survey) return console.error('Survey not found');
 
         document.getElementById('previewSurveyTitle').textContent = survey.survey_title;
@@ -152,41 +77,165 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('modalOverlay').style.display = 'block';
     }
 
-    function showDeleteModal(surveyId) {
-        const survey = surveyData.find(survey => survey.survey_id === parseInt(surveyId));
+    function showDeleteModal(surveyId, surveys) {
+        const survey = surveys.find(survey => survey.survey_id === parseInt(surveyId));
         if (!survey) return console.error('Survey not found');
 
         document.getElementById('surveyTitle').textContent = survey.survey_title;
         document.getElementById('deleteModal').showModal();
         document.getElementById('modalOverlay').style.display = 'block';
 
-        document.getElementById('confirmDelete').onclick = () => {
-            deleteSurvey(surveyId);
-            document.getElementById('deleteModal').close();
-            document.getElementById('modalOverlay').style.display = 'none';
-        };
+        const confirmDelete = document.getElementById('confirmDelete');
+        const cancelDelete = document.getElementById('cancelDelete');
+
+        confirmDelete.dataset.surveyId = surveyId;
     }
 
-    // Delete survey function
-    function deleteSurvey(surveyId) {
-        const index = surveyData.findIndex(survey => survey.survey_id === parseInt(surveyId));
-        if (index !== -1) {
-            surveyData.splice(index, 1); // Remove the survey from the array
-            renderSurveys(surveyData); // Re-render surveys to update the UI
-            console.log(`Survey with ID ${surveyId} deleted.`);
+    async function deleteSurvey(event) {
+        event.preventDefault();
+
+        const surveyId = event.currentTarget.dataset.surveyId;
+
+        try {
+            const response = await fetch(`waiting for boss lestits`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => null);
+                throw new Error(errorData?.message || `HTTP error! status: ${response.status}`);
+            }
+
+            const updatedSurveys = surveys.filter(survey =>
+                survey.survey_id !== parseInt(surveyId)
+            );
+
+            surveys.length = 0;
+            surveys.push(...updatedSurveys);
+
+            renderSurveys(surveys);
+
+            document.getElementById('deleteModal').close();
+            document.getElementById('modalOverlay').style.display = 'none';
+
+
+        } catch (error) {
+            console.error('Error deleting survey:', error);
         }
     }
 
-    // Close Modals and Overlay
-    document.getElementById('closePreview').addEventListener('click', () => {
-        document.getElementById('previewModal').close();
-        document.getElementById('modalOverlay').style.display = 'none';
-    });
+    function showDeleteModal(surveyId, surveys) {
+        const survey = surveys.find(survey => survey.survey_id === parseInt(surveyId));
+        if (!survey) return console.error('Survey not found');
 
-    document.getElementById('cancelDelete').addEventListener('click', () => {
-        document.getElementById('deleteModal').close();
-        document.getElementById('modalOverlay').style.display = 'none';
-    });
+        document.getElementById('surveyTitle').textContent = survey.survey_title;
+        document.getElementById('deleteModal').showModal();
+        document.getElementById('modalOverlay').style.display = 'block';
 
-    renderSurveys(surveyData);
+        const confirmDelete = document.getElementById('confirmDelete');
+        confirmDelete.dataset.surveyId = surveyId;
+    }
+
+    async function deleteSurvey(event) {
+        event.preventDefault();
+
+        const surveyId = event.currentTarget.dataset.surveyId;
+
+        try {
+            const response = await fetch(`waiting for the goat`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => null);
+                throw new Error(errorData?.message || `HTTP error! status: ${response.status}`);
+            }
+
+            const updatedSurveys = surveys.filter(survey =>
+                survey.survey_id !== parseInt(surveyId)
+            );
+
+            surveys.length = 0;
+            surveys.push(...updatedSurveys);
+
+            renderSurveys(surveys);
+
+            document.getElementById('deleteModal').close();
+            document.getElementById('modalOverlay').style.display = 'none';
+
+            const successMessage = document.createElement('div');
+            successMessage.className = 'alert alert-success';
+            successMessage.textContent = 'Survey deleted successfully';
+            document.body.insertBefore(successMessage, document.body.firstChild);
+
+            setTimeout(() => successMessage.remove(), 3000);
+
+        } catch (error) {
+            console.error('Error deleting survey:', error);
+
+            const errorMessage = document.createElement('div');
+            errorMessage.className = 'alert alert-danger';
+            errorMessage.textContent = `Failed to delete survey: ${error.message}`;
+            document.body.insertBefore(errorMessage, document.body.firstChild);
+
+            setTimeout(() => errorMessage.remove(), 5000);
+        }
+    }
+
+    async function fetchSurveys() {
+        const url = "http://localhost:2020/api/survey-service/survey-summary";
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`Response status: ${response.status}`);
+            }
+
+            const surveys = await response.json();
+            console.log(surveys);
+            return surveys;
+        } catch (error) {
+            console.error('Failed to fetch surveys:', error.message);
+            return [];
+        }
+    }
+
+    (async () => {
+        const surveys = await fetchSurveys();
+        if (surveys.length) {
+            document.body.addEventListener('click', (event) => {
+                const button = event.target.closest('button');
+                if (!button) return;
+
+                const surveyId = button.dataset.id;
+
+                if (button.classList.contains('details-btn')) {
+                    showPreview(surveyId, surveys);
+                } else if (button.classList.contains('view-btn')) {
+                    window.location.href = `/admin/surveys/view?survey_id=${surveyId}`;
+                } else if (button.classList.contains('edit-btn')) {
+                    window.location.href = `/admin/surveys/edit?survey_id=${surveyId}`;
+                } else if (button.classList.contains('delete-btn')) {
+                    showDeleteModal(surveyId, surveys);
+                }
+            });
+
+            document.getElementById('confirmDelete').addEventListener('click', deleteSurvey);
+            document.getElementById('cancelDelete').addEventListener('click', () => {
+                document.getElementById('deleteModal').close();
+                document.getElementById('modalOverlay').style.display = 'none';
+            });
+            document.getElementById('closePreview').addEventListener('click', () => {
+                document.getElementById('previewModal').close();
+                document.getElementById('modalOverlay').style.display = 'none';
+            });
+
+            renderSurveys(surveys);
+        }
+    })();
 });

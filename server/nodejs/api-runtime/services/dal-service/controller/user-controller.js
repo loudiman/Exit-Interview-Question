@@ -80,9 +80,12 @@ class UserController{
 
     //For POST '/user/:username'
     static async handlePostNewPass(req,res){
-        const {username, password, newPassword} = req.body
+        const {username, oldPassword, newPassword} = req.body
+        console.log(username)
+        console.log(oldPassword)
+        console.log(newPassword)
         try{
-            const [rows] = await UserDAL.changePass(username, password, newPassword)
+            const rows = await UserDAL.changePass(username, oldPassword, newPassword)
             res.status(200).json(rows)
         }catch(error){
             console.log(error)

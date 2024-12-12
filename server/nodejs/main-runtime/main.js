@@ -1,4 +1,5 @@
 const express = require('express')
+const {authorize} = require('./middleware/auth')
 const main = express()
 const adminRoutes= require('./services/resource-service/routes/admin-routes')
 
@@ -14,9 +15,15 @@ main.use('/static/js', express.static(path.join(publicDir, 'js')));
 //Use the admin routes
 main.use(adminRoutes)
 
+
 main.get('/admin', (req, res) => {
     const htmlPath = path.join(publicDir, "index.html")
     res.sendFile(htmlPath)
 })
+//Sample use of middleware
+main.use('/:token',authorize, async(req,res)=>{
+    res.status(200).json({message:"success"})
+})
+
 
 module.exports = main

@@ -11,6 +11,8 @@ app.use(cors(corsOptions))
 const dalRoutes = require(`./services/dal-service`)
 app.use('/api', dalRoutes)
 
+const authRoutes = require(`./services/auth-service`)
+app.use('/auth',authRoutes)
 
 app.get('/',(req,res) => {
     res.send("This is the API endpoint")
