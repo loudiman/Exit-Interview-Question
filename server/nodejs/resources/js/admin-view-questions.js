@@ -5,6 +5,21 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById('survey-expiration-date').innerHTML = `<strong>Available Until: ${surveySummary.period_end.toLocaleDateString()}</strong>`;
     document.getElementById('survey-respondents').innerHTML = `<strong>Respondents: ${surveySummary.total_responded}</strong>`;
 
+    // Get the title container
+    const titleContainer = document.getElementById('title');
+
+    const title = document.createElement('p');
+    const titleDescription = document.createElement('p');
+    
+    title.setAttribute("class", "txt-xxl bold");
+    titleDescription.setAttribute("class", "txt-md");
+
+    title.innerText = surveySummary.survey_title;
+    titleDescription.innerText = surveySummary.survey_description;
+
+    titleContainer.appendChild(title);
+    titleContainer.appendChild(titleDescription);
+
     // Initialize event listeners
     const backButton = document.getElementById("back_button");
     const sidebar = document.getElementById("sidebar");
@@ -76,15 +91,6 @@ function generateQuestionDoms(){
         console.error("Data does not contain valid questions");
         return;
     }
-
-    // Get the title container
-    const titleContainer = document.getElementById('title');
-
-    // Create a new label element for the title
-    const titleLabel = document.createElement('label');
-    titleLabel.setAttribute("class", "txt-xxl bold");
-    titleLabel.innerText = parsedQuestionnaires.survey_title;
-    titleContainer.appendChild(titleLabel);
 
     var questionNo = 1;
 
