@@ -1,4 +1,5 @@
 const {UserDAL} = require(`../model`)
+const {json} = require("express");
 
 class UserController{
 
@@ -17,14 +18,19 @@ class UserController{
     //for GET 'users/filtered'
     static async handleGetFilteredUsers(req,res){
         const{filters} = req.body
+        console.log(filters)
         var notJSON = filters[0]
         var equalJSON = filters[1]
     
         console.log(notJSON)
     
         var filterStatements = []
-        await UserController.createStatement("not", notJSON, filterStatements)
-        await UserController.createStatement("equal", equalJSON, filterStatements)
+        try {
+            await UserController.createStatement("not", notJSON, filterStatements)
+            await UserController.createStatement("equal", equalJSON, filterStatements)
+        }catch(error){
+            console.log(error)
+        }
         
         try{
             const rows = await UserDAL.getUsersByFilter(filterStatements)
@@ -36,14 +42,16 @@ class UserController{
     }
 
     // Helper function for handleGetFilteredUsers
-    static createStatement(type , jsonObject, output){
+    static async createStatement(type , jsonObject, output){
         console.log("creating")
+        console.log(jsonObject)
         let filterStatements = []
     
         //Guard Clause for not filter type
         if(type == "not"){
             // item would be the column in the database to filter by
             for(let item in jsonObject.not){
+                console.log(item)
                 var filters = jsonObject.not[item].map((filter) => `${filter}`).join(",")
                 var statement = `s.${item} NOT IN (${filters})` // This should be made dynamic later on, for now lets keep it this way the `s.`
                 output.push(statement)

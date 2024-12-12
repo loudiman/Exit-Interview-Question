@@ -176,7 +176,7 @@ CREATE TABLE `survey` (
   `survey_title` varchar(255) NOT NULL,
   `survey_description` varchar(255) DEFAULT NULL,
   `status` enum('unpublished','published') NOT NULL DEFAULT 'unpublished',
-  `program_id` int(11) NOT NULL,
+  `program_id` int(11),
   `period_start` datetime NOT NULL,
   `period_end` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -330,11 +330,6 @@ ALTER TABLE `student`
   ADD CONSTRAINT `student_ibfk_1` FOREIGN KEY (`username`) REFERENCES `user` (`username`) ON DELETE CASCADE,
   ADD CONSTRAINT `student_ibfk_2` FOREIGN KEY (`program_id`) REFERENCES `program` (`program_id`) ON DELETE CASCADE;
 
---
--- Constraints for table `survey`
---
-ALTER TABLE `survey`
-  ADD CONSTRAINT `survey_ibfk_1` FOREIGN KEY (`program_id`) REFERENCES `program` (`program_id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

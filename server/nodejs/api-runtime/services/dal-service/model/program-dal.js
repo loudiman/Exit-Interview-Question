@@ -2,7 +2,7 @@ const pool = require('../util/mysql')
 
 class ProgramDAL{
     static async getProgram(id){
-        var query = "SELECT * FROM programs WHERE program_id = ?"
+        var query = "SELECT * FROM program WHERE program_id = ?"
 
         try{
             const[result] = await pool.query(query,[id])
@@ -14,7 +14,7 @@ class ProgramDAL{
 
     static async getAllPrograms(){
         try{
-            const [result] = await pool.query("SELECT * FROM programs")
+            const [result] = await pool.query("SELECT * FROM program")
             return result
         } catch (error) {
             throw new Error(error.message)
