@@ -34,11 +34,29 @@ main {
     align-items: center;
 }
 
+/* Style for Profile Icon Button */
+#profile-icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
 #profile-icon {
     width: 80px;
     height: 80px;
     border-radius: 50%;
 }
+
+#profile-icon-btn:focus {
+    outline: 2px solid #1abc9c;
+}
+
+#profile-icon-btn:hover {
+    transform: scale(1.1);
+}
+
+
 .flex-container.row {
     width: 100%;
     justify-content: flex-start;
@@ -53,7 +71,7 @@ main {
     text-decoration: none;
     padding: 1.5rem 1.5rem;
     font-size: 1.3rem;
-    width: 1600px;
+    width: 100%;
     text-align: left;
     cursor: pointer;
     border-radius: 5px;
@@ -71,7 +89,7 @@ main {
     text-decoration: none;
     padding: 1.5rem 1.5rem;
     font-size: 1.3rem;
-    width: 1600px;
+    width: 100%;
     text-align: left;
     cursor: pointer;
     border-radius: 5px;
@@ -97,7 +115,7 @@ h2 {
     border: none;
     padding: 1.5rem 1.5rem;
     font-size: 1.3rem;
-    width: 1600px;
+    width: 100%;
     text-align: left;
     cursor: pointer;
     border-radius: 5px;
@@ -136,3 +154,104 @@ h2 {
     margin-left: 10px;
 }
 
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .changepass-btn, .createacc-btn, .logout-button {
+        width: 100%;
+        font-size: 1rem;
+        padding: 1rem;
+    }
+
+    .prompt-content {
+        width: 50%;
+    }
+}
+
+@media (max-width: 768px) {
+    .changepass-btn, .createacc-btn, .logout-button {
+        width: 100%;
+        font-size: 0.9rem;
+        padding: 0.8rem;
+    }
+
+    #profile-icon {
+        width: 60px;
+        height: 60px;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    .prompt-content {
+        width: 70%;
+    }
+}
+
+@media (max-width: 480px) {
+    .changepass-btn, .createacc-btn, .logout-button {
+        font-size: 0.8rem;
+        padding: 0.5rem;
+    }
+
+    .prompt-content {
+        width: 90%;
+    }
+}
+
+/* Modal Background */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Modal Content */
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Close Button */
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 1.5rem;
+    color: #333;
+    cursor: pointer;
+}
+
+/* Input and Buttons */
+#imageUpload {
+    margin: 15px 0;
+    width: 100%;
+    padding: 10px;
+}
+
+.upload-btn {
+    background-color: #223C6B;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.upload-btn:hover {
+    transform: scale(1.1);
+}
