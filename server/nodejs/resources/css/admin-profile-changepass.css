@@ -13,24 +13,27 @@ body {
     align-items: center;
     background-color: #2c3e50;
     color: white;
-    padding: 10px 20px;
+    padding: 10px 5%;
 }
 
 .navbar button {
     background: none;
     border: none;
     color: white;
-    font-size: 20px;
+    font-size: 1.25rem;
     cursor: pointer;
 }
 
 .navbar img {
     border-radius: 50%;
+    width: 40px;
+    height: 40px;
 }
 
 /* Sidebar Styles */
 .sidebar-container {
     display: flex;
+    flex-wrap: wrap;
     min-height: 100vh;
 }
 
@@ -66,6 +69,7 @@ main {
     flex: 1;
     padding: 20px;
 }
+
 /* Centering Password Box */
 .flex-container {
     display: flex;
@@ -78,18 +82,18 @@ main {
 /* Profile Section */
 .flex-container.row {
     display: flex;
-    align-items: center;
-    margin-right: 1300px;
+    align-items:center;
+    justify-content: flex-start;
     margin-bottom: 20px;
 }
 
 #profile-icon {
     width: 50px;
     height: 50px;
-    margin-right: 10px; /* Spacing between icon and name */
+    margin-right: 10px;
 }
 
-.flex-container row h2{
+.flex-container.row h2 {
     font-weight: bold;
     color: black;
     text-align: left;
@@ -101,18 +105,20 @@ main {
     color: white;
     padding: 20px;
     border-radius: 10px;
-    width: 1000px;
+    width: 100%;
+    max-width: 1000px;
+    margin-top: 50px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .password-box h3 {
-    font-size: 30px;
+    font-size: 1.5rem;
     margin-top: 0;
     text-align: center;
 }
 
-.password-box form{
-    font-size: 20px;
+.password-box form {
+    font-size: 1rem;
 }
 
 .password-input {
@@ -131,30 +137,72 @@ main {
     padding: 10px;
     border-radius: 5px;
     cursor: pointer;
-    width: auto;
-    font-size: 16px;
+    font-size: 1rem;
     margin-top: 10px;
-    margin-left: 940px;
+    margin-left: 94.5%;
 }
 
 .save-button:hover {
     background-color: #9B9898;
 }
 
-.cancel-btn{
-    background-color:#223C6B ;
+.back-button {
+    background-color: #223C6B;
     color: white;
     text-decoration: none;
     border: none;
     padding: 10px;
     border-radius: 5px;
     cursor: pointer;
-    width: auto;
-    font-size: 16px;
-    margin-top: 350px;
-    margin-right: auto;
+    font-size: 1rem;
+    margin-top: 300px;
+    align-self: flex-start;
 }
 
-.cancel-btn:hover{
+.back-button:hover {
     background-color: #9B9898;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .sidebar {
+        width: 100%;
+        flex-direction: row;
+        overflow-x: auto;
+    }
+
+    .sidebar a {
+        flex: 1;
+        justify-content: center;
+    }
+
+    .password-box {
+        margin-top: 20px;
+        padding: 15px;
+    }
+
+    .save-button, .back-button {
+        font-size: 0.875rem;
+        padding: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .password-box h3 {
+        font-size: 1.25rem;
+    }
+
+    .password-input {
+        padding: 10px;
+    }
+
+    .save-button, .back-button {
+        font-size: 0.75rem;
+        padding: 6px;
+    }
 }
