@@ -139,7 +139,7 @@ body {
 .publish-button {
     position: fixed;
     bottom: 20px;
-    right: 100px;
+    right: 20px;
     transition: background-color 0.3s;
 }
 
@@ -269,6 +269,30 @@ textarea {
     border-radius: 5px;
     resize: none;
 }
+
+.rating-scale {
+    display: flex;
+    flex-direction: row;  /* Align items in a row (side by side) */
+    justify-content: center; /* Center the entire row of radio buttons horizontally */
+    gap: 10px;
+    margin-top: 10px;
+    align-items: center; /* Vertically align radio buttons to the center */
+}
+
+.rating-scale label {
+    display: flex;
+    flex-direction: column;  /* Ensure label and radio button are stacked vertically */
+    align-items: center;      /* Center the label (number) below the radio button */
+    margin-bottom: 10px;      /* Add space between each row */
+}
+
+.rating-scale input[type="radio"] {
+    width: 50px;   /* Set the size of the radio button */
+    height: 50px;  /* Set the size of the radio button */
+    margin-bottom: 5px; /* Add space between radio button and label text */
+}
+
+
 
 .rating-container {
     display: flex;
