@@ -40,6 +40,7 @@ html{
 
 .flex-container.v-align-center{
     align-items: center;
+    flex-direction: column;
 }
 
 .flex-container.row{
