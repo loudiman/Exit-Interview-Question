@@ -244,6 +244,16 @@ class SurveyDAL{
             console.log(error.message)
         }
     }
+
+    static async getResponses(surveyId){
+        var query = `SElECT * FROM responses WHERE survey_id = ?`
+        try{
+            const [result] = await pool.query(query, surveyId)
+            return result
+        }catch(error){
+            throw new Error("Failed to fetch")
+        }
+    }
 }
 
 module.exports = SurveyDAL
