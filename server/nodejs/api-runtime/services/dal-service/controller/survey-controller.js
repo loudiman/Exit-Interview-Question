@@ -143,6 +143,18 @@ class SurveyController{
             res.status(500).json({message:Error.message})
         }
     }
+
+    static async handleDeleteSurvey(req,res){
+        const survey_id = req.params.survey_id
+        console.log(survey_id)
+        
+        try{
+            const result = await SurveyDAL.deleteSurvey(survey_id)
+            res.status(200).json({message:"success"})
+        }catch(error){
+            res.status(500).json({message:"failed"})
+        }
+    }
 }
 
 
