@@ -6,7 +6,7 @@
     <title>Create</title>
     <link rel="stylesheet" href="/static/css/nav-bar.css">
     <link rel="stylesheet" href="/static/css/side-bar.css">
-    <link rel="stylesheet" href="/static/css/admin-publish-survey.css">
+    <link rel="stylesheet" href="/static/css/admin-publish-edit.css">
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
@@ -85,18 +85,18 @@
 
             <!-- Publish Buttons -->
             <div class="button-container">
-
-                <button class="publish-button" onclick="history.back()">Back</button>
-                <a href="/admin/create">
-                    <button class="publish-button">Publish</button>
+                <a href="/admin/surveys/edit">
+                    <button  class="back-button">Back</button>
                 </a>
-
+                    <a href = "/admin/surveys" >
+                        <button class="publish-button">Publish</button>
+                    </a>
             </div>
         </div>
     </div>
 </div>
 
-<script src="/static/js/survey_creation_navbar.js"></script>
-<script src="/static/js/admin-publish-survey.js"></script>
+<script src="/static/js/survey-creation-navbar.js"></script>
+<script src="/static/js/admin-publish-edit.js"></script>
 </body>
 </html>

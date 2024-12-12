@@ -211,9 +211,21 @@ function updateOptionLabels(optionsContainer) {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
+    let isFormSubmitting = false; // Flag to track intentional navigation
+
+    // Warn the user if they try to reload or leave the page unintentionally
+    window.addEventListener("beforeunload", function(event) {
+        if (!isFormSubmitting) { // Only show the warning if the form is NOT being submitted
+            event.preventDefault();
+            return ""; // Display the default browser warning
+        }
+    });
+
     const publishButton = document.querySelector(".publish-button");
     if (publishButton) {
         publishButton.addEventListener("click", function() {
+            isFormSubmitting = true; // Set the flag to true to prevent the warning
+
             // Extract Survey Title and Description
             const surveyTitle = document.getElementById("formTitle").textContent.trim();
             const surveyDescription = document.getElementById("formDescription").textContent.trim();
