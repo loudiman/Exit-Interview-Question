@@ -6,42 +6,40 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Create</title>
 
-  <link rel="stylesheet" href="/static/css/style.css">
-  <link rel="stylesheet" href="/static/css/nav-bar.css">
-  <link rel="stylesheet" href="/static/css/survey-template.css">
-  <link rel="stylesheet" href="/static/css/side-bar.css">
-
-</head>
+  <link href="/static/css/style.css" rel="stylesheet">
+  <link href="/static/css/nav-bar.css" rel="stylesheet">
+  <link href="/static/css/survey-template.css" rel="stylesheet">
+  <link href="/static/css/side-bar.css" rel="stylesheet">
+  <script defer src="/static/js/side-bar.js"></script>
 
 <body>
-  <!-- Navbar-->
-  <div class="navbar">
-    <button onclick="toggleSidebar()">☰</button>
-    <img src="/static/images/male_user.png" alt="Profile" width="30" height="30">
-  </div>
+<header class="navbar">
+  <button aria-label="Toggle Sidebar" id="sidebarToggle">☰</button>
+  <img alt="Profile" height="30" src="/static/images/male_user.png" width="30">
+</header>
 
-  <!-- Sidebar and main content container -->
-  <div class="sidebar-container">
-    <!-- Sidebar -->
-    <nav class="sidebar" id="sidebar">
-      <a href="/admin">
-        <img src="/static/images/home_icon.png" alt="Home Icon"> Home
-      </a>
-      <a href="/admin/create" class="active">
-        <img src="/static/images/create_icon.png" alt="Create Icon"> Create
-      </a>
-      <a href="/admin/surveys">
-        <img src="/static/images/view_icon.png" alt="View Icon"> View
-      </a>
-      <a href="/admin/respondents">
-        <img src="/static/images/respondents_icon.png" alt="Respondents Icon"> Respondents
-      </a>
-      <a href="/admin/profile">
-        <img src="/static/images/male_user.png" alt="Profile Icon"> Profile
-      </a>
-    </nav>
+<div class="container">
+  <!-- Sidebar -->
+  <nav aria-label="Main Navigation" class="sidebar" id="sidebar">
+    <a href="/admin">
+      <img src="/static/images/home_icon.png" alt="Home Icon"> Home
+    </a>
+    <a href="/admin/create">
+      <img src="/static/images/create_icon.png" alt="Create Icon"> Create
+    </a>
+    <a href="/admin/surveys" class="active">
+      <img src="/static/images/view_icon.png" alt="View Icon"> View
+    </a>
+    <a href="/admin/respondents">
+      <img src="/static/images/respondents_icon.png" alt="Respondents Icon"> Respondents
+    </a>
+    <a href="/admin/profile">
+      <img src="/static/images/male_user.png" alt="Profile Icon"> Profile
+    </a>
+  </nav>
 
-    <!-- Main content -->
+
+  <!-- Main content -->
     <div class="main-content" id="mainContent">
       <!-- Survey templates section -->
       <h2>Survey Templates</h2>
