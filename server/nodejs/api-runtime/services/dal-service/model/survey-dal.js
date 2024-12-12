@@ -187,40 +187,48 @@ class SurveyDAL{
     }
 
     static async putNewQuestion(surveyID, questionJSON, questionType,operationType, questionID){
-        console.log(this.isSurveyPublishedHelper(surveyID))
+        console.log(await this.isSurveyPublishedHelper(surveyID))
         if(await this.isSurveyPublishedHelper(surveyID)){
             throw new Error("Survey is already published")
         }
 
-        switch(operationType){
-            case("add"):
-                var questionQuery = `INSERT INTO question (question_json, question_type) VALUES(?,?)`
-                var questionaireQuery = `INSERT INTO questionaire (survey_id, question_id) VALUES(?,?)`
-                
-                var [questionResult] = await pool.query(questionQuery, questionJSON, questionType)
-                var newQuestionID = questionResult.insertId
-                
-                var [result] = await pool.query(questionaireQuery, surveyID, newQuestionID)
-                if (result.affectedRows == 0){
-                    throw new Error("error updating quesetionaire table")
-                }
-                break
-            case("modify"):
-                var query = `UPDATE question SET question_json = ?, question_type = ? WHERE question_id = ?`
-                var [result] = await pool.query(query, [questionJSON, questionType, questionID])
-                if (result.affectedRows == 0){
-                    throw new Error("error modifying question")
-                }
-                break
-            case("remove"):
-                var query = `DELETE FROM question WHERE question_id = ?`
-                var [result] = await pool.query(query, questionID)
-                if(result.affectedRows == 0){
-                    throw new Error("error deleting question")
-                }
-                break
-            default:
-                
+        try{
+            switch(operationType){
+                case("add"):
+                    var questionQuery = `INSERT INTO question (question_json, question_type) VALUES(?,?)`
+                    var questionaireQuery = `INSERT INTO questionaire (survey_id, question_id) VALUES(?,?)`
+                    
+                    var [questionResult] = await pool.execute(questionQuery, [questionJSON, questionType])
+                    var newQuestionID = await questionResult.insertId
+
+                    console.log(newQuestionID)
+                    
+                    var [result] = await pool.query(questionaireQuery, [surveyID, newQuestionID])
+                    if (result.affectedRows == 0){
+                        throw new Error("error updating quesetionaire table")
+                    }
+                    break
+                case("modify"):
+                    var query = `UPDATE question SET question_json = ?, question_type = ? WHERE question_id = ?`
+                    var [result] = await pool.query(query, [questionJSON, questionType, questionID])
+                    if (result.affectedRows == 0){
+                        throw new Error("error modifying question")
+                    }
+                    break
+                case("remove"):
+                    var query = `DELETE FROM question WHERE question_id = ?`
+                    var [result] = await pool.query(query, questionID)
+                    if(result.affectedRows == 0){
+                        throw new Error("error deleting question")
+                    }
+                    break
+                default:
+                    throw new Error("Invalid operation")
+                    
+            }
+        }catch(error){
+            console.log(error.message)
+            throw new Error(error.message)
         }
     }
 
@@ -228,7 +236,6 @@ class SurveyDAL{
         var query = `SELECT * FROM survey WHERE survey_id = ? AND period_start > CURDATE()`
         try{
             const [result] = await pool.query(query, surveyID)
-            console.log(result)
             if(result.length == 0){
                 return true
             }
