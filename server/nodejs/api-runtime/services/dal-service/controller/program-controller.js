@@ -26,3 +26,5 @@ class ProgramController {
         }
     }
 }
+
+module.exports = ProgramController;

@@ -1,5 +1,5 @@
 const express = require('express')
-const {userRoutes, surveyRoutes} = require(`./routes`)
+const {userRoutes, surveyRoutes, programRoutes} = require(`./routes`)
 
 const dalService = express.Router()
 
@@ -9,6 +9,7 @@ dalService.get('/',(req,res)=>{
     res.send("This is the api endpoint")
 })
 
+dalService.use('/program-service', programRoutes)
 dalService.use('/user-service/',userRoutes)
 dalService.use('/survey-service/',surveyRoutes)
 

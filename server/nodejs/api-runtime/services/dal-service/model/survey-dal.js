@@ -91,12 +91,14 @@ class SurveyDAL{
         var surveyTitle = surveyDAO.survey_title
         var surveyDescription =surveyDAO.survey_description
         var programID = surveyDAO.program_id
-        var periodStart = surveyDAO.survey_start
-        var periodEnd = surveyDAO.survey_end
+        var periodStart = surveyDAO.period_start
+        var periodEnd = surveyDAO.period_end
         var status = surveyDAO.status
 
+        console.log(surveyDAO)
+
         try{
-            var query = "INSERT INTO survey(survey_title,survey_description, status, program_id, period_start, period_end) VALUES(?,?,?,?,?,?)"
+            var query = "INSERT INTO survey(survey_title, survey_description, status, program_id, period_start, period_end) VALUES(?,?,?,?,?,?)"
             const[result] = await pool.execute(query,[surveyTitle, surveyDescription, status, programID, periodStart, periodEnd])
             return result.insertId
         }catch(error){
@@ -106,7 +108,7 @@ class SurveyDAL{
 
     static async insertQuestion(question){
         var questionType = question.question_type
-        var questionJSON = question.question_json
+        var questionJSON = JSON.stringify(question.question_json)
 
         try{
             var query = "INSERT INTO question (question_json, question_type) VALUES(?,?)"
@@ -120,40 +122,65 @@ class SurveyDAL{
     static async insertQuestions(questions){
         var idArray = []
 
-        for(question of questions){
+        for(let question of questions){
+            console.log(question)
             var id = await this.insertQuestion(question)
             idArray.push(id)
         }
 
-        return id
+        return idArray
     }
 
-    static async insertQuesetionnaire(questionsID, surveyID){
-        const placeholders = questionsID.map(()=> "(?, ?)").join(",")
-        const values = questionsID.map((questionID)=>[questionID, surveyID])
-        
-        var query = `INSERT INTO questionaire (question_id, survey_id) VALUES ${placeholders}`
+    static async insertQuestionnaire(questionsID, surveyID) {
+        console.log(questionsID)
 
-        try{
-            const[result] = await pool.execute(query, values)
-            return true
-        }catch(error){
-            throw new Error(error.message)
+        // Flatten the values array
+        const flattenedValues = questionsID.flatMap(questionID => [questionID, surveyID]);
+
+        // Create placeholders dynamically based on the number of questions
+        const placeholders = questionsID.map(() => "(?, ?)").join(",");
+
+        var query = `INSERT INTO questionaire (question_id, survey_id) VALUES ${placeholders}`;
+
+        try {
+            const [result] = await pool.execute(query, flattenedValues);
+            return true;
+        } catch (error) {
+            console.error('Error inserting questionnaire:', error);
+            throw new Error(error.message);
         }
     }
 
-    static async insertResponders(responders, surveyID){
-        const placeholders = responders.map(() => "(?,?,?)")
-        const values = responders.map((responder)=>[responder.username, surveyID, 0])
+    static async insertResponders(responders, surveyID) {
+        // If no responders, return early
+        if (responders.length === 0) return true;
 
-        var query = `INSERT INTO responders (username, survey_id, responded) VALUES ${placeholders}`
+        // Batch the inserts to prevent packet size issues
+        const BATCH_SIZE = 500; // Adjust based on your needs
+        let results = true;
 
-        try{
-            const[result] = await pool.execute(query, values)
-            return true
-        }catch(error){
-            throw new Error(error.message)
+        for (let i = 0; i < responders.length; i += BATCH_SIZE) {
+            const batchResponders = responders.slice(i, i + BATCH_SIZE);
+
+            const placeholders = batchResponders.map(() => "(?,?,?)").join(',');
+            const flattenedValues = batchResponders.flatMap(responder => [
+                responder.username,
+                surveyID,
+                0
+            ]);
+
+            const query = `INSERT INTO responders (username, survey_id, responded) VALUES ${placeholders}`;
+
+            try {
+                await pool.execute(query, flattenedValues);
+            } catch (error) {
+                console.error('Error inserting responders batch:', error);
+                results = false;
+                break;
+            }
         }
+
+        return results;
     }
 
     static async insertResponse(responseJSON, surveyID){
@@ -188,7 +215,7 @@ class SurveyDAL{
     }
 
     static async putNewSurveyData(survey_id, survey_title, survey_description,status, program_id, period_start, period_end) {
-        const query = "UPDATE survey SET survey_title = ?, survey_description,status = ?, program_id = ?, period_start = ?, period_end = ? WHERE survey_id = ? AND period_start > CURDATE();";
+        const query = "UPDATE survey SET survey_title = ?, survey_description = ?,status = ?, program_id = ?, period_start = ?, period_end = ? WHERE survey_id = ? AND period_start > CURDATE();";
 
         try {
             // Await the query execution and handle the result
