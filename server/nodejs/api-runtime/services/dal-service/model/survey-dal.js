@@ -38,10 +38,10 @@ class SurveyDAL{
     }
 
     static async getRespondents(surveyID){
-        var query = "SELECT * FROM responders WHERE survey_id = ?"
+        var query = "SELECT u.username, u.given_name, u.last_name FROM responders AS r LEFT JOIN user AS u ON r.username = u.username WHERE r.survey_id = ?"
 
         try{
-            const[result] = await pool.query(query, surveyID)
+            const [result] = await pool.query(query, surveyID)
             return result
         }catch(error){
             throw new Error(error.message)

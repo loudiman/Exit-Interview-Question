@@ -153,6 +153,16 @@ class SurveyController{
             res.status(500).json({message:"failed to fetch"})
         }
     }
+
+    static async handleGetRespondents(req,res){
+        const {survey_id} = req.body
+        try{
+            const result = await SurveyDAL.getRespondents(survey_id)
+            res.status(200).json(result)
+        }catch(error){
+            res.status(500).json({message:"failed to retrieve"})
+        }
+    }
 }
 
 
