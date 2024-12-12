@@ -144,10 +144,30 @@ class SurveyController{
         }
     }
 
+    static async handleGetResponses(req,res){
+        const {survey_id} = req.body
+        try{
+            const result = await SurveyDAL.getResponses(survey_id)
+            res.status(200).json({result})
+        }catch(Error){
+            res.status(500).json({message:"failed to fetch"})
+        }
+    }
+
+    static async handleGetRespondents(req,res){
+        const {survey_id} = req.body
+        try{
+            const result = await SurveyDAL.getRespondents(survey_id)
+            res.status(200).json(result)
+        }catch(error){
+            res.status(500).json({message:"failed to retrieve"})
+        }
+    }
+
     static async handleDeleteSurvey(req,res){
         const survey_id = req.params.survey_id
         console.log(survey_id)
-        
+
         try{
             const result = await SurveyDAL.deleteSurvey(survey_id)
             res.status(200).json({message:"success"})

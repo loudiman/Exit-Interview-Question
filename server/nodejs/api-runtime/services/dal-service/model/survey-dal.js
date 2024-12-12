@@ -52,10 +52,10 @@ class SurveyDAL{
     }
 
     static async getRespondents(surveyID){
-        var query = "SELECT * FROM responders WHERE survey_id = ?"
+        var query = "SELECT u.username, u.given_name, u.last_name FROM responders AS r LEFT JOIN user AS u ON r.username = u.username WHERE r.survey_id = ?"
 
         try{
-            const[result] = await pool.query(query, surveyID)
+            const [result] = await pool.query(query, surveyID)
             return result
         }catch(error){
             throw new Error(error.message)
@@ -256,6 +256,16 @@ class SurveyDAL{
             return false
         }catch(error){
             console.log(error.message)
+        }
+    }
+
+    static async getResponses(surveyId){
+        var query = `SElECT * FROM responses WHERE survey_id = ?`
+        try{
+            const [result] = await pool.query(query, surveyId)
+            return result
+        }catch(error){
+            throw new Error("Failed to fetch")
         }
     }
 }
