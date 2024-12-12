@@ -134,7 +134,27 @@ class SurveyController{
         }
     }
        
+    static async handlePutQuestion(req,res){
+        const {surveyID, questionJSON,questionType,operation, questionID} = req.body
+        try{
+            const result = await SurveyDAL.putNewQuestion(surveyID,questionJSON,questionType,operation,questionID)
+            res.status(200).json({message:"success"})
+        }catch(Error){
+            res.status(500).json({message:Error.message})
+        }
+    }
 
+    static async handleDeleteSurvey(req,res){
+        const survey_id = req.params.survey_id
+        console.log(survey_id)
+        
+        try{
+            const result = await SurveyDAL.deleteSurvey(survey_id)
+            res.status(200).json({message:"success"})
+        }catch(error){
+            res.status(500).json({message:"failed"})
+        }
+    }
 }
 
 
