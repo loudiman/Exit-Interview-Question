@@ -134,7 +134,15 @@ class SurveyController{
         }
     }
        
-
+    static async handlePutQuestion(req,res){
+        const {surveyID, questionJSON,questionType,operation, questionID} = req.body
+        try{
+            const result = await SurveyDAL.putNewQuestion(surveyID,questionJSON,questionType,operation,questionID)
+            res.status(200).json({message:"success"})
+        }catch(Error){
+            res.status(500).json({message:Error.message})
+        }
+    }
 }
 
 
