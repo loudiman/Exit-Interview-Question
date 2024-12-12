@@ -88,22 +88,40 @@ main {
     gap: 1rem;
 }
 /* Buttons */
-.btn-prm-long {
-    display: block;
-    text-decoration: none;
-    background-color: #223C6B;
+.changepass-btn {
     color: white;
+    background-color: #223C6B;
+    display: block;
     border: none;
+    text-decoration: none;
     padding: 1.5rem 1.5rem;
     font-size: 1.3rem;
-    width: 100%;
+    width: 1600px;
     text-align: left;
     cursor: pointer;
     border-radius: 5px;
+    font-weight: bold;
 }
 
-.btn-prm-long:hover {
+.changepass-btn:hover {
     background-color: #9B9898;
+}
+.createacc-btn{
+    color: white;
+    background-color: #223C6B;
+    display: block;
+    border: none;
+    text-decoration: none;
+    padding: 1.5rem 1.5rem;
+    font-size: 1.3rem;
+    width: 1600px;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: bold;
+}
+.createacc-btn:hover {
+    background-color:#9B9898 ;
 }
 
 h2 {
