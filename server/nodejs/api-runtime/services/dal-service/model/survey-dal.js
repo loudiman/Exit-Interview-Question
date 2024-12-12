@@ -166,9 +166,9 @@ class SurveyDAL{
         }
     }
 
-    static async getSurveySummary(){
+    static async getSurveySummary(survey_id){
         console.log("Getting summary")
-        const query = `
+        var query = `
         SELECT s.survey_id, s.survey_title,s.survey_description, s.status, s.program_id, s.period_start, s.period_end,
         COUNT(CASE WHEN r.responded = TRUE THEN 1 END) AS total_responded,
         COUNT(*) AS total_responders
@@ -176,6 +176,18 @@ class SurveyDAL{
         LEFT JOIN responders r ON s.survey_id = r.survey_id
         GROUP BY s.survey_id LIMIT 100;
     `;
+
+    if(survey_id){
+        var query = `
+        SELECT s.survey_id, s.survey_title,s.survey_description, s.status, s.program_id, s.period_start, s.period_end,
+        COUNT(CASE WHEN r.responded = TRUE THEN 1 END) AS total_responded,
+        COUNT(*) AS total_responders
+        FROM survey s
+        LEFT JOIN responders r ON s.survey_id = r.survey_id
+        WHERE s.survey_id = ${survey_id}
+        GROUP BY s.survey_id LIMIT 100;
+    `;
+    }
     
         
         try{
