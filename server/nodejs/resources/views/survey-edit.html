@@ -40,45 +40,20 @@
     </nav>
 
     <!-- Main content -->
-    <div class="main-content" id="mainContent">
-        <!-- Survey Container -->
-        <div class="survey-container">
-            <div class="survey-title">
-                <h2 id="formTitle" contenteditable="true" onfocus="this.placeholder=''" onblur="this.placeholder='Enter survey title...'" placeholder="Enter survey title...">Sample Title</h2>
-            </div>
-
-            <!-- Questions Container -->
-            <div id="questionsContainer">
-                <!-- Initial Question Container -->
-                <div class="question-container">
-                    <div class="question-content">
-                        <div class="question-header">
-                            <input type="text" placeholder="Untitled Question">
-                            <select onchange="updateQuestionContent(this)">
-                                <option value="multiple-choice">Multiple Choice</option>
-                                <option value="essay">Essay</option>
-                                <option value="rating">Rating</option>
-                                <option value="true-false">True or False</option>
-                            </select>
-                        </div>
-                        <div class="options"></div>
-                        <div class="button-container" style="display: none;">
-                            <button class="option-button" onclick="addOption(this)">Add Option</button>
-                            <span>or</span>
-                            <button class="option-button" onclick="addOtherOption(this)">Add Other</button>
-                        </div>
-                    </div>
-
-                    <!-- Side buttons for add question, add photo, add video -->
-                    <div class="side-buttons">
-                        <button class="side-button" id="addQuestionButton">+</button>
-                    </div>
-                </div>
-            </div>
+    <div class="survey-container">
+        <div class="survey-title">
+            <h2 id="formTitle" contenteditable="true" placeholder="Enter survey title..."></h2>
+            <p id="formDescription" contenteditable="true" placeholder="Enter survey description..."></p>
+        </div>
+        <div id="questionsContainer">
+            <!-- Questions will be dynamically added here -->
         </div>
         <button class="publish-button">Publish Survey</button>
-        <button class="back-button" onclick="window.history.back();">Back</button>
+        <a href="/admin/surveys">
+            <button class="back-button">Back</button>
+        </a>
     </div>
+
 </div>
 </body>
 </html>
