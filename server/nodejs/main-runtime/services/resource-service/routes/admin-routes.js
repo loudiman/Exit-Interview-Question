@@ -58,6 +58,12 @@ router.get('/admin/surveys/publish', (req, res) => {
     res.sendFile(path.join(baseDir, 'admin-publish-edit.html'));
 });
 
+router.get('/admin/dashboard', (req, res) => {
+    res.sendFile()
+})
 
+router.get('/admin/dashboard/survey', (req, res) => {
+    res.sendFile(path.join(baseDir, 'admin-view-questions.html'));
+})
 
 module.exports = router;
