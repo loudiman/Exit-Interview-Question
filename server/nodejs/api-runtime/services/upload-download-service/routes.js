@@ -4,8 +4,10 @@ const uploadDownloadService = express.Router()
 
 uploadDownloadService.post('/upload/image/:username',upload.single('file'), (req,res)=>{
     if(!req.file){
+        console.log("not uploaded")
         res.status(400).json({message:"no file sent"})
     }
+    console.log("uploaded")
     res.status(200).json({message:"uploaded"})
 })
 
