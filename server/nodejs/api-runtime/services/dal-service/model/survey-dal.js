@@ -11,6 +11,20 @@ class SurveyDAL{
         }
     }
 
+    static async deleteSurvey(surveyID){
+        const query = `DELETE FROM survey WHERE survey_id = ?`
+        try{
+            const[result] = await pool.execute(query, [surveyID])
+            if(result.affectedRows == 0){
+                console.log("failed")
+                throw new Error("Delete failed")
+            }
+
+        }catch(error){
+            throw new Error("delete failed")
+        }
+    }
+
     static async getAllPublishedSurvey(username){
         try{
             console.log("username: "+username)
