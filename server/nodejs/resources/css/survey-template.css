@@ -1,29 +1,32 @@
-
-@font-face {
-    font-family: "CustomFont";
-    src: url("../resource/fonts/Istok_Web/IstokWeb-Regular.ttf") format("truetype");
-    font-weight: normal;
-    font-style: normal;
-}
-@font-face {
-    font-family: "CustomFont";
-    src: url("../resource/fonts/Istok_Web/IstokWeb-Bold.ttf") format("truetype");
-    font-weight: bold;
-    font-style: normal;
-}
-@font-face {
-    font-family: "CustomFont";
-    src: url("../resource/fonts/Istok_Web/IstokWeb-Italic.ttf") format("truetype");
-    font-weight: normal;
-    font-style: italic;
-}
-@font-face {
-    font-family: "CustomFont";
-    src: url("../resource/fonts/Istok_Web/IstokWeb-BoldItalic.ttf") format("truetype");
-    font-weight: bold;
-    font-style: italic;
+/* Reset default margin and padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
+html, body {
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Container for Sidebar and Content */
+.container {
+    display: flex;
+}
+
+/* Main content area */
+.content {
+    width: 100%;
+    padding: 50px;
+    height: 100%;
+    overflow-y: auto;
+}
 button{
     border: none;
     cursor: pointer;

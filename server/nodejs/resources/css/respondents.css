@@ -1,53 +1,23 @@
-body {
+/* Reset default margin and padding */
+* {
     margin: 0;
-    font-family: Arial, sans-serif;
-    display: flex;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-.navbar {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    height: 50px;
-    background-color: #223C6B;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 15px;
-    z-index: 1;
+html, body {
+    height: 100%;
 }
 
-.sidebar-container {
-    position: fixed;
-    top: 50px; /* Push below the navbar */
-    width: 250px;
-    height: calc(100% - 50px);
-    background-color: #444;
-    color: white;
+body {
     display: flex;
     flex-direction: column;
 }
 
-.sidebar {
-    padding: 10px;
+/* Container for Sidebar and Content */
+.container {
     display: flex;
-    flex-direction: column;
 }
-
-.sidebar a {
-    color: white;
-    text-decoration: none;
-    padding: 10px;
-    margin: 5px 0;
-    display: flex;
-    align-items: center;
-}
-
-.sidebar a.active {
-    background-color: #666;
-}
-
 .main-content {
     margin-top: 50px;
       padding: 20px;
