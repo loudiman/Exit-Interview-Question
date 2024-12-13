@@ -54,8 +54,8 @@ document.addEventListener("DOMContentLoaded", async() => {
             const startTime = document.querySelector('input[type="time"]').value;
             const untilDate = document.querySelectorAll('input[type="date"]')[1].value;
             const endTime = document.querySelectorAll('input[type="time"]')[1].value;
-            surveyData.surveyReq.period_start = `${fromDate} ${startTime}`;
-            surveyData.surveyReq.period_end = `${untilDate} ${endTime}`;
+            surveyData.period_start = `${fromDate} ${startTime}`;
+            surveyData.period_end = `${untilDate} ${endTime}`;
             surveyData.users = userArray;
 
             const oldSurveyData = JSON.parse(sessionStorage.getItem('oldSurveyData'));
@@ -189,18 +189,18 @@ function getSelectedValues(containerId) {
     const checkboxes = container.querySelectorAll('input[type="checkbox"]:checked');
     return Array.from(checkboxes).map(checkbox => checkbox.value);
 }
-async function updateQuestion(questionID, surveyID, questionJSON, questionType) {
-    const url = "http://localhost:2020/api/survey-service/survey/questions";
+async function updateQuestion(question_id, survey_id, question_json, question_type) {
+    const url = "http://localhost:2020/api/survey-service/questions";
     try {
         const response = await fetch(url, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                surveyID: surveyID,
-                questionJSON: questionJSON,
-                questionType: questionType,
+                surveyID: survey_id,
+                questionJSON: question_json,
+                questionType: question_type,
                 operation: "modify",
-                questionID: questionID
+                questionID: question_id
             })
         });
 
@@ -215,15 +215,15 @@ async function updateQuestion(questionID, surveyID, questionJSON, questionType) 
     }
 }
 
-async function deleteQuestion(questionID) {
-    const url = "http://localhost:2020/api/survey-service/survey/questions";
+async function deleteQuestion(question_id) {
+    const url = "http://localhost:2020/api/survey-service/questions";
     try {
         const response = await fetch(url, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 operation: "remove",
-                questionID: questionID
+                questionID: question_id
             })
         });
 
@@ -238,17 +238,17 @@ async function deleteQuestion(questionID) {
     }
 }
 
-async function addQuestion(surveyID, questionJSON, questionType) {
-    const url = "http://localhost:2020/api/survey-service/survey/questions";
+async function addQuestion(survey_id, question_json, question_type) {
+    const url = "http://localhost:2020/api/survey-service/questions";
     try {
-
+        console.log('Adding question:', survey_id, question_json, question_type);
         const response = await fetch(url, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                surveyID: surveyID,
-                questionJSON: questionJSON,
-                questionType: questionType,
+                surveyID: survey_id,
+                questionJSON: JSON.stringify(question_json),
+                questionType: question_type,
                 operation: "add"
             })
         });
@@ -265,6 +265,10 @@ async function addQuestion(surveyID, questionJSON, questionType) {
 }
 
 function surveyDifferences(oldSurveyData, surveyData) {
+    console.log("Checking for differences in survey data...");
+    console.log("Old survey data:", oldSurveyData);
+    console.log("Old survey data:", oldSurveyData.survey.survey_id);
+    console.log("New survey data:", surveyData.survey.survey_id);
     const surveyID = surveyData.survey.survey_id;
 
     const oldQuestions = new Map(oldSurveyData.questions.map(q => [q.question_id, q]));
@@ -281,8 +285,8 @@ function surveyDifferences(oldSurveyData, surveyData) {
 
     //Update
     newQuestions.forEach((newQuestion, questionID) => {
-        if (!oldQuestions.has(questionID)) {
-            console.log(`Adding new question ID ${questionID}`);
+        if (!newQuestion.question_id) {
+            console.log(`Adding new question`);
             addQuestion(surveyID, newQuestion.question_json, newQuestion.question_type).then(r => console.log("Question added:", r));
 
         } else {

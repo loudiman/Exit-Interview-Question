@@ -4,6 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const unpublishedContainer = document.querySelector('#unpublishedSurveys');
     const publishedContainer = document.querySelector('#publishedSurveys');
 
+
+
     // Improved Render Surveys Function
     function renderSurveys(data) {
         // Clear containers more efficiently
@@ -147,7 +149,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     (async () => {
         const surveys = await fetchSurveys();
+        console.log('SURVEYS', surveys);
         if (surveys.length) {
+            renderSurveys(surveys);
             // Restore search event listener
             searchInput.addEventListener('input', debounce(() => searchSurveys(surveys), 300));
 
@@ -178,7 +182,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('modalOverlay').style.display = 'none';
             });
 
-            renderSurveys(surveys);
         }
     })();
 });
