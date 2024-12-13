@@ -9,7 +9,7 @@ return [
     "database" => [ 
     "host" => "127.0.0.1",
     "port" => 3306,
-    "dbname" => "amalgam",
+    "dbname" => "team02",
     "password" => "secret",
     "charset" => "utf8mb4"
     ],
