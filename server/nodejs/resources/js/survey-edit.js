@@ -5,9 +5,11 @@ class SurveyEditor {
         this.initializePage();
     }
 
-    initializePage() {
+    async initializePage() {
         // Step 1: Retrieve Survey Details from sessionStorage
         const storedSurveyDetails = sessionStorage.getItem('surveyDetails');
+        document.getElementById('formTitle').textContent = 'Untitled Survey';
+        document.getElementById('formDescription').textContent = 'No description';
         if (storedSurveyDetails) {
             const parsedDetails = JSON.parse(storedSurveyDetails);
             document.getElementById('formTitle').textContent = parsedDetails.survey_title || 'Untitled Survey';
@@ -25,20 +27,23 @@ class SurveyEditor {
         console.log('Survey ID:', this.surveyId);
 
         // Step 3: Fetch Associated Questions
-        this.fetchSurveyQuestions(this.surveyId);
+        await this.fetchSurveyQuestions(this.surveyId);
 
         // Attach event listeners
-        this.attachEventListeners();
+        await this.attachEventListeners();
+
+        this.saveCurrentSurvey();
+        this.saveOldData();
     }
 
     async fetchSurveyQuestions(surveyID) {
         try {
-            const response = await fetch(`http://localhost:2020/api/survey-service/questions/${surveyID}`);
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+            this.surveyData = await fetch(`http://localhost:2020/api/survey-service/questions/${surveyID}`);
+            if (!this.surveyData.ok) {
+                throw new Error(`HTTP error! Status: ${this.surveyData.status}`);
             }
 
-            const data = await response.json();
+            const data = await this.surveyData.json();
             if (data.questions) {
                 data.questions = data.questions.map(question => {
                     try {
@@ -58,11 +63,12 @@ class SurveyEditor {
                     }
                 });
 
-                this.surveyData = data;
+                this.surveyData = data
+                console.log("rendering")
                 this.renderSurvey(data);
                 console.log('Survey questions fetched and parsed:', data);
             } else {
-                console.error('No questions found in the response');
+                console.error('No questions found in the this.surveyData');
             }
         } catch (error) {
             console.error('Error fetching or parsing survey questions:', error);
@@ -130,6 +136,7 @@ class SurveyEditor {
             publishButton.addEventListener("click", () => this.saveSurveyToJSON());
         }
 
+
         // Make title and description editable
         document.getElementById('formTitle').addEventListener('click', () => this.makeEditable('formTitle'));
         document.getElementById('formDescription').addEventListener('click', () => this.makeEditable('formDescription'));
@@ -143,7 +150,7 @@ class SurveyEditor {
         const surveyDescription = document.getElementById("formDescription").textContent.trim();
 
         const questionContainers = document.querySelectorAll(".question-container");
-        const questions = Array.from(questionContainers).map((container) => {
+        const questions = Array.from(questionContainers).map((container, index) => {
             const questionText = container.querySelector(".question-header input").value.trim();
             const questionType = container.querySelector(".question-header select").value;
 
@@ -159,12 +166,16 @@ class SurveyEditor {
                     const scaleSelect = container.querySelector(".max-rating-select");
                     if (scaleSelect) {
                         const maxScale = parseInt(scaleSelect.value, 10);
-                        scale = Array.from({length: maxScale}, (_, i) => i + 1);
+                        scale = Array.from({ length: maxScale }, (_, i) => i + 1);
                     }
                     break;
             }
 
+            // Get question ID from this.surveyData
+            const questionId = this.surveyData?.questions?.[index]?.question_id;
+
             return {
+                question_id: questionId,
                 question_json: {
                     question: questionText,
                     options: options,
@@ -179,7 +190,7 @@ class SurveyEditor {
                 survey_title: surveyTitle || "Untitled Survey",
                 survey_description: surveyDescription || "",
                 survey_id: this.surveyId,
-                program_id: "", // These can be populated from existing data or left blank
+                program_id: "",
                 period_start: "",
                 period_end: "",
                 status: "Draft"
@@ -194,6 +205,77 @@ class SurveyEditor {
 
         // Redirect to publish page
         window.location.href = "/admin/surveys/publish";
+    }
+
+    saveCurrentSurvey() {
+        // Step 5: Generate JSON and store in sessionStorage
+        const surveyTitle = document.getElementById("formTitle").textContent.trim();
+        const surveyDescription = document.getElementById("formDescription").textContent.trim();
+
+        const questionContainers = document.querySelectorAll(".question-container");
+        const questions = Array.from(questionContainers).map((container, index) => {
+            const questionText = container.querySelector(".question-header input").value.trim();
+            const questionType = container.querySelector(".question-header select").value;
+
+            let options = [];
+            let scale = [];
+
+            switch (questionType) {
+                case "multiple_choice":
+                case "checkbox":
+                    options = Array.from(container.querySelectorAll(".options input")).map(input => input.value.trim());
+                    break;
+                case "rating":
+                    const scaleSelect = container.querySelector(".max-rating-select");
+                    if (scaleSelect) {
+                        const maxScale = parseInt(scaleSelect.value, 10);
+                        scale = Array.from({ length: maxScale }, (_, i) => i + 1);
+                    }
+                    break;
+            }
+
+            // Get question ID from this.surveyData
+            const questionId = this.surveyData?.questions?.[index]?.question_id;
+
+            return {
+                question_id: questionId,
+                question_json: {
+                    question: questionText,
+                    options: options,
+                    scale: scale,
+                },
+                question_type: questionType,
+            };
+        });
+
+        const surveyData = {
+            survey: {
+                survey_title: surveyTitle || "Untitled Survey",
+                survey_description: surveyDescription || "",
+                survey_id: this.surveyId,
+                program_id: "",
+                period_start: "",
+                period_end: "",
+                status: "Draft"
+            },
+            questions: questions,
+            restrict_students: []
+        };
+
+        // Store the JSON in sessionStorage
+        sessionStorage.setItem("surveyData", JSON.stringify(surveyData));
+        console.log("Survey data saved:", JSON.stringify(surveyData));
+    }
+
+    saveOldData(){
+        try {
+            console.log("saving old data")
+            console.log(sessionStorage.getItem("surveyData"))
+            const oldSurveyData = sessionStorage.getItem("surveyData");
+            sessionStorage.setItem("oldSurveyData", oldSurveyData);
+        }catch(error){
+            console.log(error)
+        }
     }
 
     // Helper methods for SurveyEditor class
@@ -501,7 +583,11 @@ class SurveyEditor {
             this.surveyData.questions[questionIndex].question_json.scale = Array.from({ length: scaleValue }, (_, i) => i + 1);
         }
     }
+
+
+
 }
+
 
 // Initialize the survey editor
 const surveyEditor = new SurveyEditor();

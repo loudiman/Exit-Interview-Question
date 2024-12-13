@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const action = isUnpublished ? 'Edit' : 'Details';
 
             const surveyItem = document.createElement('div');
-            const href = isUnpublished ? `/admin/surveys/edit?id=${survey_id}` : `/admin/surveys/details?id=${survey_id}`;
+            const href = isUnpublished ? `/admin/surveys/edit?survey_id=${survey_id}` : `/admin/surveys/details?id=${survey_id}`;
 
             surveyItem.className = 'survey-item';
             surveyItem.innerHTML = `
