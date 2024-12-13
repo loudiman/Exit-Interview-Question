@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const surveyId = currentSurveyToDelete.survey_id;
 
         try {
-            const response = await fetch(`http://localhost:2020/api/survey-service/survey/${surveyId}`, {
+            const response = await fetch(`http://amalgam.com:2020/api/survey-service/survey/${surveyId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function fetchSurveys() {
-        const url = "http://localhost:2020/api/survey-service/survey-summary";
+        const url = "http://amalgam.com:2020/api/survey-service/survey-summary";
         try {
             const response = await fetch(url);
             if (!response.ok) {

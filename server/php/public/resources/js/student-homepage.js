@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
             //         }
             //     ]
             // };
-            const response = await fetch('http://localhost:8888/student');
+            const response = await fetch('http://amalgam.com:8888/student');
             const jsonString = await response.json();
             console.log(jsonString);
             surveyData = jsonString.surveys;
@@ -189,7 +189,7 @@ function formatDateToStandardTime(dateInput) {
 
 // Another way to logout
 // function logout() {
-//     fetch('http://localhost:8888/session/logout', {
+//     fetch('http://amalgam.com:8888/session/logout', {
 //         method: 'POST',
 //         headers: { 'Content-Type': 'application/json' },
 //         body: JSON.stringify({ '_method': 'DELETE' })
@@ -197,7 +197,7 @@ function formatDateToStandardTime(dateInput) {
 //         .then(response => response.text())
 //         .then(data => {
 //             console.log("Logout response:", data);
-//             // window.location.href = 'http://localhost:8888/';
+//             // window.location.href = 'http://amalgam.com:8888/';
 //         })
 //         .catch(error => console.error("Logout error:", error));
 // }

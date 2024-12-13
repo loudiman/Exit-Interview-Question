@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", async() => {
             console.log(`Survey Data to send: ${JSON.stringify(surveyData)}`);
 
             // Step 4: Publish button logic to send data (commented for now)
-            fetch('http://localhost:2020/api/survey-service/survey', {
+            fetch('http://amalgam.com:2020/api/survey-service/survey', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(surveyData)
@@ -110,7 +110,7 @@ function toggleRestrictionsDropdown(containerId) {
 }
 
 async function fetchAllowedUsers(filters) {
-    const url = "http://localhost:2020/api/user-service/users/filtered";
+    const url = "http://amalgam.com:2020/api/user-service/users/filtered";
 
     try {
         const response = await fetch(url, {
@@ -134,7 +134,7 @@ async function fetchAllowedUsers(filters) {
 }
 
 async function fetchAllUsers(){
-    const url = "http://localhost:2020/api/user-service/users";
+    const url = "http://amalgam.com:2020/api/user-service/users";
 
     try {
         const response = await fetch(url);
@@ -149,7 +149,7 @@ async function fetchAllUsers(){
 }
 
 async function fetchFromServer() {
-    const url = "http://localhost:2020/api/program-service/programs"
+    const url = "http://amalgam.com:2020/api/program-service/programs"
     try {
         const response = await fetch(url);
         if (!response.ok) {

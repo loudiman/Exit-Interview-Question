@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
             surveyItem.querySelector('#temp').addEventListener('click', (function(survey_id) {
                 return function(event) {
                     event.preventDefault();
-                    fetch(`http://localhost:2020/api/survey-service/questions/${survey_id}`)
+                    fetch(`http://amalgam.com:2020/api/survey-service/questions/${survey_id}`)
                     .then(response => response.json())
                     .then(surveyData => {
                         console.log(JSON.stringify(surveyData));
@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to fetch surveys from the server
     async function fetchSurveys() {
-        const url = "http://localhost:2020/api/survey-service/survey-summary";
+        const url = "http://amalgam.com:2020/api/survey-service/survey-summary";
         try {
             const response = await fetch(url);
             if (!response.ok) {
