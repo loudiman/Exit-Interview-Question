@@ -62,6 +62,8 @@ document.addEventListener("DOMContentLoaded", async() => {
             surveyDifferences(oldSurveyData, surveyData);
 
             console.log("Survey Data to send:", surveyData);
+
+            window.href.location = 'http://localhost:2021/admin/surveys';
         });
     } else {
         console.error("Publish button not found.");
@@ -190,6 +192,7 @@ function getSelectedValues(containerId) {
     return Array.from(checkboxes).map(checkbox => checkbox.value);
 }
 async function updateQuestion(question_id, survey_id, question_json, question_type) {
+    console.log("Updating question:", question_id, survey_id, question_json, question_type);
     const url = "http://localhost:2020/api/survey-service/questions";
     try {
         const response = await fetch(url, {
@@ -267,9 +270,8 @@ async function addQuestion(survey_id, question_json, question_type) {
 function surveyDifferences(oldSurveyData, surveyData) {
     console.log("Checking for differences in survey data...");
     console.log("Old survey data:", oldSurveyData);
-    console.log("Old survey data:", oldSurveyData.survey.survey_id);
-    console.log("New survey data:", surveyData.survey.survey_id);
     const surveyID = surveyData.survey.survey_id;
+    console.log("Survey ID:", surveyID);
 
     const oldQuestions = new Map(oldSurveyData.questions.map(q => [q.question_id, q]));
     const newQuestions = new Map(surveyData.questions.map(q => [q.question_id, q]));
