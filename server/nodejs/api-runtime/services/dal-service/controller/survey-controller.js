@@ -107,9 +107,14 @@ class SurveyController{
     }
 
     static async handleGetSurveySummary(req,res){
+        const survey_id = req.query.survey_id
         console.log("hit")
         try{
-            const result = await SurveyDAL.getSurveySummary()
+            if(!survey_id){
+                var result = await SurveyDAL.getSurveySummary()
+            }else{
+                var result = await SurveyDAL.getSurveySummary(survey_id)
+            }
             console.log(`Result: ${result}`)
             res.status(200).json(result)
         }catch(error){

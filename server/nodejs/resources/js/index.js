@@ -46,12 +46,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="status ${status}">
                     <span class="survey-status">${capitalize(status)}</span>
                 </div>
-                <a href="${href}" class="${isUnpublished ? 'edit-btn' : 'details-btn'}">
+                <a id="temp" class="${isUnpublished ? 'edit-btn' : 'details-btn'}">
                     <button data-id="${survey_id}">
                         <img src="/static/images/${action}.png" alt="${action} Icon" />
                     </button>  
                 </a>
             `;
+
+            surveyItem.querySelector('#temp').addEventListener('click', (function(survey_id) {
+                return function(event) {
+                    event.preventDefault();
+                    fetch(`http://localhost:2020/api/survey-service/questions/${survey_id}`)
+                    .then(response => response.json())
+                    .then(surveyData => {
+                        console.log(JSON.stringify(surveyData));
+                        sessionStorage.setItem('questionnaireData', JSON.stringify(surveyData));
+                        sessionStorage.setItem('surveyId', survey_id);
+                        window.location.href = '/admin/dashboard/survey';
+                    })
+                    .catch(error => console.error("Fetch error: ", error));
+                };
+            })(survey_id));
 
             container.appendChild(surveyItem);
         });
@@ -114,6 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const json = await response.json();
+            sessionStorage.setItem('surveysSummaryData', JSON.stringify(json));
             console.log(json);
             return json;
         } catch (error) {
