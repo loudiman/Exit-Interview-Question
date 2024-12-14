@@ -224,6 +224,7 @@ input[type="date"], input[type="time"]{
     gap: 10px;
     margin-bottom: 15px;
     width: 100%;
+    position: relative;
 }
 
 .dropdown-checkbox-toggle {
@@ -245,10 +246,17 @@ input[type="date"], input[type="time"]{
     background-color: #223C6A;
     border: 1px solid #ccc;
     border-radius: 5px;
-    width: 40%;
+    width: 100%;
     max-height: 200px;
     overflow-y: auto;
     z-index: 1;
+    top: 100%;
+}
+
+.dropdown-checkbox-options label {
+    display: block;
+    padding: 8px;
+    cursor: pointer;
 }
 
 .dropdown-toggle {
