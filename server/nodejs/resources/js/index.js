@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const container = actualStatus === 'unpublished' ? unpublishedContainer : publishedContainer;
             const isUnpublished = actualStatus === 'unpublished';
             const action = isUnpublished ? 'Edit' : 'Details';
-            const href = isUnpublished ? `/admin/surveys/edit?id=${survey_id}` : `details-btn`;
+            const href = isUnpublished ? `/admin/surveys/edit?survey_id=${survey_id}` : `details-btn`;
             const buttonAction = isUnpublished ? `href=${href}` : `onClick=showPreview(${survey_id})`;
 
             const surveyItem = document.createElement('div');
