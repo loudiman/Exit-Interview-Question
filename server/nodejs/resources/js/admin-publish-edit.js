@@ -22,7 +22,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const publishButton = document.getElementById("publishButton");
     if (publishButton) {
         publishButton.addEventListener("click", async () => {
-            publishSurvey(surveyData).then(r => console.log("Survey published:", r));
+            await publishSurvey(surveyData).then(r => console.log("Survey published:", r));
+            window.location.href = 'http://localhost:2021/admin/surveys';
         });
     } else {
         console.error("Publish button not found.");
@@ -54,8 +55,6 @@ async function publishSurvey(surveyData) {
     surveyDifferences(oldSurveyData, surveyData);
 
     console.log("Survey Data to send:", surveyData);
-
-    window.href.location = 'http://localhost:2021/admin/surveys';
 }
 
 function filtersAPI() {
