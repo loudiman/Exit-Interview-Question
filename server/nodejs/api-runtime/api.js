@@ -21,8 +21,5 @@ app.get('/',(req,res) => {
     res.send("This is the API endpoint")
 })
 
-app.listen(2019, () => {
-    console.log("API Server is Running")
-})
 
 module.exports = app
