@@ -126,22 +126,16 @@ function addSemester(containerId) {
 
 function addYear(containerId, startYear) {
     const container = document.getElementById(containerId);
-    container.innerHTML = ''; // Clear existing options
+    container.innerHTML = '';
 
-    // Get the current year
-    const currentYear = new Date().getFullYear();
+    const now = new Date();
+    const currentYear = now.getFullYear();
 
     // Create an array of all the years from the start year to the current year + 100
     const allYears = [];
     for (let year = startYear; year <= currentYear + 100; year++) {
         allYears.push(year);
     }
-
-    allYears.sort((a, b) => {
-        if (a < currentYear && b >= currentYear) return -1;  // Past years should come before current year
-        if (b < currentYear && a >= currentYear) return 1;   // Future years should come after current year
-        return a - b;
-    });
 
     for (const year of allYears) {
         const label = document.createElement('label');
@@ -153,6 +147,16 @@ function addYear(containerId, startYear) {
         label.appendChild(document.createTextNode(year));
         container.appendChild(label);
     }
+
+    const dropdown = container.closest('.dropdown-checkbox'); // Find the closest dropdown container
+    const dropdownOptions = dropdown.querySelector('.dropdown-checkbox-options');
+
+    dropdown.addEventListener('click', () => {
+        const currentYearCheckbox = container.querySelector(`input[value="${currentYear}"]`);
+        if (currentYearCheckbox && dropdownOptions) {
+            dropdownOptions.scrollTop = currentYearCheckbox.offsetTop - dropdownOptions.offsetTop;
+        }
+    });
 }
 
 function toggleDropdown(containerId) {
