@@ -101,6 +101,7 @@ class SurveyDAL{
             const[result] = await pool.execute(query,[surveyTitle, surveyDescription,  programID, periodStart, periodEnd])
             return result.insertId
         }catch(error){
+            console.log(error)
             throw new Error(error.message)
         }
     }

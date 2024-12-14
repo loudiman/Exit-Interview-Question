@@ -30,12 +30,22 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderSurveys(data) {
         unpublishedContainer.innerHTML = '';
         publishedContainer.innerHTML = '';
+        const currentDate = new Date()
 
-        data.forEach(({ survey_id, survey_title, status, total_responded, total_responders }) => {
-            const container = status === 'unpublished' ? unpublishedContainer : publishedContainer;
-            const isUnpublished = status === 'unpublished';
+        for (const {survey_id, survey_title, status, total_responded, total_responders, period_start, period_end} of data) {
+        
+            const periodStartDate = new Date(period_start)
+            const periodEndDate = new Date(period_end)
+            var actualStatus = periodStartDate > currentDate ? 'unpublished' : 'published'
+            var actualStatus = periodEndDate < currentDate ? 'Survey Ended': actualStatus
+            console.log(`Actual status ${actualStatus} with survey id ${survey_id}`)
+            const container = actualStatus === 'unpublished' ? unpublishedContainer : publishedContainer;
+            const isUnpublished = actualStatus === 'unpublished';
+            console.log(actualStatus === 'unpublished');
             const action = isUnpublished ? 'Edit' : 'Details';
 
+
+            console.log(`${survey_id}`);
             const surveyItem = document.createElement('div');
             const href = isUnpublished ? `/admin/surveys/edit?survey_id=${survey_id}` : `/admin/surveys/details?id=${survey_id}`;
 
@@ -43,10 +53,10 @@ document.addEventListener('DOMContentLoaded', () => {
             surveyItem.innerHTML = `
                 <span class="survey-title">${survey_title}</span>
                 <span class="survey-respondents">(${total_responded}/${total_responders})</span>
-                <div class="status ${status}">
-                    <span class="survey-status">${capitalize(status)}</span>
+                <div class="status ${actualStatus}">
+                    <span class="survey-status">${capitalize(actualStatus)}</span>
                 </div>
-                <a id="temp" class="${isUnpublished ? 'edit-btn' : 'details-btn'}">
+                <a id="temp" href="${href}" class="${isUnpublished ? 'edit-btn' : 'details-btn'}">
                     <button data-id="${survey_id}">
                         <img src="/static/images/${action}.png" alt="${action} Icon" />
                     </button>  
@@ -62,14 +72,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         console.log(JSON.stringify(surveyData));
                         sessionStorage.setItem('questionnaireData', JSON.stringify(surveyData));
                         sessionStorage.setItem('surveyId', survey_id);
-                        window.location.href = '/admin/dashboard/survey';
+                        window.location.href = href;
                     })
                     .catch(error => console.error("Fetch error: ", error));
                 };
             })(survey_id));
 
             container.appendChild(surveyItem);
-        });
+        }
     }
 
     // Function to render the dashboard cards with specific data
