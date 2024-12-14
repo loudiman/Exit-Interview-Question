@@ -7,8 +7,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const surveyDescriptionElement = document.getElementById('survey-description');
 
     if (surveyTitleElement && surveyDescriptionElement) {
-        surveyTitleElement.textContent = surveyData.surveyReq.survey_title;
-        surveyDescriptionElement.textContent = surveyData.surveyReq.survey_description;
+        surveyTitleElement.textContent = surveyData.survey.survey_title;
+        surveyDescriptionElement.textContent = surveyData.survey.survey_description;
     }
 
     fetchAllUsers().then(data => {
@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 // Survey Publishing Functions
-async function publishSurvey(surveyData) {
+async function publishSurvey(currentData) {
     const filters = filtersAPI();
     console.log(JSON.stringify(filters));
 
@@ -41,24 +41,50 @@ async function publishSurvey(surveyData) {
     }));
 
     console.log(userArray);
-
     const fromDate = document.querySelector('input[type="date"]').value;
     const startTime = document.querySelector('input[type="time"]').value;
     const untilDate = document.querySelectorAll('input[type="date"]')[1].value;
     const endTime = document.querySelectorAll('input[type="time"]')[1].value;
+    console.log (fromDate);
+    console.log (startTime);
+    console.log (untilDate);
+    console.log (endTime);
+    
+    currentData.survey.period_start = `${fromDate} ${startTime}:00`;
+    currentData.survey.period_end = `${untilDate} ${endTime}:00`;
+    currentData.survey.users = userArray;
 
-    surveyData.period_start = `${fromDate} ${startTime}`;
-    surveyData.period_end = `${untilDate} ${endTime}`;
-    surveyData.users = userArray;
+    console.log("JSON TANGINA MO: ", JSON.stringify(currentData.json))
+    console.log("Survey Title:", currentData.survey.survey_title);
+    console.log("Survey Description:", currentData.survey.survey_description);
+    console.log("Survey ID: ",currentData.survey.survey_id)
+    console.log ("Period start: ",currentData.survey.period_start)
+    console.log ("Period end:", currentData.survey.period_end)
+    console.log(" Programs that are selected: " , filters.filters[1].equal.program_id)
+    console.log("Pwede na users: ", filters.filters[0].not.username)
+
+
+
+    const updateSurveyJSON = {
+        "survey_id": currentData.survey.survey_id,
+        "survey_title": currentData.survey.survey_title,
+        "survey_description": currentData.survey_description,
+        "program_id": 1,
+        "period_start": currentData.survey.period_start,
+        "period_end": currentData.survey.period_end
+    }
+
+
+    console.log("TANGINA TALGAG PAG ITO MALI",JSON.stringify(updateSurveyJSON))
 
     const oldSurveyData = JSON.parse(sessionStorage.getItem('oldSurveyData'));
-    surveyDifferences(oldSurveyData, surveyData);
-
-    console.log("Survey Data to send:", surveyData);
+    surveyDifferences(oldSurveyData, currentData);
+    updateSurvey (currentData,filters)
+    console.log("Survey Data to send:", JSON.stringify(currentData));
 }
 
 function filtersAPI() {
-    const programFilters = getSelectedValues("program-dropdown");
+    const programFilters = getSelectedValue("program-dropdown");
     const studentFilters = getSelectedValues("student-dropdown");
 
     const filters = {
@@ -163,6 +189,13 @@ function addOptions(data, containerId) {
     });
 }
 
+function getSelectedValue(containerId) {
+    const container = document.getElementById(containerId);
+    const checkedCheckbox = container.querySelector('input[type="checkbox"]:checked');
+    return checkedCheckbox ? parseInt(checkedCheckbox.value, 10) : null;
+}
+
+
 function getSelectedValues(containerId) {
     const container = document.getElementById(containerId);
     const checkboxes = container.querySelectorAll('input[type="checkbox"]:checked');
@@ -187,6 +220,7 @@ function surveyDifferences(oldSurveyData, surveyData) {
 
     deleteQuestion(newQuestions, oldQuestions);
     updateQuestion(newQuestions, oldQuestions, surveyID);
+
 }
 
 function updateQuestion(newQuestions, oldQuestions, surveyID) {
@@ -215,6 +249,35 @@ function deleteQuestion(newQuestions, oldQuestions) {
             deleteQuestionAPI(questionID).then(r => console.log("Question deleted:", r));
         }
     });
+}
+//Survey API
+async function updateSurvey(surveyData, filteredData) {
+    const url = "http://localhost:2020/api/survey-service/survey"
+    try {
+
+        const response = await fetch(url, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                "survey_id": surveyData.survey.survey_id,
+                "survey_title": surveyData.survey.survey_title,
+                "survey_description": surveyData.survey.survey_description,
+                // "program_id": filteredData.filters[1].equal.program_id,
+                "program_id": filteredData.filters[1].equal.program_id,
+                "period_start": surveyData.survey.period_start,
+                "period_end": surveyData.survey.period_end
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to update survey. Status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log("Survey updated:", result);
+    } catch (error) {
+        console.error("Error updating survey:", error);
+    }
 }
 
 // Question APIs
