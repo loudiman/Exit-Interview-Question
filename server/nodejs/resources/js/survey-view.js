@@ -160,6 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentSurveyToDelete = null;
             });
 
+            renderSurveys(surveys);
         }
     })();
 });

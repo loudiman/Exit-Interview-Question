@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             console.log(`${survey_id}`);
             const surveyItem = document.createElement('div');
-            const href = isUnpublished ? `/admin/surveys/edit?survey_id=${survey_id}` : `/admin/surveys/details?id=${survey_id}`;
+            const href = isUnpublished ? `/admin/surveys/edit?survey_id=${survey_id}` : `/admin/dashboard/survey?id=${survey_id}`;
 
             surveyItem.className = 'survey-item';
             surveyItem.innerHTML = `
