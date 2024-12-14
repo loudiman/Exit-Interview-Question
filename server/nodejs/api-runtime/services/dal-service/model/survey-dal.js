@@ -241,6 +241,7 @@ class SurveyDAL{
     }
 
     static async putNewQuestion(surveyID, questionJSON, questionType,operationType, questionID){
+        // TODO: debug this later on, the below code is a pre processor to make sure survey isnt published yet
         // console.log(await this.isSurveyPublishedHelper(surveyID))
         // if(await this.isSurveyPublishedHelper(surveyID)){
         //     throw new Error("Survey is already published")
