@@ -195,12 +195,16 @@ async function updateQuestion(question_id, survey_id, question_json, question_ty
     console.log("Updating question:", question_id, survey_id, question_json, question_type);
     const url = "http://localhost:2020/api/survey-service/questions";
     try {
+        if (question_type === 'rating' && Array.isArray(question_json.scale)) {
+            question_json.scale = question_json.scale.length;
+        }
+
         const response = await fetch(url, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 surveyID: survey_id,
-                questionJSON: question_json,
+                questionJSON: JSON.stringify(question_json),
                 questionType: question_type,
                 operation: "modify",
                 questionID: question_id
@@ -245,6 +249,11 @@ async function addQuestion(survey_id, question_json, question_type) {
     const url = "http://localhost:2020/api/survey-service/questions";
     try {
         console.log('Adding question:', survey_id, question_json, question_type);
+
+        if (question_type === 'rating' && Array.isArray(question_json.scale)) {
+            question_json.scale = question_json.scale.length;
+        }
+
         const response = await fetch(url, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
@@ -266,6 +275,7 @@ async function addQuestion(survey_id, question_json, question_type) {
         console.error("Error adding question:", error);
     }
 }
+
 
 function surveyDifferences(oldSurveyData, surveyData) {
     console.log("Checking for differences in survey data...");
