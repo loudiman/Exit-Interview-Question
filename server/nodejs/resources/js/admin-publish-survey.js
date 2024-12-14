@@ -1,4 +1,5 @@
-document.addEventListener("DOMContentLoaded", async () => {
+
+document.addEventListener("DOMContentLoaded", async() => {
     const surveyData = JSON.parse(sessionStorage.getItem('surveyData'))
 
     // const programDropdownToggle = document.querySelector('.dropdown-toggle[onclick*="program-dropdown"]');
@@ -17,7 +18,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const surveyTitleElement = document.getElementById('survey-title');
     const surveyDescriptionElement = document.getElementById('survey-description');
-    setCurrentDateAndTime()
 
     if (surveyTitleElement && surveyDescriptionElement) {
         surveyTitleElement.textContent = surveyData.surveyReq.survey_title;
@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     fetchAllUsers().then(data => {
-        addStudentsDropdown(data, "student-dropdown"); // Add options for responders
+        addStudentsDropdown(data,"student-dropdown"); // Add options for responders
     })
 
     fetchFromServer().then(data => {
@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             var result = await fetchAllowedUsers(filters)
             var userArray = []
-            for (item in result) {
+            for(item in result){
                 console.log(item)
                 let jsonObject = {}
                 jsonObject.username = result[item].username
@@ -96,8 +96,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                 .catch(error => console.error('Error:', error));
 
             // Redirect to survey creation page
-            // sessionStorage.clear()
-            // window.location.href = "/admin/create";
+            //sessionStorage.clear()
+            //window.location.href = "/admin/create";
         });
     } else {
         console.error("Publish button not found.");
@@ -117,7 +117,7 @@ async function fetchAllowedUsers(filters) {
     try {
         const response = await fetch(url, {
             method: 'PUT',
-            headers: {'Content-Type': 'application/json'},
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(filters)
         });
 
@@ -135,7 +135,7 @@ async function fetchAllowedUsers(filters) {
     }
 }
 
-async function fetchAllUsers() {
+async function fetchAllUsers(){
     const url = "http://localhost:2020/api/user-service/users";
 
     try {
@@ -168,15 +168,13 @@ function addStudentsDropdown(data, containerId) {
     const container = document.getElementById(containerId);
     container.innerHTML = '';
     data.users.forEach(user => {
-        if (user.type == 1) {
-            const checkbox = document.createElement('input');
-            const label = document.createElement('label');
-            checkbox.type = 'checkbox';
-            checkbox.value = user.username; // Use username as the value
-            label.appendChild(checkbox);
-            label.appendChild(document.createTextNode(`${user.given_name} ${user.last_name}`));
-            container.appendChild(label);
-        }
+        const label = document.createElement('label');
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = user.username; // Use username as the value
+        label.appendChild(checkbox);
+        label.appendChild(document.createTextNode(`${user.given_name} ${user.last_name}`));
+        container.appendChild(label);
     });
 }
 
@@ -194,6 +192,7 @@ function addOptions(data, containerId) {
     });
 }
 
+<<<<<<< HEAD
 function addSemester(containerId) {
     const container = document.getElementById(containerId);
     container.innerHTML = ''; // Clear existing options
@@ -262,6 +261,8 @@ function setCurrentDateAndTime() {
     document.getElementById('periodEndTime').value = formattedTime;
 }
 
+=======
+>>>>>>> development
 function getSelectedValues(containerId) {
     const container = document.getElementById(containerId);
     const checkboxes = container.querySelectorAll('input[type="checkbox"]:checked');
