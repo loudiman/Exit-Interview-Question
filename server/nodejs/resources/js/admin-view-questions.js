@@ -4,6 +4,8 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById('survey-publish-date').innerHTML = `<strong>Publish Date: ${surveySummary.period_start.toLocaleDateString()}</strong>`;
     document.getElementById('survey-expiration-date').innerHTML = `<strong>Available Until: ${surveySummary.period_end.toLocaleDateString()}</strong>`;
     document.getElementById('survey-respondents').innerHTML = `<strong>Respondents: ${surveySummary.total_responded}</strong>`;
+    document.getElementById('questionsTab').setAttribute('href', `/admin/dashboard/survey?id=${getSurveySummary().survey_id}`);
+    document.getElementById('responsesTab').setAttribute('href', `/admin/dashboard/survey/responses?id=${getSurveySummary().survey_id}`);
 
     // Get the title container
     const titleContainer = document.getElementById('title');
@@ -394,7 +396,7 @@ async function insertQuestion(question) {
 // Function to fetch a question using the DAL
 async function fetchQuestion() {
     try {
-        const response = await fetch("localhost:2019/api/survey-service/questions/:survey_id", {
+        const response = await fetch("amalgam.com:2019/api/survey-service/questions/:survey_id", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"

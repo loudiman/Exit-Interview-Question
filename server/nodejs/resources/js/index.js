@@ -31,11 +31,15 @@ document.addEventListener('DOMContentLoaded', () => {
         unpublishedContainer.innerHTML = '';
         publishedContainer.innerHTML = '';
 
-        data.forEach(({ survey_id, survey_title, status, total_responded, total_responders }) => {
+        for (const {survey_id, survey_title, status, total_responded, total_responders} of data) {
             const container = status === 'unpublished' ? unpublishedContainer : publishedContainer;
             const isUnpublished = status === 'unpublished';
+            console.log(status === 'unpublished');
             const action = isUnpublished ? 'Edit' : 'Details';
 
+            console.log("Surveys are:" + isUnpublished)
+            console.log("Survey actual is: "+ status)
+            console.log(`${survey_id}`);
             const surveyItem = document.createElement('div');
             const href = isUnpublished ? `/admin/surveys/edit?id=${survey_id}` : `/admin/dashboard/survey?id=${survey_id}`;
 
@@ -46,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="status ${status}">
                     <span class="survey-status">${capitalize(status)}</span>
                 </div>
-                <a id="temp" class="${isUnpublished ? 'edit-btn' : 'details-btn'}">
+                <a id="temp" href="${href}" class="${isUnpublished ? 'edit-btn' : 'details-btn'}">
                     <button data-id="${survey_id}">
                         <img src="/static/images/${action}.png" alt="${action} Icon" />
                     </button>  
@@ -56,20 +60,20 @@ document.addEventListener('DOMContentLoaded', () => {
             surveyItem.querySelector('#temp').addEventListener('click', (function(survey_id) {
                 return function(event) {
                     event.preventDefault();
-                    fetch(`http://localhost:2020/api/survey-service/questions/${survey_id}`)
+                    fetch(`http://amalgam.com:2020/api/survey-service/questions/${survey_id}`)
                     .then(response => response.json())
                     .then(surveyData => {
                         console.log(JSON.stringify(surveyData));
                         sessionStorage.setItem('questionnaireData', JSON.stringify(surveyData));
                         sessionStorage.setItem('surveyId', survey_id);
-                        window.location.href = '/admin/dashboard/survey';
+                        window.location.href = href;
                     })
                     .catch(error => console.error("Fetch error: ", error));
                 };
             })(survey_id));
 
             container.appendChild(surveyItem);
-        });
+        }
     }
 
     // Function to render the dashboard cards with specific data
@@ -121,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to fetch surveys from the server
     async function fetchSurveys() {
-        const url = "http://localhost:2020/api/survey-service/survey-summary";
+        const url = "http://amalgam.com:2020/api/survey-service/survey-summary";
         try {
             const response = await fetch(url);
             if (!response.ok) {
