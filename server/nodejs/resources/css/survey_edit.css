@@ -274,44 +274,45 @@ textarea {
 
 .rating-scale {
     display: flex;
-    flex-direction: row;  /* Align items in a row (side by side) */
-    justify-content: center; /* Center the entire row of radio buttons horizontally */
-    gap: 10px;
+    flex-direction: row;  /* Align items in a row (side-by-side) */
+    justify-content: center; /* Center the entire row horizontally */
     margin-top: 10px;
-    align-items: center; /* Vertically align radio buttons to the center */
+    gap: 20px; /* Matches the original margin-right in JS for spacing */
+    align-items: center; /* Vertically align radio buttons in the row */
 }
 
 .rating-scale label {
     display: flex;
-    flex-direction: column;  /* Ensure label and radio button are stacked vertically */
-    align-items: center;      /* Center the label (number) below the radio button */
-    margin-bottom: 10px;      /* Add space between each row */
+    flex-direction: column;
+    align-items: center;
+    font-size: 14px;
+    cursor: pointer;
+    width: 70px;
+    height: auto;
 }
 
 .rating-scale input[type="radio"] {
-    width: 50px;   /* Set the size of the radio button */
-    height: 50px;  /* Set the size of the radio button */
-    margin-bottom: 5px; /* Add space between radio button and label text */
-    margin-right: 5px;
-}
-
-
-
-.rating-container {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    align-items: center;
+    accent-color: #6200ee;
+    width: 18px;
+    height: 18px;
+    margin: 5px 0;
+    cursor: pointer;
 }
 
 .max-rating-select {
-    padding: 8px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
+    margin-bottom: 15px;
+    padding: 5px;
     font-size: 14px;
-    outline: none;
-    cursor: pointer;
-    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+}
+
+.rating-container {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
 }
 
 .rating-container label {
