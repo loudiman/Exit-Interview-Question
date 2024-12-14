@@ -30,8 +30,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderSurveys(data) {
         unpublishedContainer.innerHTML = '';
         publishedContainer.innerHTML = '';
-
-        data.forEach(({ survey_id, survey_title, status, total_responded, total_responders }) => {
+        const currentDate = new Date()
+        data.forEach(({ survey_id, survey_title, total_responded, total_responders, period_start, period_end }) => {
+            const periodStart = new Date(period_start)
+            const periodEnd = new Date(period_end)
+            var status = periodStart > currentDate ? 'unpublished' : 'published'
+            var status = periodEnd < currentDate ? 'Survey Done' : status
             const container = status === 'unpublished' ? unpublishedContainer : publishedContainer;
             const isUnpublished = status === 'unpublished';
             const action = isUnpublished ? 'Edit' : 'Details';
@@ -62,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         console.log(JSON.stringify(surveyData));
                         sessionStorage.setItem('questionnaireData', JSON.stringify(surveyData));
                         sessionStorage.setItem('surveyId', survey_id);
-                        window.location.href = '/admin/dashboard/survey';
+                        window.location.href = href;
                     })
                     .catch(error => console.error("Fetch error: ", error));
                 };

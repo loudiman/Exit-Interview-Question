@@ -7,13 +7,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // Improved Render Surveys Function
+    // Global variables to store surveys and current survey for deletion
+    let surveys = [];
+    let currentSurveyToDelete = null;
+
     function renderSurveys(data) {
         // Clear containers more efficiently
         unpublishedContainer.innerHTML = '';
         publishedContainer.innerHTML = '';
-
+        console.log('Surveys', data);
+        const currentDate = new Date()
         data.forEach(survey => {
-            const container = survey.status === 'unpublished' ? unpublishedContainer : publishedContainer;
+            const surveyPeriodStart = new Date(survey.period_start)
+            const status = surveyPeriodStart < currentDate ? 'published' : 'unpublished'
+            const container = status === 'unpublished' ? unpublishedContainer : publishedContainer;
             const surveyItem = document.createElement('div');
             surveyItem.className = 'survey-item';
 
@@ -182,6 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('modalOverlay').style.display = 'none';
             });
 
+            renderSurveys(surveys);
         }
     })();
 });
