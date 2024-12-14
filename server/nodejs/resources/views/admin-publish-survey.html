@@ -40,25 +40,25 @@
     <!-- Main content -->
     <div class="main-content" id="mainContent">
         <div class="survey-header-container">
-            <h1>Survey Title</h1>
-            <p>Description.</p>
+            <h1 id="survey-title">Survey Title</h1>
+            <p id="survey-description">Description.</p>
         </div>
 
         <!-- Survey Details -->
         <div class="survey-details-container">
             <!-- Date Range -->
             <div class="date-time-row">
-                <label>From: <input type="date" value="2024-11-04"></label>
-                <label>Start: <input type="time" value="23:59"></label>
-                <label>Until: <input type="date" value="2024-11-12"></label>
-                <label>End: <input type="time" value="23:59"></label>
+                <label>From: <input id="periodStartDate" type="date" value="2024-11-04"></label>
+                <label>Start: <input id="periodStartTime" type="time" value="23:59"></label>
+                <label>Until: <input id="periodEndDate" type="date" value="2024-11-12"></label>
+                <label>End: <input id="periodEndTime" type="time" value="23:59"></label>
             </div>
 
             <!-- Restrictions -->
             <!-- Dropdown with multiple selection -->
             <div class="restriction-row">
                 <div class="dropdown-multiselect">
-                    <button class="dropdown-toggle" onclick="toggleDropdown('program-dropdown')">Make available for</button>
+                    <button class="dropdown-toggle" onclick="toggleRestrictionsDropdown('program-dropdown')">Make available for</button>
                     <div id="program-dropdown" class="dropdown-options">
                         <!-- Options will be dynamically added here -->
                     </div>
@@ -67,7 +67,7 @@
 
             <div class="restriction-row">
                 <div class="dropdown-multiselect">
-                    <button class="dropdown-toggle" onclick="toggleDropdown('student-dropdown')">Student/s Restricted</button>
+                    <button class="dropdown-toggle" onclick="toggleRestrictionsDropdown('student-dropdown')">Student/s Restricted</button>
                     <div id="student-dropdown" class="dropdown-options">
                         <!-- Options will be dynamically added here -->
                     </div>
@@ -76,7 +76,7 @@
 
             <div class="restriction-row">
                 <div class="dropdown-multiselect">
-                    <button class="dropdown-toggle" onclick="toggleDropdown('batch-dropdown')">Class Restricted</button>
+                    <button class="dropdown-toggle" onclick="toggleRestrictionsDropdown('batch-dropdown')">Class Restricted</button>
                     <div id="batch-dropdown" class="dropdown-options">
                         <!-- Options will be dynamically added here -->
                     </div>
@@ -87,16 +87,14 @@
             <div class="button-container">
 
                 <button class="publish-button" onclick="history.back()">Back</button>
-                <a href="/admin/create">
-                    <button class="publish-button">Publish</button>
-                </a>
+                <button id="publishButton" class="publish-button">Publish</button>
 
             </div>
         </div>
     </div>
 </div>
 
-<script src="/static/js/survey_creation_navbar.js"></script>
-<script src="/static/js/admin-publish-survey.js"></script>
+<script defer src="/static/js/survey-navbar.js"></script>
+<script defer src="/static/js/admin-publish-survey.js"></script>
 </body>
 </html>

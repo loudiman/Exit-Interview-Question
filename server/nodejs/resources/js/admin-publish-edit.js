@@ -27,8 +27,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const surveyDescriptionElement = document.querySelector('.survey-header-container p');
 
     if (surveyTitleElement && surveyDescriptionElement) {
-        surveyTitleElement.textContent = surveyData.survey.survey_title;
-        surveyDescriptionElement.textContent = surveyData.survey.survey_description;
+        surveyTitleElement.textContent = surveyData.surveyReq.survey_title;
+        surveyDescriptionElement.textContent = surveyData.surveyReq.survey_description;
     }
 
     // Step 2: Fetch the data from the server
@@ -41,8 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const publishButton = document.querySelector(".publish-button"); // Second button for 'Publish'
     if (publishButton) {
         publishButton.addEventListener("click", () => {
-            // Get selected values from checkboxes
-            surveyData.survey.program_id = getSelectedValues("program-dropdown");
+            surveyData.surveyReq.program_id = getSelectedValues("program-dropdown");
             surveyData.restrict_students = getSelectedValues("student-dropdown");
 
             // Get date and time values
@@ -50,8 +49,8 @@ document.addEventListener("DOMContentLoaded", () => {
             const startTime = document.querySelector('input[type="time"]').value;
             const untilDate = document.querySelectorAll('input[type="date"]')[1].value;
             const endTime = document.querySelectorAll('input[type="time"]')[1].value;
-            surveyData.survey.period_start = `${fromDate}T${startTime}`;
-            surveyData.survey.period_end = `${untilDate}T${endTime}`;
+            surveyData.surveyReq.period_start = `${fromDate}T${startTime}`;
+            surveyData.surveyReq.period_end = `${untilDate}T${endTime}`;
 
             // Prepare and print the JSON data that will be sent to the server
             console.log(`Survey Data to send: ${JSON.stringify(surveyData)}`);
@@ -76,25 +75,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-function fetchFromServer() {
-    // Simulate fetching data from the server
-    return new Promise(resolve => {
-        setTimeout(() => {
-            resolve({
-                availability: [
-                    "Bachelor of Science in Accountancy",
-                    "Bachelor of Science in Information Technology",
-                    "Bachelor of Science in Computer Science",
-                    "Bachelor of Multimedia Arts"
-                ],
-                responders: [
-                    "Lou Diamond Morados",
-                    "Jane Doe",
-                    "John Smith"
-                ]
-            });
-        }, 1000);
-    });
+async function fetchFromServer() {
+    try {
+        const response = await fetch(url, options);
+        if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error(`Failed to fetch data from ${url}:`, error.message);
+        return null;
+    }
 }
 
 function addOptions(data, containerId) {
