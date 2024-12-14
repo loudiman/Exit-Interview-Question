@@ -1,8 +1,7 @@
-
-document.addEventListener("DOMContentLoaded", async() => {
-    const surveyData = JSON.parse(sessionStorage.getItem('surveyData'))
+document.addEventListener("DOMContentLoaded", async () => {
+    const surveyData = JSON.parse(sessionStorage.getItem('surveyData'));
     console.log(surveyData);
-    console.dir(surveyData, {depth: null});
+    console.dir(surveyData, { depth: null });
 
     const surveyTitleElement = document.getElementById('survey-title');
     const surveyDescriptionElement = document.getElementById('survey-description');
@@ -14,7 +13,7 @@ document.addEventListener("DOMContentLoaded", async() => {
 
     fetchAllUsers().then(data => {
         addStudentsDropdown(data, "student-dropdown"); // Add options for responders
-    })
+    });
 
     fetchFromServer().then(data => {
         addOptions(data.availability, "program-dropdown"); // Add options for programs
@@ -23,61 +22,65 @@ document.addEventListener("DOMContentLoaded", async() => {
     const publishButton = document.getElementById("publishButton");
     if (publishButton) {
         publishButton.addEventListener("click", async () => {
-            const programFilters = getSelectedValues("program-dropdown");
-            const studentFilters = getSelectedValues("student-dropdown");
-
-            const filters = {
-                "filters": [
-                    {
-                        "not": {
-                            "username": studentFilters //this is the not allowed users
-                        }
-                    },
-                    {
-                        "equal": {
-                            "program_id": programFilters //this is the allowed programs
-                        }
-                    }
-                ]
-            }
-
-            console.log(JSON.stringify(filters))
-
-            const result = await fetchAllowedUsers(filters)
-            const userArray = result.map(item => ({
-                username: item.username
-            }));
-
-            console.log(userArray)
-
-            const fromDate = document.querySelector('input[type="date"]').value;
-            const startTime = document.querySelector('input[type="time"]').value;
-            const untilDate = document.querySelectorAll('input[type="date"]')[1].value;
-            const endTime = document.querySelectorAll('input[type="time"]')[1].value;
-            surveyData.period_start = `${fromDate} ${startTime}`;
-            surveyData.period_end = `${untilDate} ${endTime}`;
-            surveyData.users = userArray;
-
-            const oldSurveyData = JSON.parse(sessionStorage.getItem('oldSurveyData'));
-            surveyDifferences(oldSurveyData, surveyData);
-
-            console.log("Survey Data to send:", surveyData);
-
-            window.href.location = 'http://localhost:2021/admin/surveys';
+            await publishSurvey(surveyData).then(r => console.log("Survey published:", r));
+            window.location.href = 'http://localhost:2021/admin/surveys';
         });
     } else {
         console.error("Publish button not found.");
     }
 });
 
+// Survey Publishing Functions
+async function publishSurvey(surveyData) {
+    const filters = filtersAPI();
+    console.log(JSON.stringify(filters));
 
+    const result = await fetchAllowedUsers(filters);
+    const userArray = result.map(item => ({
+        username: item.username
+    }));
 
-function toggleRestrictionsDropdown(containerId) {
-    const dropdown = document.getElementById(containerId);
-    const isVisible = dropdown.style.display === 'block';
-    dropdown.style.display = isVisible ? 'none' : 'block';
+    console.log(userArray);
+
+    const fromDate = document.querySelector('input[type="date"]').value;
+    const startTime = document.querySelector('input[type="time"]').value;
+    const untilDate = document.querySelectorAll('input[type="date"]')[1].value;
+    const endTime = document.querySelectorAll('input[type="time"]')[1].value;
+
+    surveyData.period_start = `${fromDate} ${startTime}`;
+    surveyData.period_end = `${untilDate} ${endTime}`;
+    surveyData.users = userArray;
+
+    const oldSurveyData = JSON.parse(sessionStorage.getItem('oldSurveyData'));
+    surveyDifferences(oldSurveyData, surveyData);
+
+    console.log("Survey Data to send:", surveyData);
 }
 
+function filtersAPI() {
+    const programFilters = getSelectedValues("program-dropdown");
+    const studentFilters = getSelectedValues("student-dropdown");
+
+    const filters = {
+        "filters": [
+            {
+                "not": {
+                    "username": studentFilters // this is the not allowed users
+                }
+            },
+            {
+                "equal": {
+                    "program_id": programFilters // this is the allowed programs
+                }
+            }
+        ]
+    };
+
+    console.log(JSON.stringify(filters));
+    return filters;
+}
+
+// Fetching Functions
 async function fetchAllowedUsers(filters) {
     const url = "http://localhost:2020/api/user-service/users/filtered";
 
@@ -94,15 +97,14 @@ async function fetchAllowedUsers(filters) {
 
         const data = await response.json();
         console.log("Fetched allowed users:", data);
-
-        console.log(data)
         return data;
+
     } catch (error) {
         console.error("Error fetching allowed users:", error);
     }
 }
 
-async function fetchAllUsers(){
+async function fetchAllUsers() {
     const url = "http://localhost:2020/api/user-service/users";
 
     try {
@@ -118,7 +120,8 @@ async function fetchAllUsers(){
 }
 
 async function fetchFromServer() {
-    const url = "http://localhost:2020/api/program-service/programs"
+    const url = "http://localhost:2020/api/program-service/programs";
+
     try {
         const response = await fetch(url);
         if (!response.ok) {
@@ -129,35 +132,9 @@ async function fetchFromServer() {
         console.error(`Failed to fetch data from ${url}:`, error.message);
         return null;
     }
-
-
-
-
-
 }
 
-async function updateSurvey(body) {
-    const url = "http://localhost:2020/api/survey-service/survey"
-    try {
-
-        const response = await fetch(url, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(body)
-        });
-
-        if (!response.ok) {
-            throw new Error(`Failed to update survey. Status: ${response.status}`);
-        }
-
-        const result = await response.json();
-        console.log("Survey updated:", result);
-    } catch (error) {
-        console.error("Error updating survey:", error);
-    }
-}
-
-
+// Dropdown and UI Functions
 function addStudentsDropdown(data, containerId) {
     const container = document.getElementById(containerId);
     container.innerHTML = '';
@@ -165,7 +142,7 @@ function addStudentsDropdown(data, containerId) {
         const label = document.createElement('label');
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
-        checkbox.value = user.username; // Use username as the value
+        checkbox.value = user.username;
         label.appendChild(checkbox);
         label.appendChild(document.createTextNode(`${user.given_name} ${user.last_name}`));
         container.appendChild(label);
@@ -191,9 +168,60 @@ function getSelectedValues(containerId) {
     const checkboxes = container.querySelectorAll('input[type="checkbox"]:checked');
     return Array.from(checkboxes).map(checkbox => checkbox.value);
 }
-async function updateQuestion(question_id, survey_id, question_json, question_type) {
+
+function toggleRestrictionsDropdown(containerId) {
+    const dropdown = document.getElementById(containerId);
+    const isVisible = dropdown.style.display === 'block';
+    dropdown.style.display = isVisible ? 'none' : 'block';
+}
+
+// Survey Modifications and Differences
+function surveyDifferences(oldSurveyData, surveyData) {
+    console.log("Checking for differences in survey data...");
+    console.log("Old survey data:", oldSurveyData);
+    const surveyID = surveyData.survey.survey_id;
+    console.log("Survey ID:", surveyID);
+
+    const oldQuestions = new Map(oldSurveyData.questions.map(q => [q.question_id, q]));
+    const newQuestions = new Map(surveyData.questions.map(q => [q.question_id, q]));
+
+    deleteQuestion(newQuestions, oldQuestions);
+    updateQuestion(newQuestions, oldQuestions, surveyID);
+}
+
+function updateQuestion(newQuestions, oldQuestions, surveyID) {
+    newQuestions.forEach((newQuestion, questionID) => {
+        if (!newQuestion.question_id) {
+            console.log(`Adding new question`);
+            addQuestion(surveyID, newQuestion.question_json, newQuestion.question_type)
+                .then(r => console.log("Question added:", r));
+        } else {
+            const oldQuestion = oldQuestions.get(questionID);
+            if (JSON.stringify(oldQuestion) !== JSON.stringify(newQuestion)) {
+                console.log(`Updating question ID ${questionID}`);
+                updateQuestionAPI(questionID, surveyID, newQuestion.question_json, newQuestion.question_type)
+                    .then(r => console.log("Question updated:", r));
+            } else {
+                console.log(`No changes for question ID ${questionID}`);
+            }
+        }
+    });
+}
+
+function deleteQuestion(newQuestions, oldQuestions) {
+    oldQuestions.forEach((oldQuestion, questionID) => {
+        if (!newQuestions.has(questionID)) {
+            console.log(`Deleting question ID ${questionID}`);
+            deleteQuestionAPI(questionID).then(r => console.log("Question deleted:", r));
+        }
+    });
+}
+
+// Question APIs
+async function updateQuestionAPI(question_id, survey_id, question_json, question_type) {
     console.log("Updating question:", question_id, survey_id, question_json, question_type);
     const url = "http://localhost:2020/api/survey-service/questions";
+
     try {
         if (question_type === 'rating' && Array.isArray(question_json.scale)) {
             question_json.scale = question_json.scale.length;
@@ -222,8 +250,9 @@ async function updateQuestion(question_id, survey_id, question_json, question_ty
     }
 }
 
-async function deleteQuestion(question_id) {
+async function deleteQuestionAPI(question_id) {
     const url = "http://localhost:2020/api/survey-service/questions";
+
     try {
         const response = await fetch(url, {
             method: 'PUT',
@@ -247,6 +276,7 @@ async function deleteQuestion(question_id) {
 
 async function addQuestion(survey_id, question_json, question_type) {
     const url = "http://localhost:2020/api/survey-service/questions";
+
     try {
         console.log('Adding question:', survey_id, question_json, question_type);
 
@@ -274,42 +304,4 @@ async function addQuestion(survey_id, question_json, question_type) {
     } catch (error) {
         console.error("Error adding question:", error);
     }
-}
-
-
-function surveyDifferences(oldSurveyData, surveyData) {
-    console.log("Checking for differences in survey data...");
-    console.log("Old survey data:", oldSurveyData);
-    const surveyID = surveyData.survey.survey_id;
-    console.log("Survey ID:", surveyID);
-
-    const oldQuestions = new Map(oldSurveyData.questions.map(q => [q.question_id, q]));
-    const newQuestions = new Map(surveyData.questions.map(q => [q.question_id, q]));
-
-    //Delete
-    oldQuestions.forEach((oldQuestion, questionID) => {
-        if (!newQuestions.has(questionID)) {
-            console.log(`Deleting question ID ${questionID}`);
-            deleteQuestion(questionID).then(r => console.log("Question deleted:", r));
-
-        }
-    });
-
-    //Update
-    newQuestions.forEach((newQuestion, questionID) => {
-        if (!newQuestion.question_id) {
-            console.log(`Adding new question`);
-            addQuestion(surveyID, newQuestion.question_json, newQuestion.question_type).then(r => console.log("Question added:", r));
-
-        } else {
-            const oldQuestion = oldQuestions.get(questionID);
-            if (JSON.stringify(oldQuestion) !== JSON.stringify(newQuestion)) {
-                console.log(`Updating question ID ${questionID}`);
-                updateQuestion(questionID, surveyID, newQuestion.question_json, newQuestion.question_type).then(r =>  console.log("Question updated:", r));
-
-            } else {
-                console.log(`No changes for question ID ${questionID}`);
-            }
-        }
-    });
 }
