@@ -1,0 +1,63 @@
+button{
+  border: none;
+  cursor: pointer;
+  appearance: none;
+  background-color: inherit;
+}
+
+html, body {
+    height: 100%;
+    overflow: hidden;
+}
+
+body{
+    margin: 0;
+}
+
+h2, p, a {
+    color: black;
+    font-family: "CustomFont", sans-serif;
+}
+
+ /* Main content */
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #FFFFFF;
+    transition: all 0.3s ease;
+    height: 100vh;
+    overflow-y: auto;
+    
+}
+  
+  .main-content.full-width {
+    width: 100%;
+  
+  }
+  
+  .survey-templates {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .survey-template img,
+.recent-surveys .recent-item img  {
+    width: 250px;
+    height: 230px;
+    object-fit: cover; 
+    border-radius: 4px; 
+}
+
+
+
+  .recent-surveys {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  
+  
+  
+
+  
