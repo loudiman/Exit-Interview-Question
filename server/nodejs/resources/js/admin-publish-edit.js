@@ -35,8 +35,10 @@ document.addEventListener("DOMContentLoaded", () => {
     fetchFromServer().then(data => {
         addOptions(data.availability, "program-dropdown"); // Add options for programs
         addOptions(data.responders, "student-dropdown"); // Add options for responders
-        addOptions(["BSCS 3-1", "BSIT 2-2", "BSBA 1-1"], "batch-dropdown"); // Add options for batches
     });
+
+    addYear("year-dropdown", 1911); // Add options for year
+    addSemester("semester-dropdown"); // Add options for semester
 
     const publishButton = document.querySelector(".publish-button"); // Second button for 'Publish'
     if (publishButton) {
@@ -100,6 +102,57 @@ function addOptions(data, containerId) {
         label.appendChild(document.createTextNode(item));
         container.appendChild(label);
     });
+}
+
+function addSemester(containerId) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = ''; // Clear existing options
+
+    const sems = [
+        { semester: "first" },
+        { semester: "second" }
+    ];
+
+    sems.forEach(item => {
+        const label = document.createElement('label');
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = item.semester;
+        label.appendChild(checkbox);
+        label.appendChild(document.createTextNode(item.semester));
+        container.appendChild(label);
+    });
+}
+
+function addYear(containerId, startYear) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = ''; // Clear existing options
+
+    // Get the current year
+    const currentYear = new Date().getFullYear();
+
+    // Create an array of all the years from the start year to the current year + 100
+    const allYears = [];
+    for (let year = startYear; year <= currentYear + 100; year++) {
+        allYears.push(year);
+    }
+
+    allYears.sort((a, b) => {
+        if (a < currentYear && b >= currentYear) return -1;  // Past years should come before current year
+        if (b < currentYear && a >= currentYear) return 1;   // Future years should come after current year
+        return a - b;
+    });
+
+    for (const year of allYears) {
+        const label = document.createElement('label');
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = year;
+        checkbox.checked = year === currentYear; // Set the current year as checked by default
+        label.appendChild(checkbox);
+        label.appendChild(document.createTextNode(year));
+        container.appendChild(label);
+    }
 }
 
 function toggleDropdown(containerId) {
