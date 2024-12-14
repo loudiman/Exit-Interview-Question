@@ -10,13 +10,16 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderSurveys(data) {
         unpublishedContainer.innerHTML = '';
         publishedContainer.innerHTML = '';
-
+        console.log('Surveys', data);
+        const currentDate = new Date()
         data.forEach(survey => {
-            const container = survey.status === 'unpublished' ? unpublishedContainer : publishedContainer;
+            const surveyPeriodStart = new Date(survey.period_start)
+            const status = surveyPeriodStart < currentDate ? 'published' : 'unpublished'
+            const container = status === 'unpublished' ? unpublishedContainer : publishedContainer;
             const surveyItem = document.createElement('div');
             surveyItem.className = 'survey-item';
 
-            const buttonsHtml = survey.status === 'unpublished'
+            const buttonsHtml = status === 'unpublished'
                 ? createUnpublishedSurveyHTML(survey)
                 : createPublishedSurveyHTML(survey);
 
