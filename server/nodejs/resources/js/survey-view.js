@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (button.classList.contains('delete-btn')) {
                     showDeleteModal(surveyId);
                 } else if (button.classList.contains('view-btn')) {
-                    window.location.href = `/admin/surveys/view?survey_id=${surveyId}`;
+                    window.location.href = `/admin/dashboard/survey?id=${surveyId}`;
                 } else if (button.classList.contains('edit-btn')) {
                     window.location.href = `/admin/surveys/edit?survey_id=${surveyId}`;
                 }
