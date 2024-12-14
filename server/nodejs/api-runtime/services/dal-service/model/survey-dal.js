@@ -90,7 +90,7 @@ class SurveyDAL{
     static async insertSurvey(surveyDAO){
         var surveyTitle = surveyDAO.survey_title
         var surveyDescription =surveyDAO.survey_description
-        var programID = surveyDAO.program_id
+        var programID = null
         var periodStart = surveyDAO.period_start
         var periodEnd = surveyDAO.period_end
         var status = surveyDAO.status
@@ -102,6 +102,7 @@ class SurveyDAL{
             const[result] = await pool.execute(query,[surveyTitle, surveyDescription, status, programID, periodStart, periodEnd])
             return result.insertId
         }catch(error){
+            console.log(error)
             throw new Error(error.message)
         }
     }

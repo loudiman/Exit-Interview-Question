@@ -30,25 +30,31 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderSurveys(data) {
         unpublishedContainer.innerHTML = '';
         publishedContainer.innerHTML = '';
+        const currentDate = new Date()
 
-        for (const {survey_id, survey_title, status, total_responded, total_responders} of data) {
-            const container = status === 'unpublished' ? unpublishedContainer : publishedContainer;
-            const isUnpublished = status === 'unpublished';
-            console.log(status === 'unpublished');
+        for (const {survey_id, survey_title, status, total_responded, total_responders, period_start, period_end} of data) {
+        
+            const periodStartDate = new Date(period_start)
+            const periodEndDate = new Date(period_end)
+            var actualStatus = periodStartDate > currentDate ? 'unpublished' : 'published'
+            var actualStatus = periodEndDate < currentDate ? 'Survey Ended': actualStatus
+            console.log(`Actual status ${actualStatus} with survey id ${survey_id}`)
+            const container = actualStatus === 'unpublished' ? unpublishedContainer : publishedContainer;
+            const isUnpublished = actualStatus === 'unpublished';
+            console.log(actualStatus === 'unpublished');
             const action = isUnpublished ? 'Edit' : 'Details';
 
-            console.log("Surveys are:" + isUnpublished)
-            console.log("Survey actual is: "+ status)
+
             console.log(`${survey_id}`);
             const surveyItem = document.createElement('div');
-            const href = isUnpublished ? `/admin/surveys/edit?survey_id=${survey_id}` : `/admin/surveys/details?id=${survey_id}`;
+            const href = isUnpublished ? `/admin/surveys/edit?survey_id=${survey_id}` : `/admin/dashboard/survey?id=${survey_id}`;
 
             surveyItem.className = 'survey-item';
             surveyItem.innerHTML = `
                 <span class="survey-title">${survey_title}</span>
                 <span class="survey-respondents">(${total_responded}/${total_responders})</span>
-                <div class="status ${status}">
-                    <span class="survey-status">${capitalize(status)}</span>
+                <div class="status ${actualStatus}">
+                    <span class="survey-status">${capitalize(actualStatus)}</span>
                 </div>
                 <a id="temp" href="${href}" class="${isUnpublished ? 'edit-btn' : 'details-btn'}">
                     <button data-id="${survey_id}">
