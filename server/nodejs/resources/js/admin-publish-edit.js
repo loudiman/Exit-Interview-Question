@@ -1,83 +1,112 @@
-document.addEventListener("DOMContentLoaded", () => {
-    // Step 1: Initialize JSON String from sessionStorage or default structured object
-    let surveyData = JSON.parse(sessionStorage.getItem("surveyData")) || {
-        survey: {
-            survey_title: "Sample Title",
-            survey_description: "Form Description",
-            program_id: [],
-            period_start: "",
-            period_end: "",
-            status: ""
-        },
-        questions: [
-            {
-                question_json: {
-                    question: "",
-                    options: [], // Used for question types like "multiple-choice" and "checkbox"
-                    scale: [] // Used for "rating" questions
-                },
-                question_type: "rating" // Supports "rating", "multiple-choice", "checkbox", or "essay"
-            }
-        ],
-        restrict_students: [] // List of restricted student names
-    };
 
-    // Update the survey title and description in the HTML
-    const surveyTitleElement = document.querySelector('.survey-header-container h1');
-    const surveyDescriptionElement = document.querySelector('.survey-header-container p');
+document.addEventListener("DOMContentLoaded", async() => {
+    const surveyData = JSON.parse(sessionStorage.getItem('surveyData'))
+    console.log(surveyData);
+    console.dir(surveyData, {depth: null});
+
+    const surveyTitleElement = document.getElementById('survey-title');
+    const surveyDescriptionElement = document.getElementById('survey-description');
 
     if (surveyTitleElement && surveyDescriptionElement) {
         surveyTitleElement.textContent = surveyData.surveyReq.survey_title;
         surveyDescriptionElement.textContent = surveyData.surveyReq.survey_description;
     }
 
-    // Step 2: Fetch the data from the server
+    fetchAllUsers().then(data => {
+        addStudentsDropdown(data, "student-dropdown"); // Add options for responders
+    })
+
     fetchFromServer().then(data => {
         addOptions(data.availability, "program-dropdown"); // Add options for programs
-        addOptions(data.responders, "student-dropdown"); // Add options for responders
-        addOptions(["BSCS 3-1", "BSIT 2-2", "BSBA 1-1"], "batch-dropdown"); // Add options for batches
     });
 
-    const publishButton = document.querySelector(".publish-button"); // Second button for 'Publish'
+    const publishButton = document.getElementById("publishButton");
     if (publishButton) {
-        publishButton.addEventListener("click", () => {
-            surveyData.surveyReq.program_id = getSelectedValues("program-dropdown");
-            surveyData.restrict_students = getSelectedValues("student-dropdown");
+        publishButton.addEventListener("click", async () => {
+            const programFilters = getSelectedValues("program-dropdown");
+            const studentFilters = getSelectedValues("student-dropdown");
 
-            // Get date and time values
+            const filters = {
+                "filters": [
+                    {
+                        "not": {
+                            "username": studentFilters //this is the not allowed users
+                        }
+                    },
+                    {
+                        "equal": {
+                            "program_id": programFilters //this is the allowed programs
+                        }
+                    }
+                ]
+            }
+
+            console.log(JSON.stringify(filters))
+
+            const result = await fetchAllowedUsers(filters)
+            const userArray = result.map(item => ({
+                username: item.username
+            }));
+
+            console.log(userArray)
+
             const fromDate = document.querySelector('input[type="date"]').value;
             const startTime = document.querySelector('input[type="time"]').value;
             const untilDate = document.querySelectorAll('input[type="date"]')[1].value;
             const endTime = document.querySelectorAll('input[type="time"]')[1].value;
-            surveyData.surveyReq.period_start = `${fromDate}T${startTime}`;
-            surveyData.surveyReq.period_end = `${untilDate}T${endTime}`;
+            surveyData.period_start = `${fromDate} ${startTime}`;
+            surveyData.period_end = `${untilDate} ${endTime}`;
+            surveyData.users = userArray;
 
-            // Prepare and print the JSON data that will be sent to the server
-            console.log(`Survey Data to send: ${JSON.stringify(surveyData)}`);
+            const oldSurveyData = JSON.parse(sessionStorage.getItem('oldSurveyData'));
+            surveyDifferences(oldSurveyData, surveyData);
 
-            // Step 4: Publish button logic to send data (commented for now)
-            /*
-            fetch('/api/publish-survey', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(surveyData)
-            })
-            .then(response => response.json())
-            .then(data => console.log('Success:', data))
-            .catch(error => console.error('Error:', error));
-            */
+            console.log("Survey Data to send:", surveyData);
 
-            // Redirect to survey creation page
-            window.location.href = 'survey_templates.html';
+            window.href.location = 'http://localhost:2021/admin/surveys';
         });
     } else {
         console.error("Publish button not found.");
     }
 });
 
-async function fetchFromServer() {
+
+
+function toggleRestrictionsDropdown(containerId) {
+    const dropdown = document.getElementById(containerId);
+    const isVisible = dropdown.style.display === 'block';
+    dropdown.style.display = isVisible ? 'none' : 'block';
+}
+
+async function fetchAllowedUsers(filters) {
+    const url = "http://localhost:2020/api/user-service/users/filtered";
+
     try {
-        const response = await fetch(url, options);
+        const response = await fetch(url, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(filters)
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("Fetched allowed users:", data);
+
+        console.log(data)
+        return data;
+    } catch (error) {
+        console.error("Error fetching allowed users:", error);
+    }
+}
+
+async function fetchAllUsers(){
+    const url = "http://localhost:2020/api/user-service/users";
+
+    try {
+        const response = await fetch(url);
         if (!response.ok) {
             throw new Error(`Response status: ${response.status}`);
         }
@@ -88,28 +117,189 @@ async function fetchFromServer() {
     }
 }
 
-function addOptions(data, containerId) {
+async function fetchFromServer() {
+    const url = "http://localhost:2020/api/program-service/programs"
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error(`Failed to fetch data from ${url}:`, error.message);
+        return null;
+    }
+
+
+
+
+
+}
+
+async function updateSurvey(body) {
+    const url = "http://localhost:2020/api/survey-service/survey"
+    try {
+
+        const response = await fetch(url, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to update survey. Status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log("Survey updated:", result);
+    } catch (error) {
+        console.error("Error updating survey:", error);
+    }
+}
+
+
+function addStudentsDropdown(data, containerId) {
     const container = document.getElementById(containerId);
-    container.innerHTML = ''; // Clear existing options
-    data.forEach(item => {
+    container.innerHTML = '';
+    data.users.forEach(user => {
         const label = document.createElement('label');
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
-        checkbox.value = item;
+        checkbox.value = user.username; // Use username as the value
         label.appendChild(checkbox);
-        label.appendChild(document.createTextNode(item));
+        label.appendChild(document.createTextNode(`${user.given_name} ${user.last_name}`));
         container.appendChild(label);
     });
 }
 
-function toggleDropdown(containerId) {
-    const dropdown = document.getElementById(containerId);
-    const isVisible = dropdown.style.display === 'block';
-    dropdown.style.display = isVisible ? 'none' : 'block';
+function addOptions(data, containerId) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+    data.forEach(item => {
+        const label = document.createElement('label');
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = item.program_id;
+        label.appendChild(checkbox);
+        label.appendChild(document.createTextNode(JSON.stringify(item.program_name)));
+        container.appendChild(label);
+    });
 }
 
 function getSelectedValues(containerId) {
     const container = document.getElementById(containerId);
     const checkboxes = container.querySelectorAll('input[type="checkbox"]:checked');
     return Array.from(checkboxes).map(checkbox => checkbox.value);
+}
+async function updateQuestion(question_id, survey_id, question_json, question_type) {
+    console.log("Updating question:", question_id, survey_id, question_json, question_type);
+    const url = "http://localhost:2020/api/survey-service/questions";
+    try {
+        const response = await fetch(url, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                surveyID: survey_id,
+                questionJSON: question_json,
+                questionType: question_type,
+                operation: "modify",
+                questionID: question_id
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to update question. Status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log("Question updated:", result);
+    } catch (error) {
+        console.error("Error updating question:", error);
+    }
+}
+
+async function deleteQuestion(question_id) {
+    const url = "http://localhost:2020/api/survey-service/questions";
+    try {
+        const response = await fetch(url, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                operation: "remove",
+                questionID: question_id
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to delete question. Status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log("Question deleted:", result);
+    } catch (error) {
+        console.error("Error deleting question:", error);
+    }
+}
+
+async function addQuestion(survey_id, question_json, question_type) {
+    const url = "http://localhost:2020/api/survey-service/questions";
+    try {
+        console.log('Adding question:', survey_id, question_json, question_type);
+        const response = await fetch(url, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                surveyID: survey_id,
+                questionJSON: JSON.stringify(question_json),
+                questionType: question_type,
+                operation: "add"
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to add question. Status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log("Question added:", result);
+    } catch (error) {
+        console.error("Error adding question:", error);
+    }
+}
+
+function surveyDifferences(oldSurveyData, surveyData) {
+    console.log("Checking for differences in survey data...");
+    console.log("Old survey data:", oldSurveyData);
+    const surveyID = surveyData.survey.survey_id;
+    console.log("Survey ID:", surveyID);
+
+    const oldQuestions = new Map(oldSurveyData.questions.map(q => [q.question_id, q]));
+    const newQuestions = new Map(surveyData.questions.map(q => [q.question_id, q]));
+
+    //Delete
+    oldQuestions.forEach((oldQuestion, questionID) => {
+        if (!newQuestions.has(questionID)) {
+            console.log(`Deleting question ID ${questionID}`);
+            deleteQuestion(questionID).then(r => console.log("Question deleted:", r));
+
+        }
+    });
+
+    //Update
+    newQuestions.forEach((newQuestion, questionID) => {
+        if (!newQuestion.question_id) {
+            console.log(`Adding new question`);
+            addQuestion(surveyID, newQuestion.question_json, newQuestion.question_type).then(r => console.log("Question added:", r));
+
+        } else {
+            const oldQuestion = oldQuestions.get(questionID);
+            if (JSON.stringify(oldQuestion) !== JSON.stringify(newQuestion)) {
+                console.log(`Updating question ID ${questionID}`);
+                updateQuestion(questionID, surveyID, newQuestion.question_json, newQuestion.question_type).then(r =>  console.log("Question updated:", r));
+
+            } else {
+                console.log(`No changes for question ID ${questionID}`);
+            }
+        }
+    });
 }

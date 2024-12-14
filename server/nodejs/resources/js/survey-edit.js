@@ -1,220 +1,25 @@
-// Static JSON for testing
-const staticSurveyData = {
-    survey: {
-        survey_title: "Sample Survey",
-        survey_description: "This is a test survey description",
-        program_id: "1234",
-        period_start: "2024-01-01",
-        period_end: "2024-01-31",
-        status: "Draft"
-    },
-    questions: [
-        {
-            question_json: {
-                question: "What is your favorite color?",
-                options: ["Red", "Blue", "Green"],
-                scale: []
-            },
-            question_type: "multiple-choice"
-        },
-        {
-            question_json: {
-                question: "Rate your experience with our service.",
-                options: [],
-                scale: [1, 2, 3, 4, 5]
-            },
-            question_type: "rating"
-        }
-    ],
-    restrict_students: []
-};
-
-// Render Survey UI
-function renderSurvey(data) {
-    document.getElementById("formTitle").textContent = data.survey.survey_title;
-    document.getElementById("formDescription").textContent = data.survey.survey_description;
-
-    const questionsContainer = document.getElementById("questionsContainer");
-    questionsContainer.innerHTML = ""; // Clear existing questions
-
-    data.questions.forEach((item, index) => {
-        const questionContainer = document.createElement("div");
-        questionContainer.classList.add("question-container");
-        questionContainer.setAttribute("data-id", index + 1);
-
-        questionContainer.innerHTML = `
-            <div class="question-content">
-                <div class="question-header">
-                    <input type="text" value="${item.question_json.question}" placeholder="Question">
-                    <select onchange="updateQuestionContent(this)">
-                        <option value="multiple-choice" ${item.question_type === "multiple-choice" ? "selected" : ""}>Multiple Choice</option>
-                        <option value="checkbox" ${item.question_type === "checkbox" ? "selected" : ""}>Checkbox</option>
-                        <option value="essay" ${item.question_type === "essay" ? "selected" : ""}>Essay</option>
-                        <option value="rating" ${item.question_type === "rating" ? "selected" : ""}>Rating</option>
-                    </select>
-                </div>
-                <div class="options">${
-            item.question_type === "multiple-choice" || item.question_type === "checkbox"
-                ? item.question_json.options.map(opt => `<div class='option-container'><input type="text" value="${opt}" placeholder="Option"><button class="remove-button" onclick="removeOption(this)">Remove</button></div>`).join("")
-                : item.question_type === "rating"
-                    ? `<select class="max-rating-select">${[...Array(10).keys()].map(i => `<option value="${i + 1}" ${item.question_json.scale.includes(i + 1) ? "selected" : ""}>${i + 1}</option>`).join("")}</select>`
-                    : "<textarea placeholder='Enter an answer here' disabled></textarea>"
-        }</div>
-                <div class="button-container" style="display: ${item.question_type === "multiple-choice" || item.question_type === "checkbox" ? "block" : "none"}">
-                    <button class="option-button" onclick="addOption(this)">Add Option</button>
-                    <span>or</span>
-                    <button class="option-button-other" onclick="addOtherOption(this)">Add Other</button>
-                </div>
-            </div>
-            <div class="side-buttons">
-                <button class="side-button" onclick="addNewQuestion(this)">+</button> <!-- Add question button inside each question container -->
-                <button class="side-button" onclick="removeQuestion(this)">x</button>
-            </div>
-        `;
-
-        questionsContainer.appendChild(questionContainer);
-    });
-}
-
-// Function to add a new question (below the current one)
-function addNewQuestion(button) {
-    const questionsContainer = document.getElementById("questionsContainer");
-
-    // Find the container of the clicked "Add Question" button
-    const currentQuestionContainer = button.closest(".question-container");
-
-    // Create a new question object (with default values)
-    const newQuestion = {
-        question_json: {
-            question: "New question?",
-            options: [],
-            scale: []
-        },
-        question_type: "multiple-choice"
-    };
-
-    // Add the new question to the survey data
-    staticSurveyData.questions.push(newQuestion);
-
-    // Create a new question container to append below the current one
-    const newQuestionContainer = document.createElement("div");
-    newQuestionContainer.classList.add("question-container");
-    newQuestionContainer.setAttribute("data-id", staticSurveyData.questions.length); // Update the data-id dynamically
-
-    newQuestionContainer.innerHTML = `
-        <div class="question-content">
-            <div class="question-header">
-                <input type="text" value="${newQuestion.question_json.question}" placeholder="Question">
-                <select onchange="updateQuestionContent(this)">
-                    <option value="multiple-choice" ${newQuestion.question_type === "multiple-choice" ? "selected" : ""}>Multiple Choice</option>
-                    <option value="checkbox" ${newQuestion.question_type === "checkbox" ? "selected" : ""}>Checkbox</option>
-                    <option value="essay" ${newQuestion.question_type === "essay" ? "selected" : ""}>Essay</option>
-                    <option value="rating" ${newQuestion.question_type === "rating" ? "selected" : ""}>Rating</option>
-                </select>
-            </div>
-            <div class="options">
-                ${newQuestion.question_type === "multiple-choice" || newQuestion.question_type === "checkbox"
-        ? "<div class='option-container'><input type='text' placeholder='Option'><button class='remove-button' onclick='removeOption(this)'>Remove</button></div>"
-        : newQuestion.question_type === "rating"
-            ? `<select class="max-rating-select">${[...Array(10).keys()].map(i => `<option value="${i + 1}">${i + 1}</option>`).join("")}</select>`
-            : "<textarea placeholder='Enter an answer here' disabled></textarea>"
+async function saveOldData(){
+    try {
+        console.log("saving old data")
+        console.log(sessionStorage.getItem("surveyData"))
+        const oldSurveyData = sessionStorage.getItem("surveyData");
+        sessionStorage.setItem("oldSurveyData", oldSurveyData);
+    }catch(error){
+        console.log(error)
     }
-            </div>
-            <div class="button-container" style="display: ${newQuestion.question_type === "multiple-choice" || newQuestion.question_type === "checkbox" ? "block" : "none"}">
-                <button class="option-button" onclick="addOption(this)">Add Option</button>
-                <span>or</span>
-                <button class="option-button-other" onclick="addOtherOption(this)">Add Other</button>
-            </div>
-        </div>
-        <div class="side-buttons">
-            <button class="side-button" onclick="removeQuestion(this)">x</button>
-            <button class="side-button" onclick="addNewQuestion(this)">+</button> <!-- Add button for each new question -->
-        </div>
-    `;
-
-    // Insert the new question container below the current question container
-    questionsContainer.insertBefore(newQuestionContainer, currentQuestionContainer.nextSibling);
 }
 
-function saveSurveyToJSON() {
-    // Collect survey title and description
-    const surveyTitle = document.getElementById("formTitle").textContent.trim();
-    const surveyDescription = document.getElementById("formDescription").textContent.trim();
+// Helper methods for SurveyEditor class
 
-    // Collect questions
-    const questionContainers = document.querySelectorAll(".question-container");
-    const questions = Array.from(questionContainers).map((container) => {
-        const questionText = container.querySelector(".question-header input").value.trim();
-        const questionType = container.querySelector(".question-header select").value;
-
-        let options = [];
-        if (questionType === "multiple-choice" || questionType === "checkbox") {
-            const optionInputs = container.querySelectorAll(".options input");
-            options = Array.from(optionInputs).map((input) => input.value.trim());
-        }
-
-        let scale = [];
-        if (questionType === "rating") {
-            const scaleSelect = container.querySelector(".max-rating-select");
-            if (scaleSelect) {
-                const maxScale = parseInt(scaleSelect.value, 10);
-                scale = Array.from({ length: maxScale }, (_, i) => i + 1); // Generate scale array
-            }
-        }
-
-        return {
-            question_json: {
-                question: questionText,
-                options: options,
-                scale: scale,
-            },
-            question_type: questionType,
-        };
-    });
-
-    // Construct the final JSON object
-    const surveyData = {
-        survey: {
-            survey_title: surveyTitle || "",
-            survey_description: surveyDescription || "",
-            program_id: "",
-            period_start: "",
-            period_end: "",
-            status: "",
-        },
-        questions: questions,
-        restrict_students: [],
-    };
-
-    // Store the JSON in sessionStorage
-    sessionStorage.setItem("surveyData", JSON.stringify(surveyData));
-    console.log("Survey data saved:", JSON.stringify(surveyData));
-
-    // Redirect to the publish page
-    window.location.href = "/admin/surveys/publish";
-}
-
-// Attach the save functionality to the Publish button
-document.addEventListener("DOMContentLoaded", function () {
-    const publishButton = document.querySelector(".publish-button");
-    if (publishButton) {
-        publishButton.addEventListener("click", saveSurveyToJSON);
-    } else {
-        console.error("Publish button not found.");
-    }
-});
-
-
-
-function makeEditable(elementId) {
-    var element = document.getElementById(elementId);
+async function makeEditable(elementId) {
+    const element = document.getElementById(elementId);
     if (!element.querySelector('input')) {
-        var currentText = element.textContent;
-        var input = document.createElement('input');
+        const currentText = element.textContent;
+        const input = document.createElement('input');
         input.type = 'text';
         input.value = currentText;
 
-        var computedStyle = window.getComputedStyle(element);
+        const computedStyle = window.getComputedStyle(element);
         input.style.width = computedStyle.width;
         input.style.fontSize = computedStyle.fontSize;
         input.style.fontFamily = computedStyle.fontFamily;
@@ -223,7 +28,9 @@ function makeEditable(elementId) {
         input.style.padding = '8px 10px';
         input.style.boxSizing = 'border-box';
 
-        input.onblur = function() { saveText(elementId, input.value); };
+        input.onblur = () => {
+            this.saveText(elementId, input.value);
+        };
 
         element.innerHTML = '';
         element.appendChild(input);
@@ -232,76 +39,60 @@ function makeEditable(elementId) {
     }
 }
 
-function saveText(elementId, text) {
-    var element = document.getElementById(elementId);
-    element.textContent = text || (elementId === 'formTitle' ? 'Sample Title' : 'Form Description');
+async function saveText(elementId, text) {
+    const element = document.getElementById(elementId);
+    element.textContent = text || (elementId === 'formTitle' ? 'Untitled Survey' : 'Survey Description');
 }
 
-let questionIndex = 1;
 
-window.onload = function () {
-    renderSurvey(staticSurveyData);
+async function addNewQuestion(button) {
+    const questionsContainer = document.getElementById("questionsContainer");
+    const currentQuestionContainer = button.closest(".question-container");
 
-    document.querySelector(".publish-button").addEventListener("click", saveSurveyToJSON);
+    // Create a new question object (with default values)
+    const newQuestion = {
+        question_json: {
+            question: "New Question?",
+            options: [],
+            scale: []
+        },
+        question_type: "multiple_choice"
+    };
 
-    const addQuestionButton = document.getElementById('addQuestionButton');
-    addQuestionButton.addEventListener('click', addQuestion);
-}
-
-function addQuestion(event) {
-    const button = event.target;
-    const questionContainer = button.closest(".question-container");
+    // Add the new question to the survey data if it exists
+    if (this.surveyData && this.surveyData.questions) {
+        this.surveyData.questions.push(newQuestion);
+    }
 
     // Create a new question container
-    const newQuestionContainer = document.createElement("div");
-    newQuestionContainer.classList.add("question-container");
-    newQuestionContainer.setAttribute("data-id", questionIndex);
+    const newQuestionContainer = this.createQuestionElement(newQuestion, this.surveyData ? this.surveyData.questions.length - 1 : 0);
 
-    newQuestionContainer.innerHTML = `
-        <div class="question-content">
-            <div class="question-header">
-                <input type="text" placeholder="Untitled Question">
-                <select onchange="updateQuestionContent(this)">
-                    <option value="multiple-choice">Multiple Choice</option>
-                    <option value="checkbox">Checkbox</option>
-                    <option value="essay">Essay</option>
-                    <option value="rating">Rating</option>
-                </select>
-            </div>
-            <div class="options"></div>
-            <div class="button-container" style="display: none;">
-                <button class="option-button" onclick="addOption(this)">Add Option</button>
-                <span>or </span>
-                <button class="option-button-other" onclick="addOtherOption(this)">Add Other</button>
-            </div>
-        </div>
-        <div class="side-buttons">
-            <button class="side-button" onclick="addQuestion(event)">+</button>
-            <button class="side-button" onclick="removeQuestion(this)">x</button>
-        </div>
-    `;
+    // Insert the new question container below the current one
+    questionsContainer.insertBefore(newQuestionContainer, currentQuestionContainer.nextSibling);
 
-    // Insert the new container after the current one
-    questionContainer.insertAdjacentElement("afterend", newQuestionContainer);
-
-    // Increment question index and reindex questions
-    questionIndex++;
-    reindexQuestions();
+    // Reindex questions to ensure consistent data-id attributes
+    this.reindexQuestions();
 }
 
-
-function removeQuestion(button) {
+async function removeQuestion(button) {
     const questionContainer = button.closest(".question-container");
+    const dataId = parseInt(questionContainer.getAttribute('data-id')) - 1;
 
     if (questionContainer) {
         questionContainer.remove();
-        reindexQuestions();
+
+        // Remove the question from surveyData if it exists
+        if (this.surveyData && this.surveyData.questions) {
+            this.surveyData.questions.splice(dataId, 1);
+        }
+
+        this.reindexQuestions();
     }
 }
 
-function reindexQuestions() {
+async function reindexQuestions() {
     const questions = document.querySelectorAll(".question-container");
-    questionIndex = 1;
+    let questionIndex = 1;
 
     questions.forEach((question) => {
         question.setAttribute("data-id", questionIndex);
@@ -309,24 +100,28 @@ function reindexQuestions() {
     });
 }
 
-function updateQuestionContent(selectElement) {
+async function updateQuestionContent(selectElement) {
     const questionContent = selectElement.closest(".question-content");
     const optionsContainer = questionContent.querySelector(".options");
     const buttonContainer = questionContent.querySelector(".button-container");
     const questionType = selectElement.value;
 
+    // Reset options container
     optionsContainer.innerHTML = '';
     buttonContainer.style.display = 'none'; // Default to hide buttons
 
     switch (questionType) {
-        case 'multiple-choice':
+        case 'multiple_choice':
         case 'checkbox':
             buttonContainer.style.display = 'block';
-            addOption(buttonContainer.querySelector(".option-button"));
+            this.addOption(optionsContainer);
             break;
 
         case 'essay':
-            optionsContainer.innerHTML = `<textarea placeholder="Enter an answer here" rows="4" cols="50" disabled class="textarea"></textarea>`;
+            optionsContainer.innerHTML = `
+            <textarea placeholder="Enter an answer here" rows="4" cols="50" disabled class="textarea">
+            </textarea>
+        `;
             break;
 
         case 'rating':
@@ -375,9 +170,18 @@ function updateQuestionContent(selectElement) {
         default:
             break;
     }
+
+    // Update the question type in surveyData if it exists
+    const questionContainer = selectElement.closest(".question-container");
+    const dataId = parseInt(questionContainer.getAttribute('data-id')) - 1;
+
+    if (this.surveyData && this.surveyData.questions && this.surveyData.questions[dataId]) {
+        this.surveyData.questions[dataId].question_type = questionType;
+    }
 }
 
-function addOption(button) {
+
+async function addOption(button) {
     const questionContent = button.closest(".question-content");
     const optionsContainer = questionContent.querySelector(".options");
 
@@ -385,32 +189,61 @@ function addOption(button) {
     newOption.classList.add("option-container");
 
     newOption.innerHTML = `
-        <input type="text" placeholder="Option">
-        <button class="remove-button" onclick="removeOption(this)">Remove</button>
-    `;
+    <input type="text" placeholder="Option">
+    <button class="remove-button" onclick="removeOption(this)">Remove</button>
+`;
 
     optionsContainer.appendChild(newOption);
     updateOptionLabels(optionsContainer);
+
 }
 
-function addOtherOption(button) {
+async function addOtherOption(button) {
     const optionsContainer = button.closest(".question-content").querySelector(".options");
     const otherOption = document.createElement("div");
     otherOption.classList.add("option-container");
     otherOption.innerHTML = `
-        <input type="text" placeholder="Other">
-        <button class="remove-button" onclick="removeOption(this, false)">Remove</button>
-    `;
+    <input type="text" value="Other" placeholder="Other">
+    <button class="remove-button" onclick="removeOption(this)">Remove</button>
+`;
     optionsContainer.appendChild(otherOption);
+    this.updateOptionLabels(optionsContainer);
+
+    // Update options in surveyData if it exists
+    const questionContainer = button.closest(".question-container");
+    const dataId = parseInt(questionContainer.getAttribute('data-id')) - 1;
+
+    if (this.surveyData && this.surveyData.questions && this.surveyData.questions[dataId]) {
+        const currentQuestion = this.surveyData.questions[dataId];
+        if (!currentQuestion.question_json.options) {
+            currentQuestion.question_json.options = [];
+        }
+        currentQuestion.question_json.options.push('Other');
+    }
 }
 
-function removeOption(button) {
+async function removeOption(button) {
     const optionsContainer = button.closest(".options");
-    button.parentElement.remove();
-    updateOptionLabels(optionsContainer);
+    const optionToRemove = button.parentElement;
+    const optionText = optionToRemove.querySelector('input').value;
+
+    // Remove the option from the DOM
+    optionToRemove.remove();
+    this.updateOptionLabels(optionsContainer);
+
+    // Remove the option from surveyData if it exists
+    const questionContainer = button.closest(".question-container");
+    const dataId = parseInt(questionContainer.getAttribute('data-id')) - 1;
+
+    if (this.surveyData && this.surveyData.questions && this.surveyData.questions[dataId]) {
+        const currentQuestion = this.surveyData.questions[dataId];
+        if (currentQuestion.question_json.options) {
+            currentQuestion.question_json.options = currentQuestion.question_json.options.filter(opt => opt !== optionText);
+        }
+    }
 }
 
-function updateOptionLabels(optionsContainer) {
+async function updateOptionLabels(optionsContainer) {
     const optionContainers = optionsContainer.querySelectorAll(".option-container");
 
     optionContainers.forEach((option, index) => {
@@ -418,3 +251,362 @@ function updateOptionLabels(optionsContainer) {
         input.placeholder = `Option ${index + 1}`;
     });
 }
+
+async function updateScale(selectElement, questionIndex) {
+    const scaleValue = parseInt(selectElement.value, 10);  // Get the selected scale size
+
+    // Get the container where we will render the radio buttons
+    const ratingContainer = document.getElementById(`rating-scale-${questionIndex}`);
+    ratingContainer.innerHTML = "";  // Clear any existing radio buttons
+
+    // Render radio buttons dynamically based on the scale value
+    for (let i = 1; i <= scaleValue; i++) {
+        const label = document.createElement("label");
+        label.style.display = "flex";
+        label.style.alignItems = "center";
+        label.style.justifyContent = "center";  // Center the radio button and number horizontally
+        label.style.marginRight = "40px";  // Add some spacing between radio buttons
+
+        const radio = document.createElement("input");
+        radio.type = "radio";
+        radio.name = `rating-${questionIndex}`;
+        radio.value = i;
+        radio.style.width = "18px";  // Set radio button width
+        radio.style.height = "18px"; // Set radio button height
+        radio.style.marginRight = "5px"; // Add space between the radio button and number
+        radio.style.marginLeft = "5px";  // Ensure consistent spacing
+
+        label.appendChild(radio);
+        label.appendChild(document.createTextNode(i));  // Add the number next to the radio button
+        ratingContainer.appendChild(label);
+    }
+
+    // Update the question data (if needed)
+    if (this.surveyData && this.surveyData.questions && this.surveyData.questions[questionIndex]) {
+        this.surveyData.questions[questionIndex].question_json.scale = Array.from({ length: scaleValue }, (_, i) => i + 1);
+    }
+}
+
+function renderOptions(type, options, scale, index) {
+    switch (type) {
+        case "multiple_choice":
+        case "checkbox":
+            return options.map((opt, i) => `
+            <div class="option-container">
+                <input type="text" value="${opt}" placeholder="Option ${i + 1}">
+                <button class="remove-button" onclick="removeOption(this)">Remove</button>
+            </div>
+        `).join("");
+        case "rating":
+            const maxScaleValue = 10;  // Fixed max scale value of 10
+            const selectedScale = scale ? scale : 5;  // Default to 5 if no scale is provided
+            return `
+    <select class="max-rating-select" onchange="updateScale(this, ${index})">
+        ${Array.from({ length: maxScaleValue }, (_, i) => `
+            <option value="${i + 1}" ${selectedScale === (i + 1) ? "selected" : ""}>${i + 1}</option>
+        `).join("")}
+    </select>
+    <div class="rating-scale" id="rating-scale-${index}">
+        <!-- Dynamic radio buttons will be added here -->
+    </div>
+`;
+        case "essay":
+            return `<textarea placeholder="Enter your answer here" disabled></textarea>`;
+        default:
+            return "";
+    }
+}
+
+
+async function fetchSurveyDetails(survey_ID){
+    const url = `http://localhost:2020/api/survey-service/survey-summary?survey_id=${survey_ID}`;
+
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+        }
+        const surveyDetails = await response.json();
+        console.log(surveyDetails)
+        return surveyDetails;
+    }
+    catch (error) {
+        console.error('Failed to fetch survey details:', error.message);
+        return {};
+    }
+}
+
+async function fetchSurveyQuestions(surveyID) {
+    try {
+        this.surveyData = await fetch(`http://localhost:2020/api/survey-service/questions/${surveyID}`);
+        if (!this.surveyData.ok) {
+            throw new Error(`HTTP error! Status: ${this.surveyData.status}`);
+        }
+
+        const data = await this.surveyData.json();
+        if (data.questions) {
+            data.questions = data.questions.map(question => {
+                try {
+                    const parsedJson = JSON.parse(question.question_json);
+                    console.log("Parsed question:", parsedJson);
+
+                    return {
+                        ...question,
+                        question_json: parsedJson || {}, // Ensure valid object
+                    };
+                } catch (e) {
+                    console.error('Error parsing question_json:', question.question_json, e);
+                    return {
+                        ...question,
+                        question_json: {}, // Fallback to default
+                    };
+                }
+            });
+
+            this.surveyData = data
+            console.log("rendering")
+            renderSurvey(data);
+            console.log('Survey questions fetched and parsed:', data);
+        } else {
+            console.error('No questions found in the this.surveyData');
+        }
+    } catch (error) {
+        console.error('Error fetching or parsing survey questions:', error);
+    }
+}
+
+function renderSurvey(data) {
+    const questionsContainer = document.getElementById("questionsContainer");
+    questionsContainer.innerHTML = ""; // Clear existing questions
+
+    data.questions.forEach((item, index) => {
+        const questionContainer = createQuestionElement(item, index);
+        questionsContainer.appendChild(questionContainer);
+    });
+
+    reindexQuestions();
+}
+
+function createQuestionElement(item, index) {
+    const questionContainer = document.createElement("div");
+    questionContainer.classList.add("question-container");
+    questionContainer.setAttribute("data-id", index + 1);
+
+    const { question, options = [], scale = []} = item.question_json || {};
+
+    console.log("Options:", options);
+
+    questionContainer.innerHTML = `
+    <div class="question-content">
+        <div class="question-header">
+            <input type="text" value="${question}" placeholder="Question">
+            <select onchange="updateQuestionContent(this)">
+                <option value="multiple_choice" ${item.question_type === "multiple_choice" ? "selected": ""}>Multiple Choice</option>
+                <option value="checkbox" ${item.question_type === "checkbox" ? "selected" : ""}>Checkbox</option>
+                <option value="essay" ${item.question_type === "essay" ? "selected" : ""}>Essay</option>
+                <option value="rating" ${item.question_type === "rating" ? "selected" : ""}>Rating</option>
+            </select>
+        </div>
+        <div class="options">
+            ${renderOptions(item.question_type, options, scale, index)}
+        </div>
+       
+         
+        <div class="button-container" style="display: ${["multiple_choice", "checkbox"].includes(item.question_type) ? "block" : "none"};">
+            <button class="option-button" onclick="addOption(this)">Add Option</button>
+            <span>or</span>
+            <button class="option-button-other" onclick="addOtherOption(this)">Add Other</button>
+        </div>
+    </div>
+    <div class="side-buttons">
+        <button class="side-button" onclick="addNewQuestion(this)">+</button>
+        <button class="side-button" onclick="removeQuestion(this)">x</button>
+    </div>
+`;
+    return questionContainer;
+}
+
+function attachEventListeners() {
+    // Attach save functionality to Publish button
+    const publishButton = document.querySelector(".publish-button");
+    if (publishButton) {
+        publishButton.addEventListener("click", () => this.saveSurveyToJSON());
+    }
+
+
+    // Make title and description editable
+    document.getElementById('formTitle').addEventListener('click', () => this.makeEditable('formTitle'));
+    document.getElementById('formDescription').addEventListener('click', () => this.makeEditable('formDescription'));
+}
+
+function saveSurveyToJSON() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const surveyID = urlParams.get('survey_id')
+    // Step 5: Generate JSON and store in sessionStorage
+    const surveyTitle = document.getElementById("formTitle").textContent.trim();
+    const surveyDescription = document.getElementById("formDescription").textContent.trim();
+
+    const questionContainers = document.querySelectorAll(".question-container");
+    const questions = Array.from(questionContainers).map((container, index) => {
+        const questionText = container.querySelector(".question-header input").value.trim();
+        const questionType = container.querySelector(".question-header select").value;
+
+        let options = [];
+        let scale = [];
+
+        switch (questionType) {
+            case "multiple_choice":
+            case "checkbox":
+                options = Array.from(container.querySelectorAll(".options input")).map(input => input.value.trim());
+                break;
+            case "rating":
+                const scaleSelect = container.querySelector(".max-rating-select");
+                if (scaleSelect) {
+                    const maxScale = parseInt(scaleSelect.value, 10);
+                    scale = Array.from({ length: maxScale }, (_, i) => i + 1);
+                }
+                break;
+        }
+
+        // Get question ID from this.surveyData
+        const questionId = this.surveyData?.questions?.[index]?.question_id;
+
+        return {
+            question_id: questionId,
+            question_json: {
+                question: questionText,
+                options: options,
+                scale: scale,
+            },
+            question_type: questionType,
+        };
+    });
+
+    const surveyData = {
+        survey: {
+            survey_title: surveyTitle || "Untitled Survey",
+            survey_description: surveyDescription || "",
+            survey_id: surveyID,
+            program_id: "",
+            period_start: "",
+            period_end: "",
+            status: "Draft"
+        },
+        questions: questions,
+        restrict_students: []
+    };
+
+    // Store the JSON in sessionStorage
+    sessionStorage.setItem("surveyData", JSON.stringify(surveyData));
+    console.log("Survey data saved:", JSON.stringify(surveyData));
+
+    // Redirect to publish page
+    window.location.href = "/admin/surveys/publish";
+}
+
+function saveCurrentSurvey() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const surveyID = urlParams.get('survey_id')
+    // Step 5: Generate JSON and store in sessionStorage
+    const surveyTitle = document.getElementById("formTitle").textContent.trim();
+    const surveyDescription = document.getElementById("formDescription").textContent.trim();
+
+    const questionContainers = document.querySelectorAll(".question-container");
+    const questions = Array.from(questionContainers).map((container, index) => {
+        const questionText = container.querySelector(".question-header input").value.trim();
+        const questionType = container.querySelector(".question-header select").value;
+
+        let options = [];
+        let scale = [];
+
+        switch (questionType) {
+            case "multiple_choice":
+            case "checkbox":
+                options = Array.from(container.querySelectorAll(".options input")).map(input => input.value.trim());
+                break;
+            case "rating":
+                const scaleSelect = container.querySelector(".max-rating-select");
+                if (scaleSelect) {
+                    const maxScale = parseInt(scaleSelect.value, 10);
+                    scale = Array.from({ length: maxScale }, (_, i) => i + 1);
+                }
+                break;
+        }
+
+        // Get question ID from this.surveyData
+        const questionId = this.surveyData?.questions?.[index]?.question_id;
+
+        return {
+            question_id: questionId,
+            question_json: {
+                question: questionText,
+                options: options,
+                scale: scale,
+            },
+            question_type: questionType,
+        };
+    });
+
+    const surveyData = {
+        survey: {
+            survey_title: surveyTitle || "Untitled Survey",
+            survey_description: surveyDescription || "",
+            survey_id: surveyID,
+            program_id: "",
+            period_start: "",
+            period_end: "",
+            status: "Draft"
+        },
+        questions: questions,
+        restrict_students: []
+    };
+
+    // Store the JSON in sessionStorage
+    sessionStorage.setItem("surveyData", JSON.stringify(surveyData));
+    console.log("Survey data saved:", JSON.stringify(surveyData));
+}
+
+class SurveyEditor {
+    constructor() {
+        this.surveyData = null;
+        this.surveyId = null;
+        this.initializePage();
+    }
+
+    async initializePage() {
+        // Extract Survey ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+
+        // Retrieve Survey Details from sessionStorage
+        const surveyDetails = await fetchSurveyDetails(urlParams.get('survey_id'));
+        this.surveyId = urlParams.get('survey_id');
+        // sessionStorage.setItem('surveyDetails', getSurveyDetails);
+        // const storedSurveyDetails = sessionStorage.getItem('surveyDetails');
+        console.log('Stored survey details:', surveyDetails);
+        document.getElementById('formTitle').textContent = surveyDetails.survey_title || 'Untitled Survey';
+        document.getElementById('formDescription').textContent = surveyDetails.survey_description || 'No description';
+        if (surveyDetails) {
+            // console.log('Survey details:', surveyDetails);
+            // const parsedDetails = JSON.parse(surveyDetails);
+            // console.log('Parsed survey details:', parsedDetails);
+            var [surveyDetailsJson ] = surveyDetails
+            document.getElementById('formTitle').textContent = surveyDetailsJson.survey_title || 'Untitled Survey';
+            document.getElementById('formDescription').textContent = surveyDetailsJson.survey_description || 'No description';
+        }        
+
+        // Step 3: Fetch Associated Questions
+        await fetchSurveyQuestions(urlParams.get('survey_id'));
+
+        // Attach event listeners
+        attachEventListeners();
+
+        saveCurrentSurvey(this.surveyId);
+        saveOldData(this.surveyId);
+    }
+}
+
+// Initialize the survey editor
+const surveyEditor = new SurveyEditor();
+
+// To ensure compatibility with existing event handlers
+window.surveyEditor = surveyEditor;

@@ -242,10 +242,10 @@ class SurveyDAL{
     }
 
     static async putNewQuestion(surveyID, questionJSON, questionType,operationType, questionID){
-        console.log(await this.isSurveyPublishedHelper(surveyID))
-        if(await this.isSurveyPublishedHelper(surveyID)){
-            throw new Error("Survey is already published")
-        }
+        // console.log(await this.isSurveyPublishedHelper(surveyID))
+        // if(await this.isSurveyPublishedHelper(surveyID)){
+        //     throw new Error("Survey is already published")
+        // }
 
         try{
             switch(operationType){
@@ -288,6 +288,7 @@ class SurveyDAL{
     }
 
     static async isSurveyPublishedHelper(surveyID){
+        console.log("Survey ID: "+surveyID)
         var query = `SELECT * FROM survey WHERE survey_id = ? AND period_start > CURDATE()`
         try{
             const [result] = await pool.query(query, surveyID)
