@@ -228,11 +228,13 @@ class SurveyDAL{
 
     static async putNewSurveyData(survey_id, survey_title, survey_description, program_id, period_start, period_end) {
         const query = "UPDATE survey SET survey_title = ?, survey_description = ?, program_id = ?, period_start = ?, period_end = ? WHERE survey_id = ? AND period_start > CURDATE();";
-
+        console.log(survey_id, survey_title, survey_description, program_id, period_start, period_end)
+        survey_description = !survey_description ? null : survey_description
         try {
             // Await the query execution and handle the result
             const [results] = await pool.execute(query, [survey_title, survey_description, program_id, period_start, period_end, survey_id]);
             console.log('Query executed successfully:', results);
+            return results
         } catch (error) {
             // Log and throw the error with a helpful message
             console.error('Error executing query:', error.message);
