@@ -227,7 +227,7 @@ input[type="date"], input[type="time"]{
 }
 
 .dropdown-checkbox-toggle {
-    flex: 1;
+    width: 40%;
     height: 50px;
     background-color: #223C6B;
     color: white;
@@ -240,16 +240,15 @@ input[type="date"], input[type="time"]{
 }
 
 .dropdown-checkbox-options {
-    width: 40%;
-    height: 50px;
-    background-color: #223C6B;
-    color: white;
-    padding: 8px;
+    display: none;
+    position: absolute;
+    background-color: #223C6A;
     border: 1px solid #ccc;
     border-radius: 5px;
-    text-align: left;
-    font-size: 14px;
-    cursor: pointer;
+    width: 40%;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1;
 }
 
 .dropdown-toggle {
