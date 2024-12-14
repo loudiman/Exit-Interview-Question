@@ -15,7 +15,7 @@ async function callAPI() {
 
     try {
         console.log("Triggering fetch")
-        const response = await fetch(`http://amalgam.com:2020/api/user-service/user`, {
+        const response = await fetch(`http://localhost:2020/api/user-service/user`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

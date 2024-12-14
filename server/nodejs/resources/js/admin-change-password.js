@@ -16,7 +16,7 @@ async function callAPI(){
 
     const localUsername = sessionStorage.getItem("username")
     //This makes a POST request to the api
-    const response = await fetch(`http://amalgam.com:2020/api/user-service/user/${localUsername}`,{
+    const response = await fetch(`http://localhost:2020/api/user-service/user/${localUsername}`,{
         method: "POST",
         headers: {
             "Content-Type": "application/json"

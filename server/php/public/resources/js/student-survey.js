@@ -43,7 +43,7 @@ function getSurveyIdFromURL() {
 }
 
 async function getQuestions(id){
-    // var response = await fetch("http://amalgam.com:8888/student/survey?id="+id)
+    // var response = await fetch("http://localhost:8888/student/survey?id="+id)
     // var data = await response.json()
     // await sessionStorage.setItem('questionnaireData', JSON.stringify(data))
 }
@@ -479,7 +479,7 @@ function gatherResponses(surveyId) {
         submitButton.disabled = true;
     }
 
-    fetch(`http://amalgam.com:8888/student/survey/questionnaires`, {
+    fetch(`http://localhost:8888/student/survey/questionnaires`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -497,7 +497,7 @@ function gatherResponses(surveyId) {
             }
             console.log("Response saved successfully:", data);
             alert("Survey submitted successfully!");
-            window.location.href = 'http://amalgam.com:8888/student/surveys';
+            window.location.href = 'http://localhost:8888/student/surveys';
         })
         .catch((error) => {
             console.error("Error details:", error);

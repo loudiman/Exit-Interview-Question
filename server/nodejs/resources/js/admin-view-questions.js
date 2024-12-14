@@ -396,7 +396,7 @@ async function insertQuestion(question) {
 // Function to fetch a question using the DAL
 async function fetchQuestion() {
     try {
-        const response = await fetch("amalgam.com:2019/api/survey-service/questions/:survey_id", {
+        const response = await fetch("localhost:2019/api/survey-service/questions/:survey_id", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
