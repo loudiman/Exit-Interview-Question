@@ -204,6 +204,54 @@ input[type="date"], input[type="time"]{
     width: 100%;
 }
 
+#batch-restricted-title {
+    width: 30%;
+    height: 50px;
+    background-color: #223C6B;
+    color: white;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: left;
+    font-size: 14px;
+    align-content: center;
+}
+
+.dropdown-checkbox {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.dropdown-checkbox-toggle {
+    width: 100%;
+    height: 50px;
+    background-color: #223C6B;
+    color: white;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: left;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.dropdown-checkbox-options {
+    width: 40%;
+    height: 50px;
+    background-color: #223C6B;
+    color: white;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: left;
+    font-size: 14px;
+    cursor: pointer;
+}
+
 .dropdown-toggle {
     width: 100%;
     height: 50px;
