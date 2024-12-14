@@ -18,14 +18,17 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('Surveys', data);
         const currentDate = new Date()
         data.forEach(survey => {
+            console.log(survey)
             const surveyPeriodStart = new Date(survey.period_start)
             const status = surveyPeriodStart < currentDate ? 'published' : 'unpublished'
+            console.log(`current status ${status}`)
+            console.log((status === 'unpublished'))
             const container = status === 'unpublished' ? unpublishedContainer : publishedContainer;
             const surveyItem = document.createElement('div');
             surveyItem.className = 'survey-item';
 
             // Simplified button HTML generation
-            const buttonsHtml = survey.status === 'unpublished'
+            const buttonsHtml = status === 'unpublished'
                 ? createUnpublishedSurveyHTML(survey)
                 : createPublishedSurveyHTML(survey);
 
@@ -36,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Helper functions for HTML generation
     function createUnpublishedSurveyHTML(survey) {
+        console.log(`Creating unpub survey ${survey}`)
         return `
             <span>${survey.survey_title}</span>
             <a href="/admin/surveys/edit?survey_id=${survey.survey_id}">
@@ -55,8 +59,8 @@ document.addEventListener('DOMContentLoaded', () => {
             <button data-id="${survey.survey_id}" class="view-btn">
                 <img src="/static/images/Eye.png" alt="View" />
             </button>
-            <button data-id="${survey.survey_id}" class="details-btn">
-                <img src="/static/images/Details.png" alt="Details" />
+            <button data-id="${survey.survey_id}" class="delete-btn">
+                <img src="/static/images/Delete.png" alt="Delete" />
             </button>
         `;
     }
@@ -179,6 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
+            document.getElementById('confirmDelete').addEventListener('click', deleteSurvey);
             document.getElementById('closePreview').addEventListener('click', () => {
                 document.getElementById('previewModal').close();
                 document.getElementById('modalOverlay').style.display = 'none';
