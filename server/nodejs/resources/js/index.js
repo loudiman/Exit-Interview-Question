@@ -160,4 +160,43 @@ document.addEventListener('DOMContentLoaded', () => {
     function capitalize(str) {
         return str.charAt(0).toUpperCase() + str.slice(1);
     }
+
+    async function fetchSurveys() {
+        const url = "http://localhost:2020/api/survey-service/survey-summary";
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`Response status: ${response.status}`);
+            }
+
+            surveys = await response.json();
+            return surveys;
+        } catch (error) {
+            console.error('Failed to fetch surveys:', error.message);
+            return [];
+        }
+    }
+    // Initialize the application
+    (async () => {
+        surveys = await fetchSurveys();
+
+        if (surveys.length) {
+            searchInput.addEventListener('input', debounce(() => searchSurveys(surveys), 300));
+
+            // Event delegation for survey interactions
+            document.body.addEventListener('click', (event) => {
+                const button = event.target.closest('button');
+                if (!button) return;
+
+                const surveyId = button.dataset.id;
+
+                if (button.classList.contains('details-btn')) {
+                    window.location.href=`/admin/dashboard/survey?id=${getSurveySummary().survey_id}`;
+                } else if (button.classList.contains('edit-btn')) {
+                    window.location.href = `/admin/surveys/edit?survey_id=${surveyId}`;
+                }
+            });
+            renderSurveys(surveys);
+        }
+    })();
 });

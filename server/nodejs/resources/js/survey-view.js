@@ -45,8 +45,8 @@ document.addEventListener('DOMContentLoaded', () => {
             <button data-id="${survey.survey_id}" class="view-btn">
                 <img src="/static/images/Eye.png" alt="View" />
             </button>
-            <button data-id="${survey.survey_id}" class="details-btn">
-                <img src="/static/images/Details.png" alt="Details" />
+            <button data-id="${survey.survey_id}" class="delete-btn">
+                <img src="/static/images/Delete.png" alt="Delete" />
             </button>
         `;
     }
@@ -143,8 +143,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (button.classList.contains('delete-btn')) {
                     showDeleteModal(surveyId);
-                } else if (button.classList.contains('details-btn')) {
-                    window.location.href = `/admin/dashboard/survey?id=${surveyId}`;
                 } else if (button.classList.contains('view-btn')) {
                     window.location.href = `/admin/surveys/view?survey_id=${surveyId}`;
                 } else if (button.classList.contains('edit-btn')) {
@@ -153,7 +151,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             document.getElementById('confirmDelete').addEventListener('click', deleteSurvey);
-
             document.getElementById('cancelDelete').addEventListener('click', () => {
                 document.getElementById('deleteModal').close();
                 document.getElementById('modalOverlay').style.display = 'none';
