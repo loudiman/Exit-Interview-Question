@@ -30,8 +30,10 @@ document.addEventListener("DOMContentLoaded", async() => {
 
     fetchFromServer().then(data => {
         addOptions(data.availability, "program-dropdown"); // Add options for programs
-        // addOptions({["BSCS 3-1", "BSIT 2-2", "BSBA 1-1"]}, "batch-dropdown"); // Add options for batches
     });
+
+    addYear("year-dropdown", 1911); // Add options for year
+    addSemester("semester-dropdown"); // Add options for semester
 
     const publishButton = document.getElementById("publishButton"); // Second button for 'Publish'
     if (publishButton) {
@@ -190,6 +192,77 @@ function addOptions(data, containerId) {
     });
 }
 
+<<<<<<< HEAD
+function addSemester(containerId) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = ''; // Clear existing options
+
+    const sems = [
+        { semester: "first" },
+        { semester: "second" }
+    ];
+
+    sems.forEach(item => {
+        const label = document.createElement('label');
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = item.semester;
+        label.appendChild(checkbox);
+        label.appendChild(document.createTextNode(item.semester));
+        container.appendChild(label);
+    });
+}
+
+function addYear(containerId, startYear) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+
+    const now = new Date();
+    const currentYear = now.getFullYear();
+
+    // Create an array of all the years from the start year to the current year + 100
+    const allYears = [];
+    for (let year = startYear; year <= currentYear + 100; year++) {
+        allYears.push(year);
+    }
+
+    for (const year of allYears) {
+        const label = document.createElement('label');
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = year;
+        checkbox.checked = year === currentYear; // Set the current year as checked by default
+        label.appendChild(checkbox);
+        label.appendChild(document.createTextNode(year));
+        container.appendChild(label);
+    }
+
+    const dropdown = container.closest('.dropdown-checkbox'); // Find the closest dropdown container
+    const dropdownOptions = dropdown.querySelector('.dropdown-checkbox-options');
+
+    dropdown.addEventListener('click', () => {
+        const currentYearCheckbox = container.querySelector(`input[value="${currentYear}"]`);
+        if (currentYearCheckbox && dropdownOptions) {
+            dropdownOptions.scrollTop = currentYearCheckbox.offsetTop - dropdownOptions.offsetTop;
+        }
+    });
+}
+
+function setCurrentDateAndTime() {
+    const now = new Date();
+
+    const formattedDate = now.toISOString().split('T')[0];
+
+    const formattedTime = now.toTimeString().split(' ')[0].slice(0, 5);
+
+    document.getElementById('periodStartDate').value = formattedDate;
+    document.getElementById('periodStartTime').value = formattedTime;
+    document.getElementById('periodEndDate').value = formattedDate;
+    document.getElementById('periodEndTime').value = formattedTime;
+}
+
+=======
+>>>>>>> development
 function getSelectedValues(containerId) {
     const container = document.getElementById(containerId);
     const checkboxes = container.querySelectorAll('input[type="checkbox"]:checked');
