@@ -292,6 +292,7 @@ textarea {
     width: 50px;   /* Set the size of the radio button */
     height: 50px;  /* Set the size of the radio button */
     margin-bottom: 5px; /* Add space between radio button and label text */
+    margin-right: 5px;
 }
 
 
