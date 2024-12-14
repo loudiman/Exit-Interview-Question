@@ -4,14 +4,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const unpublishedContainer = document.querySelector('#unpublishedSurveys');
     const publishedContainer = document.querySelector('#publishedSurveys');
 
+
+
     // Improved Render Surveys Function
+    // Global variables to store surveys and current survey for deletion
+    let surveys = [];
+    let currentSurveyToDelete = null;
+
     function renderSurveys(data) {
         // Clear containers more efficiently
         unpublishedContainer.innerHTML = '';
         publishedContainer.innerHTML = '';
-
+        console.log('Surveys', data);
+        const currentDate = new Date()
         data.forEach(survey => {
-            const container = survey.status === 'unpublished' ? unpublishedContainer : publishedContainer;
+            const surveyPeriodStart = new Date(survey.period_start)
+            const status = surveyPeriodStart < currentDate ? 'published' : 'unpublished'
+            const container = status === 'unpublished' ? unpublishedContainer : publishedContainer;
             const surveyItem = document.createElement('div');
             surveyItem.className = 'survey-item';
 
@@ -147,7 +156,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     (async () => {
         const surveys = await fetchSurveys();
+        console.log('SURVEYS', surveys);
         if (surveys.length) {
+            renderSurveys(surveys);
             // Restore search event listener
             searchInput.addEventListener('input', debounce(() => searchSurveys(surveys), 300));
 
@@ -160,9 +171,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (button.classList.contains('details-btn')) {
                     showPreview(surveyId, surveys);
                 } else if (button.classList.contains('view-btn')) {
-                    window.location.href = `/admin/surveys/view?survey_id=${surveyId}`;
+                    window.location.href = `/admin/dashboard/survey`;
                 } else if (button.classList.contains('edit-btn')) {
-                    window.location.href = `/admin/surveys/edit?survey_id=${surveyId}`;
+                    window.location.href = `/admin/dashboard/survey`;
                 } else if (button.classList.contains('delete-btn')) {
                     showDeleteModal(surveyId, surveys);
                 }

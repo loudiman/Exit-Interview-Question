@@ -1,10 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('welcome-message').textContent = `Welcome, ${sessionStorage.getItem('fname')}!`;
-    const logoutBtn = document.getElementById('logout-button');
-    if (logoutBtn) {
-        console.log('Logout button found');
-        // logoutBtn.addEventListener('click', logout);
-    }
 
     let surveyData = [];
     let hiddenSurveys = []; // Array to track hidden survey IDs
@@ -92,17 +87,47 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
             `;
 
-            // Handle anchor tag click to get data from db
-            surveyElement.querySelector('a').addEventListener('click', function(event) {
-                event.preventDefault();
-                fetch(`/student/survey?id=${survey['survey-id']}`)
-                    .then(response => response.json())
-                    .then(surveyData => {
-                        sessionStorage.setItem('questionaireData', JSON.stringify(surveyData));
-                        window.location.href = `/student/survey/questionaire?id=${surveyData.question_id}`;
-                    })
-                    .catch(error => console.error("Fetch error: ", error));
-            });
+            // Handle button tag click to get data from db
+            surveyElement.querySelector('.action-link').addEventListener('click', (function(survey) {
+                return function(event) {
+                    event.preventDefault();
+
+                    sessionStorage.setItem('surveyId', survey.survey_id);
+
+                    // This is a workaround solution to handle in frontend an expired survey
+                    if (survey.responded == 1 || new Date(survey.period_end) < new Date()) {
+                        window.location.href = '/student/survey/closedsurvey';
+                    }
+
+                    window.location.href = '/student/survey/viewsurvey?id=' + survey.survey_id;
+
+                    // fetch(`/student/survey/viewsurvey?id=${survey.survey_id}`)
+                    //     .then(response => {
+                    //         // This is another solution handling an expired survey but with backend processing
+                    //         if (!response.ok) {
+                    //             window.location.href = '/student/survey/closedsurvey';
+                    //             throw new Error('Survey expired');
+                    //         }
+                    //         return response.json();
+                    //     })
+                    //     .then(surveyData => {
+                    //         sessionStorage.setItem('questionnaireData', JSON.stringify(surveyData));
+                    //         window.location.href = '/student/survey/questionnaires';
+                    //     })
+                        // .catch(error => console.error("Fetch error: ", error));  
+                };
+            })(survey)
+                // function(event) {
+                // event.preventDefault();
+                // fetch(`/student/survey?id=${survey.survey_id}`)
+                //     .then(response => response.json())
+                //     .then(surveyData => {
+                //         sessionStorage.setItem('questionaireData', JSON.stringify(surveyData));
+                //         // window.location.href = `/student/survey/questionaire?id=${surveyData.question_id}`;
+                //         window.location.href = '/student/survey/questionnaires';
+                //     })
+                //     .catch(error => console.error("Fetch error: ", error));}
+            );
 
             // Hide button functionality
             surveyElement.querySelector('.hide-button').addEventListener('click', () => {

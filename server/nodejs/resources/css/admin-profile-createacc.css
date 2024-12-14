@@ -1,64 +1,23 @@
-/* General Styles */
-body {
-    font-family: Arial, sans-serif;
+/* Reset default margin and padding */
+* {
     margin: 0;
     padding: 0;
-    background-color: #f4f4f9;
+    box-sizing: border-box;
 }
 
-/* Navbar Styles */
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #2c3e50;
-    color: white;
-    padding: 10px 20px;
+html, body {
+    height: 100%;
+    overflow: hidden;
 }
 
-.navbar button {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 20px;
-    cursor: pointer;
-}
-
-.navbar img {
-    border-radius: 50%;
-}
-
-/* Sidebar Styles */
-.sidebar-container {
-    display: flex;
-    min-height: 100vh;
-}
-
-.sidebar {
-    width: 200px;
-    background-color: #34495e;
-    color: white;
+body {
     display: flex;
     flex-direction: column;
-    padding: 20px;
 }
 
-.sidebar a {
-    text-decoration: none;
-    color: white;
-    padding: 10px;
-    margin: 5px 0;
+/* Container for Sidebar and Content */
+.container {
     display: flex;
-    align-items: center;
-    border-radius: 5px;
-}
-
-.sidebar a img {
-    margin-right: 10px;
-}
-
-.sidebar a.active, .sidebar a:hover {
-    background-color: #1abc9c;
 }
 
 /* Main Content Styles */

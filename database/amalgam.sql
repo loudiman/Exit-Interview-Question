@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 12, 2024 at 12:14 PM
+-- Generation Time: Dec 14, 2024 at 01:13 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `amalgam`
+-- Database: `team02`
 --
 
 -- --------------------------------------------------------
@@ -69,7 +69,16 @@ INSERT INTO `question` (`question_id`, `question_json`, `question_type`) VALUES
 (9, '{\"question\": \"Rate your understanding of cloud computing concepts.\", \"scale\": 5}', 'rating'),
 (10, '{\"question\": \"Which color theory principle is most important in design?\", \"options\": [\"Contrast\", \"Balance\", \"Unity\", \"Rhythm\"]}', 'multiple_choice'),
 (11, '{\"question\": \"The design principles taught in the course were easy to apply in projects.\", \"options\": [\"Strongly Disagree\", \"Disagree\", \"Neutral\", \"Agree\", \"Strongly Agree\"]}', 'multiple_choice'),
-(12, '{\"question\": \"Who\'s your favorite nigga?\"}', 'rating');
+(12, '{\"question\": \"I feel prepared to use Adobe Creative Suite in a professional setting.\", \"options\": [\"Strongly Disagree\", \"Disagree\", \"Neutral\", \"Agree\", \"Strongly Agree\"]}', 'multiple_choice'),
+(13, '{\"question\": \"What role does social media play in shaping your approach to digital art and design?\"}', 'essay'),
+(14, '{\"question\": \"Rate your proficiency in Adobe Creative Suite.\", \"scale\": 5}', 'rating'),
+(15, '{ \"question\": \"What was your primary reason for choosing this university/college?\", \"options\": [\n    \"Academic reputation\",\n    \"Location\",\n    \"Scholarships/Financial aid\",\n    \"Campus facilities\"\n  ]\n}', 'multiple_choice'),
+(16, '{\"question\": \"How would you rate your overall academic experience?\",\"scale\": 5}', 'rating'),
+(17, '{\"question\": \"The faculty and staff were supportive and accessible.\",\"options\": [\"Strongly Disagree\",\"Disagree\",\"Neutral\",\"Agree\",\"Strong Agree\"]}', 'multiple_choice'),
+(18, '{\"question\": \"What did you like most about your time at this university/college?\"}', 'essay'),
+(19, '{\"question\": \"Which of the following resources did you find most helpful during your studies?\",\"options\": [\"Library\",\"Career Services\",\"Academic advising\",\"Tutoring Services\",\"Student organizations\"]}', 'multiple_choice'),
+(20, '{\"question\": \"Rank the following aspects of your university/college experience in order of importance.\",\"options\": [\"Quality of education\",\"Campus facilities\",\"Social life\",\"Career preparation\"]}', 'multiple_choice'),
+(21, '{\"question\": \"What was your primary reason for choosing this program?\",\"options\": [\"Career opportunities\",\"Program reputation\",\"Faculty expertise\",\"Research facilities\",\"Curriculum structure\"]}', 'multiple_choice');
 
 -- --------------------------------------------------------
 
@@ -98,7 +107,18 @@ INSERT INTO `questionaire` (`survey_id`, `question_id`) VALUES
 (2, 9),
 (3, 10),
 (3, 11),
-(3, 12);
+(3, 12),
+(3, 13),
+(3, 14),
+(4, 4),
+(4, 15),
+(4, 16),
+(4, 17),
+(4, 18),
+(4, 19),
+(4, 20),
+(4, 21),
+(5, 8);
 
 -- --------------------------------------------------------
 
@@ -118,6 +138,8 @@ CREATE TABLE `responders` (
 
 INSERT INTO `responders` (`username`, `survey_id`, `responded`) VALUES
 (2233672, 2, 0),
+(2233672, 4, 0),
+(2233672, 5, 1),
 (2233915, 1, 1),
 (2234244, 3, 1);
 
@@ -140,7 +162,8 @@ CREATE TABLE `responses` (
 
 INSERT INTO `responses` (`response_id`, `survey_id`, `response_json`, `submitted_at`) VALUES
 (1, 1, '[{\"question_id\":1,\"answer\":\"Functional\"},{\"question_id\":2,\"answer\":\"Yes\"},{\"question_id\":3,\"answer\":\"Recursion is a technique where a function calls itself to solve smaller instances of a problem until it reaches a base case.\"},{\"question_id\":4,\"rating\":4}]', '2024-12-01 20:11:55'),
-(3, 3, '[{\"question_id\":9,\"answer\":\"Contrast\"},{\"question_id\":10,\"answer\":\"Yes\"},{\"question_id\":11,\"answer\":\"Social media has expanded the reach of digital art, allowing artists to connect with wider audiences and showcase their work globally.\"},{\"question_id\":12,\"rating\":4}]', '2024-12-01 20:11:55');
+(3, 3, '[{\"question_id\":9,\"answer\":\"Contrast\"},{\"question_id\":10,\"answer\":\"Yes\"},{\"question_id\":11,\"answer\":\"Social media has expanded the reach of digital art, allowing artists to connect with wider audiences and showcase their work globally.\"},{\"question_id\":12,\"rating\":4}]', '2024-12-01 20:11:55'),
+(4, 5, '[{\"question_id\":8,\"answer\":\"dasdasdsa\"}]', '2024-12-01 21:34:46');
 
 -- --------------------------------------------------------
 
@@ -175,20 +198,21 @@ CREATE TABLE `survey` (
   `survey_id` int(11) NOT NULL,
   `survey_title` varchar(255) NOT NULL,
   `survey_description` varchar(255) DEFAULT NULL,
-  `status` enum('unpublished','published') NOT NULL DEFAULT 'unpublished',
   `program_id` int(11) NOT NULL,
   `period_start` datetime NOT NULL,
   `period_end` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ;
 
 --
 -- Dumping data for table `survey`
 --
 
-INSERT INTO `survey` (`survey_id`, `survey_title`, `survey_description`, `status`, `program_id`, `period_start`, `period_end`) VALUES
-(1, 'CS Department Evaluation 2024', NULL, 'published', 1, '2025-11-17 07:00:00', '2026-11-18 23:00:00'),
-(2, 'IT Department Evaluation 2024', NULL, 'published', 2, '2024-11-17 08:00:00', '2024-11-20 23:00:00'),
-(3, 'MMA Department Evaluation 2024', NULL, 'unpublished', 3, '2024-11-17 09:00:00', '2024-11-18 23:00:00');
+INSERT INTO `survey` (`survey_id`, `survey_title`, `survey_description`, `program_id`, `period_start`, `period_end`) VALUES
+(1, 'CS Department Evaluation 2024', 'CS Description', 1, '2024-11-17 07:00:00', '2024-11-18 23:00:00'),
+(2, 'IT Department Evaluation 2024', 'IT Description', 2, '2024-11-17 08:00:00', '2024-11-20 23:00:00'),
+(3, 'MMA Department Evaluation 2024', 'MMA Description', 3, '2024-11-17 09:00:00', '2024-11-18 23:00:00'),
+(4, 'Graduate Interview', 'This is to gather valuable feedback about their academic experience, campus life, and future plans.', 2, '2024-11-16 15:24:58', '2024-12-16 18:24:58'),
+(5, 'Test2', 'Test2 Desc', 2, '2024-11-16 15:24:58', '2024-12-10 22:24:58');
 
 -- --------------------------------------------------------
 
@@ -211,7 +235,6 @@ CREATE TABLE `user` (
 INSERT INTO `user` (`username`, `hashed_password`, `last_name`, `given_name`, `type`) VALUES
 (2233672, 'password123', 'Morados', 'Lou Diamond', 1),
 (2233915, 'password123', 'Agustin', 'Mark Lestat', 1),
-(2233944, 'pass123', 'Rabang', 'Gebreyl Isaac', 0),
 (2234244, 'password123', 'Luis', 'Marven Joffre', 1);
 
 --
@@ -285,19 +308,19 @@ ALTER TABLE `program`
 -- AUTO_INCREMENT for table `question`
 --
 ALTER TABLE `question`
-  MODIFY `question_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `question_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `responses`
 --
 ALTER TABLE `responses`
-  MODIFY `response_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `response_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `survey`
 --
 ALTER TABLE `survey`
-  MODIFY `survey_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `survey_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables

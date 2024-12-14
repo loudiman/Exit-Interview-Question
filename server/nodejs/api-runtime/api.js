@@ -15,7 +15,7 @@ const authRoutes = require(`./services/auth-service`)
 app.use('/auth',authRoutes)
 
 const uploadDownloadService = require(`./services/upload-download-service`)
-app.use('/upload-download',uploadDownloadService)
+app.use('/upload-download', uploadDownloadService)
 
 app.get('/',(req,res) => {
     res.send("This is the API endpoint")
