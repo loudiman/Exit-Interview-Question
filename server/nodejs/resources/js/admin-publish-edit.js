@@ -58,11 +58,15 @@ async function publishSurvey(currentData) {
     console.log(endTime);
 
         // Validate date and time
-    const isValidDate = new Date(`${fromDate} ${startTime}`) <= new Date(`${untilDate} ${endTime}`);
-    if (!isValidDate) {
+    const startDateValid = new Date(`${fromDate} ${startTime}`) <= new Date(`${untilDate} ${endTime}`);
+    const endDateValid = new Date(`${fromDate} ${startTime}`) >= new Date(`${untilDate} ${endTime}`);
+    if (!startDateValid) {
         alert("The 'Start' date/time cannot be later than the 'End' date/time. Please adjust them appropriately.");
         return false; // Return false to indicate failure
-    }
+    } if (!endDateValid) {
+        alert("The 'End' date/time cannot be earlier than the 'Start' date/time. Please adjust them appropriately.");
+        return false; // Return false to indicate failure
+    } 
 
     // Assign values to survey object
     currentData.survey.period_start = `${fromDate} ${startTime}:00`;
