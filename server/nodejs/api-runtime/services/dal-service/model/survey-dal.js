@@ -87,25 +87,33 @@ class SurveyDAL{
         }
     }
 
-    static async insertSurvey(surveyDAO){
-        var surveyTitle = surveyDAO.survey_title
-        var surveyDescription =surveyDAO.survey_description
-        var programID = null
-        var periodStart = surveyDAO.period_start
-        var periodEnd = surveyDAO.period_end
-        var status = surveyDAO.status
+    static async insertSurvey(surveyDAO) {
+        var surveyTitle = surveyDAO.survey_title;
+        var surveyDescription = surveyDAO.survey_description;
+        var programID = surveyDAO.program_id;
+        var periodStart = surveyDAO.period_start;
+        var periodEnd = surveyDAO.period_end;
 
-        console.log(surveyDAO)
+        try {
+            var programIDObject = { program_id: programID.program_id };
 
-        try{
-            var query = "INSERT INTO survey(survey_title, survey_description, status, program_id, period_start, period_end) VALUES(?,?,?,?,?,?)"
-            const[result] = await pool.execute(query,[surveyTitle, surveyDescription, status, programID, periodStart, periodEnd])
-            return result.insertId
-        }catch(error){
-            console.log(error)
-            throw new Error(error.message)
+            var query = "INSERT INTO survey(survey_title, survey_description, program_id, period_start, period_end) VALUES(?,?,?,?,?)";
+
+            const [result] = await pool.execute(query, [
+                surveyTitle,
+                surveyDescription,
+                JSON.stringify(programIDObject),
+                periodStart,
+                periodEnd
+            ]);
+
+            return result.insertId;
+        } catch (error) {
+            console.log(error);
+            throw new Error(error.message);
         }
     }
+
 
     static async insertQuestion(question){
         var questionType = question.question_type
