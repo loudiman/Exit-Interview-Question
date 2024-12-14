@@ -90,7 +90,7 @@ class SurveyDAL{
     static async insertSurvey(surveyDAO){
         var surveyTitle = surveyDAO.survey_title
         var surveyDescription =surveyDAO.survey_description
-        var programID = null
+        var programID = surveyDAO.program_id
         var periodStart = surveyDAO.period_start
         var periodEnd = surveyDAO.period_end
         var status = surveyDAO.status
@@ -102,7 +102,6 @@ class SurveyDAL{
             const[result] = await pool.execute(query,[surveyTitle, surveyDescription, status, programID, periodStart, periodEnd])
             return result.insertId
         }catch(error){
-            console.log(error)
             throw new Error(error.message)
         }
     }
@@ -242,7 +241,6 @@ class SurveyDAL{
     }
 
     static async putNewQuestion(surveyID, questionJSON, questionType,operationType, questionID){
-        // TODO: debug this later on, the below code is a pre processor to make sure survey isnt published yet
         // console.log(await this.isSurveyPublishedHelper(surveyID))
         // if(await this.isSurveyPublishedHelper(surveyID)){
         //     throw new Error("Survey is already published")
