@@ -90,7 +90,7 @@ class SurveyDAL{
     static async insertSurvey(surveyDAO){
         var surveyTitle = surveyDAO.survey_title
         var surveyDescription =surveyDAO.survey_description
-        var programID = surveyDAO.programID
+        var programID = null
         var periodStart = surveyDAO.period_start
         var periodEnd = surveyDAO.period_end
         var status = surveyDAO.status
