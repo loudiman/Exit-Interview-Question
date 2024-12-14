@@ -4,8 +4,6 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById('survey-publish-date').innerHTML = `<strong>Publish Date: ${surveySummary.period_start.toLocaleDateString()}</strong>`;
     document.getElementById('survey-expiration-date').innerHTML = `<strong>Available Until: ${surveySummary.period_end.toLocaleDateString()}</strong>`;
     document.getElementById('survey-respondents').innerHTML = `<strong>Respondents: ${surveySummary.total_responded}</strong>`;
-    document.getElementById('questionsTab').setAttribute('href', `/admin/dashboard/survey?id=${getSurveySummary().survey_id}`);
-    document.getElementById('responsesTab').setAttribute('href', `/admin/dashboard/survey/responses?id=${getSurveySummary().survey_id}`);
 
     // Get the title container
     const titleContainer = document.getElementById('title');
@@ -155,6 +153,7 @@ function generateMultipleChoice(questionNo, questionData, id) {
         input.setAttribute("name", questionId)
         input.setAttribute("value", option)
         input.setAttribute("class", "custom-radio")
+        input.setAttribute("disabled", "true")
 
         let label = document.createElement("label")
         label.setAttribute("for", option)
@@ -212,6 +211,7 @@ function generateCheckboxQuestion(questionNo, questionData, id) {
         input.setAttribute("name", questionId)
         input.setAttribute("value", option)
         input.setAttribute("class", "custom-checkbox")
+        input.setAttribute("disabled", "true")
 
         let label = document.createElement("label")
         label.setAttribute("for", option)
@@ -267,6 +267,7 @@ function generateEssayQuestion(questionNo, questionData, id) {
     textarea.setAttribute("cols", "30");
     textarea.setAttribute("placeholder", "Type your answer here...");
     textarea.setAttribute("maxlength", maxLength);
+    textarea.setAttribute("readonly", "true")
 
     // Create the character counter
     let charCounter = document.createElement("div");
@@ -334,6 +335,7 @@ function generateRatingQuestion(questionNo, questionData, id) {
         input.setAttribute("id", `rating-${i}`);
         input.setAttribute("name", questionId);
         input.setAttribute("value", i); // Sets the value to the rating number chosen
+        input.setAttribute("disabled", "true")
 
         let label = document.createElement("label");
         label.setAttribute("for", `rating-${i}`);

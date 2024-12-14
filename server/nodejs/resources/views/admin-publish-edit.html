@@ -23,10 +23,10 @@
         <a href="/admin">
             <img src="/static/images/home_icon.png" alt="Home Icon"> Home
         </a>
-        <a href="/admin/create" class="active">
+        <a href="/admin/create">
             <img src="/static/images/create_icon.png" alt="Create Icon"> Create
         </a>
-        <a href="/admin/surveys">
+        <a href="/admin/surveys" class="active">
             <img src="/static/images/view_icon.png" alt="View Icon"> View
         </a>
         <a href="/admin/respondents">
@@ -40,8 +40,8 @@
     <!-- Main content -->
     <div class="main-content" id="mainContent">
         <div class="survey-header-container">
-            <h1>Survey Title</h1>
-            <p>Description.</p>
+            <h1 id="survey-title">Survey Title</h1>
+            <p id="survey-description">Description.</p>
         </div>
 
         <!-- Survey Details -->
@@ -58,7 +58,7 @@
             <!-- Dropdown with multiple selection -->
             <div class="restriction-row">
                 <div class="dropdown-multiselect">
-                    <button class="dropdown-toggle" onclick="toggleDropdown('program-dropdown')">Make available for</button>
+                    <button class="dropdown-toggle" onclick="toggleRestrictionsDropdown('program-dropdown')">Make available for</button>
                     <div id="program-dropdown" class="dropdown-options">
                         <!-- Options will be dynamically added here -->
                     </div>
@@ -67,7 +67,7 @@
 
             <div class="restriction-row">
                 <div class="dropdown-multiselect">
-                    <button class="dropdown-toggle" onclick="toggleDropdown('student-dropdown')">Student/s Restricted</button>
+                    <button class="dropdown-toggle" onclick="toggleRestrictionsDropdown('student-dropdown')">Student/s Restricted</button>
                     <div id="student-dropdown" class="dropdown-options">
                         <!-- Options will be dynamically added here -->
                     </div>
@@ -76,7 +76,7 @@
 
             <div class="restriction-row">
                 <div class="dropdown-multiselect">
-                    <button class="dropdown-toggle" onclick="toggleDropdown('batch-dropdown')">Class Restricted</button>
+                    <button class="dropdown-toggle" onclick="toggleRestrictionsDropdown('batch-dropdown')">Class Restricted</button>
                     <div id="batch-dropdown" class="dropdown-options">
                         <!-- Options will be dynamically added here -->
                     </div>
@@ -85,18 +85,19 @@
 
             <!-- Publish Buttons -->
             <div class="button-container">
-                <a href="/admin/surveys/edit">
-                    <button  class="back-button">Back</button>
-                </a>
-                    <a href = "/admin/surveys" >
-                        <button class="publish-button">Publish</button>
-                    </a>
+
+                    <button  class="back-button" onclick=window.history.back();>Back</button>
+
+                    <button class="publish-button" id = "publishButton">Publish</button>
+
+
+
             </div>
         </div>
     </div>
 </div>
 
-<script src="/static/js/survey-creation-navbar.js"></script>
+<script src="/static/js/survey-navbar.js"></script>
 <script src="/static/js/admin-publish-edit.js"></script>
 </body>
 </html>

@@ -39,6 +39,8 @@ body {
     margin: 5px auto;
     width: 1500px;
     font-family: "CustomFont", sans-serif;
+    max-height: calc(100vh - 100px); /* Adjust the subtracted value as needed */
+    overflow-y: auto; /* This makes the container vertically scrollable */
 }
 
 .survey-title {
@@ -139,7 +141,7 @@ body {
 .publish-button {
     position: fixed;
     bottom: 20px;
-    right: 100px;
+    right: 20px;
     transition: background-color 0.3s;
 }
 
@@ -270,21 +272,47 @@ textarea {
     resize: none;
 }
 
-.rating-container {
+.rating-scale {
     display: flex;
-    gap: 10px;
-    justify-content: center;
+    flex-direction: row;  /* Align items in a row (side-by-side) */
+    justify-content: center; /* Center the entire row horizontally */
+    margin-top: 10px;
+    gap: 20px; /* Matches the original margin-right in JS for spacing */
+    align-items: center; /* Vertically align radio buttons in the row */
+}
+
+.rating-scale label {
+    display: flex;
+    flex-direction: column;
     align-items: center;
+    font-size: 14px;
+    cursor: pointer;
+    width: 70px;
+    height: auto;
+}
+
+.rating-scale input[type="radio"] {
+    accent-color: #6200ee;
+    width: 18px;
+    height: 18px;
+    margin: 5px 0;
+    cursor: pointer;
 }
 
 .max-rating-select {
-    padding: 8px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
+    margin-bottom: 15px;
+    padding: 5px;
     font-size: 14px;
-    outline: none;
-    cursor: pointer;
-    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+}
+
+.rating-container {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
 }
 
 .rating-container label {
