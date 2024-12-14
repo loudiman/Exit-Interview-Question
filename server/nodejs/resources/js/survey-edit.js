@@ -483,7 +483,7 @@ function saveSurveyToJSON() {
             status: "Draft"
         },
         questions: questions,
-        restrict_students: []
+        users: ""
     };
 
     sessionStorage.setItem("surveyData", JSON.stringify(surveyData));
@@ -544,7 +544,7 @@ function saveCurrentSurvey() {
             status: "Draft"
         },
         questions: questions,
-        restrict_students: []
+        users: []
     };
 
     sessionStorage.setItem("surveyData", JSON.stringify(surveyData));
