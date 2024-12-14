@@ -124,11 +124,11 @@ class SurveyController{
 
     static async handlePutSurvey(req, res){
         try{
-            const {survey_id, survey_title, survey_description,status, program_id, period_start, period_end} = req.body
+            const {survey_id, survey_title, survey_description, program_id, period_start, period_end} = req.body
 
             try{
-                const { rowsAffected } = await SurveyDAL.putNewSurveyData(survey_id, survey_title, survey_description,status, program_id, period_start, period_end)
-                if(rowsAffected == 0){
+                const { affectedRows } = await SurveyDAL.putNewSurveyData(survey_id, survey_title, survey_description, program_id, period_start, period_end)
+                if(affectedRows == 0){
                     res.status(400).json({message:"Survey is already published cannot edit"})
                 }
                 res.status(200).json({message:"success"})
