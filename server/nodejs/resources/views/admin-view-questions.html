@@ -21,19 +21,19 @@
 <div class="sidebar-container">
     <!-- Sidebar -->
     <nav class="sidebar" id="sidebar">
-        <a href="/admin" class="active">
+        <a href="#">
             <img src="/static/images/home_icon.png" alt="Home Icon"> Home
         </a>
-        <a href="/admin/create">
+        <a href="#">
             <img src="/static/images/create_icon.png" alt="Create Icon"> Create
         </a>
-        <a href="/admin/surveys">
+        <a href="#" class="active">
             <img src="/static/images/view_icon.png" alt="View Icon"> View
         </a>
-        <a href="/admin/respondents">
+        <a href="#">
             <img src="/static/images/respondents_icon.png" alt="Respondents Icon"> Respondents
         </a>
-        <a href="/admin/profile">
+        <a href="#">
             <img src="/static/images/male_user.png" alt="Profile Icon"> Profile
         </a>
     </nav>
@@ -41,8 +41,8 @@
     <main>
         <div class="tab-container">
             <ul class="tabs">
-                <a id="questionsTab" class="active" onclick="openTab('questions')">Questions</a>
-                <a id="responsesTab" onclick="openTab('responses')">Responses</a>
+                <a href="admin-view-questions.html" class="active" onclick="openTab('questions')">Questions</a>
+                <a href="admin-view-responses.html" onclick="openTab('responses')">Responses</a>
             </ul>
         </div>
         <div class="survey-container">
