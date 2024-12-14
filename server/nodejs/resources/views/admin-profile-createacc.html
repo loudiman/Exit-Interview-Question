@@ -8,13 +8,14 @@
     <link rel="stylesheet" href="/static/css/admin-profile-createacc.css">
     <link rel="stylesheet" href="/static/css/nav-bar.css">
     <link rel="stylesheet" href="/static/css/side-bar.css">
+    <script defer src="/static/js/side-bar.js"></script>
 </head>
 <body>
 <!-- Navbar -->
-<div class="navbar">
-    <button onclick="toggleSidebar()">☰</button>
-    <img src="/static/images/male_user.png" alt="Profile" width="30" height="30">
-</div>
+<header class="navbar">
+    <button aria-label="Toggle Sidebar" id="sidebarToggle">☰</button>
+    <img alt="Profile" height="30" src="/static/images/male_user.png" width="30">
+</header>
 
 <!-- Sidebar and main content container -->
 <div class="sidebar-container">
@@ -32,8 +33,8 @@
         <a href="/admin/respondents">
             <img src="/static/images/respondents_icon.png" alt="Respondents Icon"> Respondents
         </a>
-        <a href="#" class="active">
-            <img src="../images/male_user.png" alt="Profile Icon"> Profile
+        <a href="/admin/profile" class="active">
+            <img src="/static/images/male_user.png" alt="Profile Icon"> Profile
         </a>
     </nav>
 
