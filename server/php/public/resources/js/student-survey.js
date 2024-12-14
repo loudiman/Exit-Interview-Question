@@ -25,27 +25,59 @@
 //   };
 
 // sessionStorage.setItem('questionnaireData', JSON.stringify(surveyData));
-// async function main() {
-    // const surveyId = getSurveyIdFromURL(); // Dynamically fetch the survey ID from the URL
-    // if (surveyId) {
-    //     getQuestions(surveyId); // Call with the dynamic survey ID
-    // } else {
-    //     console.error("Survey ID not found in URL.");
-    // }
-// }
 
-generateQuestionDoms()
+main()
+
+function main() {
+    console.log("Running main function");
+    const surveyId = getSurveyIdFromURL(); // Dynamically fetch the survey ID from the URL
+    if (checkIfAlreadySubmitted(surveyId)) {
+        return;
+    }
+    if (surveyId) {
+        getQuestions(surveyId); // Call with the dynamic survey ID
+        generateQuestionDoms();
+    } else {
+        console.error("Survey ID not found in URL.");
+    }
+}
+
+// generateQuestionDoms()
 
 // Helper function to extract the survey ID from the URL
 function getSurveyIdFromURL() {
-    // const params = new URLSearchParams(window.location.search);
-    // return params.get("id"); //This is assuming the URL passed by student-homepage.js has a parameter id
+    console.log("Getting survey ID from URL");
+    const params = new URLSearchParams(window.location.search);
+    console.log("Params: ", params.get("id"));
+    return params.get("id"); 
+    
+    //This is assuming the URL passed by student-homepage.js has a parameter id
 }
 
-async function getQuestions(id){
-    // var response = await fetch("http://localhost:8888/student/survey?id="+id)
-    // var data = await response.json()
-    // await sessionStorage.setItem('questionnaireData', JSON.stringify(data))
+function getQuestions(id){
+    console.log("Getting questions for survey ID:", id);
+    fetch(`/student/survey/questionnaires?id=${id}`)
+        .then(response => {
+            // This is another solution handling an expired survey but with backend processing
+            if (!response.ok) {
+                window.location.href = '/student/survey/closedsurvey';
+                throw new Error('Survey expired');
+            }
+            return response.json();
+        })
+        .then(surveyData => {
+            sessionStorage.setItem('questionnaireData', JSON.stringify(surveyData));
+        })
+        .catch(error => console.error("Fetch error: ", error));  
+}
+
+function checkIfAlreadySubmitted(surveyId) {
+    const submitted = sessionStorage.getItem(`survey_${surveyId}_submitted`);
+    if (submitted === 'true') {
+        window.location.href = 'http://localhost:8888/student/survey/alreadyresponded';
+        return true;
+    }
+    return false;
 }
 
 function generateQuestionDoms(){
@@ -496,6 +528,7 @@ function gatherResponses(surveyId) {
                 throw new Error(`Server returned invalid JSON. Response: ${data}`);
             }
             console.log("Response saved successfully:", data);
+            sessionStorage.setItem(`survey_${numericSurveyId}_submitted`, 'true');        
             alert("Survey submitted successfully!");
             window.location.href = 'http://localhost:8888/student/surveys';
         })
@@ -507,5 +540,3 @@ function gatherResponses(surveyId) {
             alert(`Failed to submit survey: ${error.message}`);
         });
 }
-
-// main()

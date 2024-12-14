@@ -2,33 +2,32 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta  content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Create</title>
-
-    <link  href="/static/css/style.css" rel="stylesheet">
-    <link  href="/static/css/nav-bar.css" rel ="stylesheet">
-    <link  href="/static/css/survey-creation.css" rel="stylesheet">
-    <link  href="/static/css/side-bar.css" rel="stylesheet">
-    <script defer src="/static/js/side-bar.js"></script>
-
-
+  <meta  name="viewport" content="width=device-width, initial-scale=1.0" >
+  <title>Create Survey</title>
+  <link  href="/static/css/style.css" rel="stylesheet">
+  <link  href="/static/css/nav-bar.css" rel ="stylesheet">
+  <link  href="/static/css/survey-creation.css" rel="stylesheet">
+  <link  href="/static/css/side-bar.css" rel="stylesheet">
+  <script defer src="/static/js/side-bar.js"></script>
+</head>
 <body>
+
 <header class="navbar">
   <button aria-label="Toggle Sidebar" id="sidebarToggle">☰</button>
   <img alt="Profile" height="30" src="/static/images/male_user.png" width="30">
 </header>
 
-<!-- Sidebar and main content container -->
-<div class="container">
+<!--Sidebar and main content container &ndash;&gt;-->
+<div class="sidebar-container">
   <!-- Sidebar -->
-  <nav aria-label="Main Navigation" class="sidebar" id="sidebar">
+  <nav class="sidebar" id="sidebar">
     <a href="/admin">
       <img src="/static/images/home_icon.png" alt="Home Icon"> Home
     </a>
-    <a href="/admin/create" class="active">
+    <a href="/admin/create">
       <img src="/static/images/create_icon.png" alt="Create Icon"> Create
     </a>
-    <a href="/admin/surveys">
+    <a href="/admin/surveys" class="active">
       <img src="/static/images/view_icon.png" alt="View Icon"> View
     </a>
     <a href="/admin/respondents">
@@ -38,6 +37,7 @@
       <img src="/static/images/male_user.png" alt="Profile Icon"> Profile
     </a>
   </nav>
+
 
   <!-- Main content -->
   <div class="main-content" id="mainContent">
