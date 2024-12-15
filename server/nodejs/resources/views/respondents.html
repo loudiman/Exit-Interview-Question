@@ -9,33 +9,34 @@
     <link href="/static/css/nav-bar.css" rel="stylesheet">
     <link href="/static/css/side-bar.css" rel="stylesheet">
     <link href="/static/css/respondents.css" rel="stylesheet">
-    <script defer src="/static/js/side-bar.js"></script></head>
+    <script defer src="/static/js/side-bar.js"></script>
+</head>
 <body>
-    <!-- Navbar -->
-    <header class="navbar">
-        <button aria-label="Toggle Sidebar" id="sidebarToggle">☰</button>
-        <img alt="Profile" height="30" src="/static/images/male_user.png" width="30">
-    </header>
+<!-- Navbar -->
+<header class="navbar">
+    <button aria-label="Toggle Sidebar" id="sidebarToggle">☰</button>
+    <img alt="Profile" height="30" src="/static/images/male_user.png" width="30">
+</header>
 
-    <!-- Sidebar -->
-    <div class="sidebar-container">
-        <nav class="sidebar" id="sidebar">
-            <a href="/admin">
-                <img src="/static/images/home_icon.png" alt="Home Icon"> Home
-            </a>
-            <a href="/admin/create">
-                <img src="/static/images/create_icon.png" alt="Create Icon"> Create
-            </a>
-            <a href="/admin/surveys">
-                <img src="/static/images/view_icon.png" alt="View Icon"> View
-            </a>
-            <a href="/admin/respondents" class = "active">
-                <img src="/static/images/respondents_icon.png" alt="Respondents Icon"> Respondents
-            </a>
-            <a href="/admin/profile">
-                <img src="/static/images/male_user.png" alt="Profile Icon"> Profile
-            </a>
-        </nav>
+<!-- Sidebar -->
+<div class="sidebar-container">
+    <nav class="sidebar" id="sidebar">
+        <a href="/admin">
+            <img src="/static/images/home_icon.png" alt="Home Icon"> Home
+        </a>
+        <a href="/admin/create">
+            <img src="/static/images/create_icon.png" alt="Create Icon"> Create
+        </a>
+        <a href="/admin/surveys">
+            <img src="/static/images/view_icon.png" alt="View Icon"> View
+        </a>
+        <a href="/admin/respondents" class="active">
+            <img src="/static/images/respondents_icon.png" alt="Respondents Icon"> Respondents
+        </a>
+        <a href="/admin/profile">
+            <img src="/static/images/male_user.png" alt="Profile Icon"> Profile
+        </a>
+    </nav>
 
     <!-- Main Content -->
     <div class="main-content">
@@ -47,71 +48,13 @@
             </button>
         </section>
 
-        <!-- Respondents Section -->
-        <div class="respondents-section">
-            <h2>Respondents</h2>
+        <!-- Response Analytics Section -->
+        <div class="response-analytics">
+            <h2>Response Analytics</h2>
+            <!--This is where respondents.js should generate at-->
         </div>
-        <div class="respondents-table">
-            <div class="table-header">
-                <span>ID Number</span>
-                <span>Name</span>
-                <span>Surveys Responded To</span>
-            </div>
-            <div class="table-body">
-                <div class="table-row">
-                    <span>2234664</span>
-                    <span>Marven Luis</span>
-                    <span>
-                        <select>
-                            <option value="survey1">CS Exit Interview Questions</option>
-                            <option value="survey2">ICON Exit Interview Questions</option>
-                            <option value="survey3">MMA Exit Interview Questions</option>
-                        </select>
-                    </span>
-                </div>
-                <div class="table-row">
-                    <span>2234574</span>
-                    <span>Lou Morados</span>
-                    <span>
-                        <select>
-                            <option value="survey1">CS Exit Interview Questions</option>
-                            <option value="survey2">ICON Exit Interview Questions</option>
-                            <option value="survey3">MMA Exit Interview Questions</option>
-                        </select>
-                    </span>
-                </div>
-                <div class="table-row">
-                    <span>2232421</span>
-                    <span>Lenar Domingo</span>
-                    <span>
-                        <select>
-                            <option value="survey1">CS Exit Interview Questions</option>
-                            <option value="survey2">ICON Exit Interview Questions</option>
-                            <option value="survey3">MMA Exit Interview Questions</option>
-                        </select>
-                    </span>
-                </div>
-                <div class="table-row">
-                    <span>2237654</span>
-                    <span>Gebreyl Rabang</span>
-                    <span>
-                        <select>
-                            <option value="survey1">CS Exit Interview Questions</option>
-                            <option value="survey2">ICON Exit Interview Questions</option>
-                            <option value="survey3">MMA Exit Interview Questions</option>
-                        </select>
-                    </span>
-                </div>
-            </div>
-        </div>
-
-<!-- Response Analytics Section -->
-<div class="response-analytics">
-    <h2>Response Analytics</h2>
-
+    </div>
+    <script src="/static/js/respondents.js"></script>
 </div>
-    </div>
-<script src="/static/js/respondents.js"></script>
-    </div>
 </body>
 </html>
