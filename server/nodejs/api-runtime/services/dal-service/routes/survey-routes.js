@@ -28,6 +28,6 @@ surveyRoutes.delete('/survey/:survey_id',SurveyController.handleDeleteSurvey)
 
 surveyRoutes.get('/responses', SurveyController.handleGetResponses)
 
-surveyRoutes.get('/respondents', SurveyController.handleGetRespondents)
+surveyRoutes.put('/respondents', SurveyController.handleGetRespondents)
 
 module.exports = surveyRoutes
