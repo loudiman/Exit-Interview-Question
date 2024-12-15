@@ -11,6 +11,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         surveyDescriptionElement.textContent = surveyData.survey.survey_description;
     }
 
+
+    // Step 2: Fetch the data from the server
+
     fetchAllUsers().then(data => {
         addStudentsDropdown(data, "student-dropdown"); // Add options for responders
     });
@@ -19,7 +22,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         addOptions(data.availability, "program-dropdown"); // Add options for programs
     });
 
+    addYear("year-dropdown", 1911); // Add options for year
+    addSemester("semester-dropdown"); // Add options for semester
+
     const publishButton = document.getElementById("publishButton");
+
     if (publishButton) {
         publishButton.addEventListener("click", async () => {
             await publishSurvey(surveyData).then(r => console.log("Survey published:", r));
@@ -173,6 +180,69 @@ function addStudentsDropdown(data, containerId) {
         label.appendChild(document.createTextNode(`${user.given_name} ${user.last_name}`));
         container.appendChild(label);
     });
+}
+
+function addSemester(containerId) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = ''; // Clear existing options
+
+    const sems = [
+        { semester: "first" },
+        { semester: "second" }
+    ];
+
+    sems.forEach(item => {
+        const label = document.createElement('label');
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = item.semester;
+        label.appendChild(checkbox);
+        label.appendChild(document.createTextNode(item.semester));
+        container.appendChild(label);
+    });
+}
+
+function addYear(containerId, startYear) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+
+    const now = new Date();
+    const currentYear = now.getFullYear();
+
+    // Create an array of all the years from the start year to the current year + 100
+    const allYears = [];
+    for (let year = startYear; year <= currentYear + 100; year++) {
+        allYears.push(year);
+    }
+
+    for (const year of allYears) {
+        const label = document.createElement('label');
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = year;
+        checkbox.checked = year === currentYear; // Set the current year as checked by default
+        label.appendChild(checkbox);
+        label.appendChild(document.createTextNode(year));
+        container.appendChild(label);
+    }
+
+    const dropdown = container.closest('.dropdown-checkbox'); // Find the closest dropdown container
+    console.log(dropdown)
+    const dropdownOptions = dropdown.querySelector('.dropdown-checkbox-options');
+
+    dropdown.addEventListener('click', () => {
+        console.log("hit")
+        const currentYearCheckbox = container.querySelector(`input[value="${currentYear}"]`);
+        if (currentYearCheckbox && dropdownOptions) {
+            dropdownOptions.scrollTop = currentYearCheckbox.offsetTop - dropdownOptions.offsetTop;
+        }
+    });
+}
+
+function toggleDropdown(containerId) {
+    const dropdown = document.getElementById(containerId);
+    const isVisible = dropdown.style.display === 'block';
+    dropdown.style.display = isVisible ? 'none' : 'block';
 }
 
 function addOptions(data, containerId) {
