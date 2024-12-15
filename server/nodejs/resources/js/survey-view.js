@@ -146,6 +146,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function closeDeleteModal() {
+        const deleteModal = document.getElementById('deleteModal');
+        const modalOverlay = document.getElementById('modalOverlay');
+
+        if (deleteModal) {
+            deleteModal.close(); // Use the native close() method for dialogs
+            deleteModal.style.display = ''; // Reset any inline styles
+        }
+
+        if (modalOverlay) {
+            modalOverlay.style.display = 'none';
+        }
+
+        // Reset the current survey to delete
+        currentSurveyToDelete = null;
+    }
+
+    document.getElementById('cancelDelete').addEventListener('click', (event) => {
+        closeDeleteModal();
+    });
+
     (async () => {
         const surveys = await fetchSurveys();
         if (surveys.length) {
@@ -180,11 +201,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             document.getElementById('closePreview').addEventListener('click', () => {
                 document.getElementById('previewModal').close();
-                document.getElementById('modalOverlay').style.display = 'none';
-            });
-
-            document.getElementById('cancelDelete').addEventListener('click', () => {
-                document.getElementById('deleteModal').close();
                 document.getElementById('modalOverlay').style.display = 'none';
             });
 
