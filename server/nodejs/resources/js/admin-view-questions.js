@@ -155,6 +155,7 @@ function generateMultipleChoice(questionNo, questionData, id) {
         input.setAttribute("name", questionId)
         input.setAttribute("value", option)
         input.setAttribute("class", "custom-radio")
+        input.setAttribute("disabled", "true")
 
         let label = document.createElement("label")
         label.setAttribute("for", option)
@@ -212,6 +213,7 @@ function generateCheckboxQuestion(questionNo, questionData, id) {
         input.setAttribute("name", questionId)
         input.setAttribute("value", option)
         input.setAttribute("class", "custom-checkbox")
+        input.setAttribute("disabled", "true")
 
         let label = document.createElement("label")
         label.setAttribute("for", option)
@@ -267,6 +269,7 @@ function generateEssayQuestion(questionNo, questionData, id) {
     textarea.setAttribute("cols", "30");
     textarea.setAttribute("placeholder", "Type your answer here...");
     textarea.setAttribute("maxlength", maxLength);
+    textarea.setAttribute("readonly", "true")
 
     // Create the character counter
     let charCounter = document.createElement("div");
@@ -334,6 +337,7 @@ function generateRatingQuestion(questionNo, questionData, id) {
         input.setAttribute("id", `rating-${i}`);
         input.setAttribute("name", questionId);
         input.setAttribute("value", i); // Sets the value to the rating number chosen
+        input.setAttribute("disabled", "true")
 
         let label = document.createElement("label");
         label.setAttribute("for", `rating-${i}`);

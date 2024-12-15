@@ -27,6 +27,16 @@ class UserDAL {
         }
     }
 
+    //Please lestat let me
+    static async getStudentByUsername(username) {
+        try {
+            const [rows] = await pool.query("SELECT username, program_id, sem, batch, gender FROM student WHERE username = ?",[username])
+            return rows;
+        } catch (error) {
+            throw new Error(`Error fetching student: ${username} with error: ${error.message}`);
+        }
+    }
+
     //Will return a user based on username
     static async getUserByUsername(username){
         try{

@@ -40,8 +40,8 @@
     <!-- Main content -->
     <div class="main-content" id="mainContent">
         <div class="survey-header-container">
-            <h1>Survey Title</h1>
-            <p>Description.</p>
+            <h1 id="survey-title">Survey Title</h1>
+            <p id="survey-description">Description.</p>
         </div>
 
         <!-- Survey Details -->
@@ -75,7 +75,23 @@
             </div>
 
             <div class="restriction-row">
+                <div class="dropdown-checkbox">
+                    <p id="batch-restricted-title">Batch Restricted</p>
+                    <button class="dropdown-checkbox-toggle" onclick="toggleDropdown('year-dropdown')">Year</button>
+                    <button class="dropdown-checkbox-toggle" onclick="toggleDropdown('semester-dropdown')">Semester</button>
+                    <div id="year-dropdown" class="dropdown-checkbox-options">
+                        <!-- Options will be dynamically added here -->
+                    </div>
+                    <div id="semester-dropdown" class="dropdown-checkbox-options">
+                        <!-- Options will be dynamically added here -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="restriction-row">
                 <div class="dropdown-multiselect">
+                    <button class="dropdown-toggle" onclick="toggleDropdown('gender-dropdown')">Gender Restricted</button>
+                    <div id="gender-dropdown" class="dropdown-options">
                     <button class="dropdown-toggle" onclick="toggleRestrictionsDropdown('batch-dropdown')">Class Restricted</button>
                     <div id="batch-dropdown" class="dropdown-options">
                         <!-- Options will be dynamically added here -->

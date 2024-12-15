@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", async () => {
     const surveyData = JSON.parse(sessionStorage.getItem('surveyData'))
-
+    sessionStorage.clear()
     // const programDropdownToggle = document.querySelector('.dropdown-toggle[onclick*="program-dropdown"]');
     // const studentDropdownToggle = document.querySelector('.dropdown-toggle[onclick*="student-dropdown"]');
     // const batchDropdownToggle = document.querySelector('.dropdown-toggle[onclick*="batch-dropdown"]');
@@ -41,12 +41,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             const programFilters = getSelectedValues("program-dropdown");
             const studentFilters = getSelectedValues("student-dropdown");
 
-            var filters = {
-                "filters": [
+            let filters =
+                {"filters": [
                     {
                         "not":
                             {
-                                "username": studentFilters //this is the not allowed users
+                                "username": studentFilters //this is the restricted users
                             }
                     },
                     {
@@ -55,22 +55,24 @@ document.addEventListener("DOMContentLoaded", async () => {
                                 "program_id": programFilters //this is the allowed programs
                             }
                     }
-
                 ]
             }
 
-            console.log(JSON.stringify(filters))
+            let programsSelected = {
+                "program_id": programFilters
+            }
 
             var result = await fetchAllowedUsers(filters)
             var userArray = []
             for (item in result) {
-                console.log(item)
+                console.log(JSON.stringify(item))
                 let jsonObject = {}
                 jsonObject.username = result[item].username
                 userArray.push(jsonObject)
             }
 
             console.log(userArray)
+            console.log("Programs restricted: " + programFilters)
 
             const fromDate = document.querySelector('input[type="date"]').value;
             const startTime = document.querySelector('input[type="time"]').value;
@@ -78,12 +80,11 @@ document.addEventListener("DOMContentLoaded", async () => {
             const endTime = document.querySelectorAll('input[type="time"]')[1].value;
             surveyData.surveyReq.period_start = `${fromDate} ${startTime}`;
             surveyData.surveyReq.period_end = `${untilDate} ${endTime}`;
+            surveyData.surveyReq.program_id = programsSelected
             surveyData.users = userArray
 
-            // Prepare and print the JSON data that will be sent to the server
             console.log(`Survey Data to send: ${JSON.stringify(surveyData)}`);
 
-            // Step 4: Publish button logic to send data (commented for now)
             fetch('http://localhost:2020/api/survey-service/survey', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
@@ -93,7 +94,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                 .then(data => console.log('Success:', data))
                 .catch(error => console.error('Error:', error));
 
-            // Redirect to survey creation page
             // sessionStorage.clear()
             // window.location.href = "/admin/create";
         });
