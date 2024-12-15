@@ -15,14 +15,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Clear containers more efficiently
         unpublishedContainer.innerHTML = '';
         publishedContainer.innerHTML = '';
-        console.log('Surveys', data);
         const currentDate = new Date()
         data.forEach(survey => {
-            console.log(survey)
             const surveyPeriodStart = new Date(survey.period_start)
             const status = surveyPeriodStart < currentDate ? 'published' : 'unpublished'
-            console.log(`current status ${status}`)
-            console.log((status === 'unpublished'))
             const container = status === 'unpublished' ? unpublishedContainer : publishedContainer;
             const surveyItem = document.createElement('div');
             surveyItem.className = 'survey-item';
@@ -39,7 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Helper functions for HTML generation
     function createUnpublishedSurveyHTML(survey) {
-        console.log(`Creating unpub survey ${survey}`)
         return `
             <span>${survey.survey_title}</span>
             <a href="/admin/surveys/edit?survey_id=${survey.survey_id}">
@@ -102,18 +97,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const survey = surveys.find(survey => survey.survey_id === parseInt(surveyId));
         if (!survey) return console.error('Survey not found');
 
+        // Set the current survey to delete globally
+        currentSurveyToDelete = surveyId;
+
         document.getElementById('surveyTitle').textContent = survey.survey_title;
         document.getElementById('deleteModal').showModal();
         document.getElementById('modalOverlay').style.display = 'block';
-
-        const confirmHandler = () => {
-            deleteSurvey(surveyId, surveys);
-            document.getElementById('deleteModal').close();
-            document.getElementById('modalOverlay').style.display = 'none';
-            document.getElementById('confirmDelete').removeEventListener('click', confirmHandler);
-        };
-
-        document.getElementById('confirmDelete').addEventListener('click', confirmHandler);
     }
 
     async function deleteSurvey(surveyId, surveys) {
@@ -150,7 +139,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const surveys = await response.json();
-            console.log(surveys);
             return surveys;
         } catch (error) {
             console.error('Failed to fetch surveys:', error.message);
@@ -160,7 +148,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     (async () => {
         const surveys = await fetchSurveys();
-        console.log('SURVEYS', surveys);
         if (surveys.length) {
             renderSurveys(surveys);
             // Restore search event listener
@@ -183,7 +170,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            document.getElementById('confirmDelete').addEventListener('click', deleteSurvey);
+            document.getElementById('confirmDelete').addEventListener('click', () => {
+                if (currentSurveyToDelete) {
+                    console.log("Current survey to delete: "+currentSurveyToDelete);
+                    deleteSurvey(currentSurveyToDelete, surveys);
+                    document.getElementById('deleteModal').close();
+                    document.getElementById('modalOverlay').style.display = 'none';
+                }
+            });
             document.getElementById('closePreview').addEventListener('click', () => {
                 document.getElementById('previewModal').close();
                 document.getElementById('modalOverlay').style.display = 'none';
