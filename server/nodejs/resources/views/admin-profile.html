@@ -9,6 +9,7 @@
     <link href="/static/css/admin-profile.css" rel="stylesheet">
     <link href="/static/css/side-bar.css" rel="stylesheet">
     <script defer src="/static/js/side-bar.js"></script>
+    <script src="/static/js/admin-profile.js"></script>
 </head>
 <body>
 
@@ -43,7 +44,28 @@
     <main>
         <div class="flex-container">
             <div class="flex-container row">
-                <img src="/static/images/black-img.png" alt="ICON" id="profile-icon">
+                <button id="profile-icon-btn" aria-label="Profile Button">
+                    <!-- This is where the profile image will be displayed -->
+                    <img src="http://localhost:2020/upload-download/image/2233915" alt="Profile Icon" id="profile-icon">
+                </button>
+
+                <div class="modal" id="uploadModal">
+                    <div class="modal-content">
+                        <span class="close-btn" id="closeModal">&times;</span>
+                        <h3>Upload Profile Picture</h3>
+                        <form id="uploadForm" 
+                              action="http://localhost:2020/upload-download/upload/image/2233915" 
+                              method="POST" 
+                              enctype="multipart/form-data">
+                            <input type="file" 
+                                   id="imageUpload" 
+                                   name="file" 
+                                   accept="image/*" 
+                                   required>
+                            <button type="submit" class="upload-btn">Upload</button>
+                        </form>
+                    </div>
+                </div>
                 <h2>Mark Lestat Agustin</h2>
             </div>
             <button class="changepass-btn" onclick="location.href='/admin/profile/edit'">Change Password</button>
@@ -62,6 +84,6 @@
         </div>
     </main>
 </div>
-<!--<script src="/static/js/survey_creation_navbar.js"></script>-->
+
 </body>
 </html>

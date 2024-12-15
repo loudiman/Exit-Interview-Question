@@ -124,12 +124,26 @@ class SurveyController{
 
     static async handlePutSurvey(req, res){
         try{
-            const {survey_id, survey_title, survey_description, program_id, period_start, period_end} = req.body
+            const {survey_id, survey_title, survey_description, program_id, period_start, period_end, responders} = req.body
+            if(!responders){
+                res.status(400).json({message:"responders missing"})
+            }
+
+            if(!survey_id){
+                res.status(400).json({message:"survey_id missing"})
+            }
+
+            await SurveyDAL.deleteSurvey(survey_id)
 
             try{
                 const { affectedRows } = await SurveyDAL.putNewSurveyData(survey_id, survey_title, survey_description, program_id, period_start, period_end)
                 if(affectedRows == 0){
                     res.status(400).json({message:"Survey is already published cannot edit"})
+                }
+
+                const result = await SurveyDAL.insertResponders(responders,survey_id)
+                if(!result){
+                    res.status(400).json({message:"something failed hehe"})
                 }
                 res.status(200).json({message:"success"})
             }catch(Error){

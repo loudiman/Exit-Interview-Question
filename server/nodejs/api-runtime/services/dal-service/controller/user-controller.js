@@ -68,7 +68,7 @@ class UserController{
         // Guard clause for equal filter type
         if(type == "equal"){
             // item would be the column in the database to filter by
-            for(let item in jsonObject){
+            for(let item in jsonObject.equal){
                 console.log(jsonObject.equal)
                 var filters = jsonObject.equal[item].map((filter) => `${filter}`).join(",")
                 var statement = `s.${item} IN (${filters})`
