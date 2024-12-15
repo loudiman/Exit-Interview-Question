@@ -62,19 +62,19 @@ class SurveyDAL{
         }
     }
 
-
-    static async updateSurveyStatus(surveyDAO){
-        var status = surveyDAO.status
-        var surveyID = survveyDAO.survey_id
-
-        try{
-            var query = "UPDATE survey SET status = ? WHERE survey_id = ?"
-            const [result] = await pool.execute(query,[status, surveyID])
-            return result
-        }catch(error){
-            throw new Error(error.message)
-        }
-    }
+    //No longer supported by the database
+    // static async updateSurveyStatus(surveyDAO){
+    //     var status = surveyDAO.status
+    //     var surveyID = survveyDAO.survey_id
+    //
+    //     try{
+    //         var query = "UPDATE survey SET status = ? WHERE survey_id = ?"
+    //         const [result] = await pool.execute(query,[status, surveyID])
+    //         return result
+    //     }catch(error){
+    //         throw new Error(error.message)
+    //     }
+    // }
 
     static async updateResponder(username, responded){
         var query = "UPDATE responders SET responded = ? WHERE username = ?"
@@ -171,7 +171,7 @@ class SurveyDAL{
     }
 
     static async insertResponders(responders, surveyID) {
-        // If no responders, return early
+
         if (responders.length === 0) return true;
 
         // Batch the inserts to prevent packet size issues
@@ -195,7 +195,7 @@ class SurveyDAL{
             } catch (error) {
                 console.error('Error inserting responders batch:', error);
                 results = false;
-                break;
+                throw new Error("Error inserting into responders: "+error.message);
             }
         }
 
