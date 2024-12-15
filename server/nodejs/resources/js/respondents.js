@@ -1,10 +1,45 @@
 document.addEventListener('DOMContentLoaded', async () => {
     await createSurveyAnalyticsHTML()
+
+    const searchInput = document.querySelector('#searchInput');
+    searchInput.addEventListener('input', debounce(() => searchSurveys(surveyData), 300));
 });
+
+let surveyData = [];
+
+function searchSurveys(surveys) {
+    const searchTerm = document.querySelector('#searchInput').value.toLowerCase().trim();
+    const filteredSurveys = surveys.filter(survey =>
+        // Expand search to include more fields
+        survey.survey_title.toLowerCase().includes(searchTerm) ||
+        survey.survey_description.toLowerCase().includes(searchTerm) ||
+        // Search through respondent details
+        survey.respondents.some(respondent =>
+            respondent.username.toString().toLowerCase().includes(searchTerm) ||
+            respondent.first_name.toLowerCase().includes(searchTerm) ||
+            respondent.last_name.toLowerCase().includes(searchTerm) ||
+            respondent.program_name.toLowerCase().includes(searchTerm)
+        )
+    );
+
+    const responseAnalyticsDiv = document.querySelector('.response-analytics');
+    responseAnalyticsDiv.innerHTML = '<h2>Response Analytics</h2>';
+
+    const htmlContent = generateSurveyAnalyticsHTML(filteredSurveys);
+    responseAnalyticsDiv.insertAdjacentHTML('beforeend', htmlContent);
+}
+
+function debounce(func, delay) {
+    let timer;
+    return function (...args) {
+        clearTimeout(timer);
+        timer = setTimeout(() => func.apply(this, args), delay);
+    };
+}
 
 async function createSurveyAnalyticsHTML() {
     try {
-        const surveyData = await processSurveyData();
+        surveyData = await processSurveyData();
         const htmlContent = generateSurveyAnalyticsHTML(surveyData);
 
         const responseAnalyticsDiv = document.querySelector('.response-analytics');
