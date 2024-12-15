@@ -71,6 +71,20 @@ class UserController{
         }
     }
 
+    //For GET '/student/:username'
+    static async handleStudentGetByUsername(req,res){
+        const {username} = req.params
+        console.log(username)
+        try{
+            const [rows] = await UserDAL.getStudentByUsername(username)
+            console.log(rows)
+            res.status(200).json(rows)
+        }catch(error){
+            console.log(error)
+            res.status(500).json({error: 'Failed to retrieve student'})
+        }
+    }
+
     //For GET '/user/:username'
     static async handleGetByUsername(req,res){
         const {username} = req.params
