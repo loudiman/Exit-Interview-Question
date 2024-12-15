@@ -13,6 +13,7 @@ class SurveyDAL{
 
     static async deleteSurvey(surveyID){
         const query = `DELETE FROM survey WHERE survey_id = ?`
+        console.log(surveyID)
         try{
             const[result] = await pool.execute(query, [surveyID])
             if(result.affectedRows == 0){
@@ -160,15 +161,6 @@ class SurveyDAL{
         }
     }
 
-    static async deleteSurvey(surveyID){
-        var query = `DELETE FROM responders WHERE survey_id = ?`
-        try{
-            const [result] = pool.execute(query, surveyID)
-            return result.affectedRows
-        }catch(error){
-            throw new Error(error.message)
-        }
-    }
 
     static async insertResponders(responders, surveyID) {
 
