@@ -13,7 +13,6 @@ class SurveyDAL{
 
     static async deleteSurvey(surveyID){
         const query = `DELETE FROM survey WHERE survey_id = ?`
-        console.log(surveyID)
         try{
             const[result] = await pool.execute(query, [surveyID])
             if(result.affectedRows == 0){
@@ -161,6 +160,15 @@ class SurveyDAL{
         }
     }
 
+    static async deleteResponders(surveyID){
+        var query = `DELETE FROM responders WHERE survey_id = ?`
+        try{
+            const [result] = await pool.execute(query, [surveyID])
+            return result.affectedRows
+        }catch(error){
+            throw new Error(error.message)
+        }
+    }
 
     static async insertResponders(responders, surveyID) {
 
@@ -240,9 +248,16 @@ class SurveyDAL{
         const query = "UPDATE survey SET survey_title = ?, survey_description = ?, program_id = ?, period_start = ?, period_end = ? WHERE survey_id = ? AND period_start > CURDATE();";
 
         try {
+            console.log("this id ",survey_id)
+            const programIDJSON = {
+                "program_id": {program_id}
+            }
+
+            console.log(programIDJSON.program_id)
             // Await the query execution and handle the result
-            const [results] = await pool.execute(query, [survey_title, survey_description, program_id, period_start, period_end, survey_id]);
+            const [results] = await pool.execute(query, [survey_title, survey_description, JSON.stringify(programIDJSON.program_id), period_start, period_end, survey_id]);
             console.log('Query executed successfully:', results);
+            return results
         } catch (error) {
             // Log and throw the error with a helpful message
             console.error('Error executing query:', error.message);
