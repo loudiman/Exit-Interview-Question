@@ -46,65 +46,65 @@ document.addEventListener('DOMContentLoaded', () => {
         renderSurveys(filteredSurveys);
     }
 
-    // // Function to render surveys based on the filtered data
-    // function renderSurveys(data) {
-    //     unpublishedContainer.innerHTML = '';
-    //     publishedContainer.innerHTML = '';
-    //     const currentDate = new Date()
-    //     data.forEach(({ survey_id, survey_title, total_responded, total_responders, period_start, period_end }) => {
-    //         const periodStart = new Date(period_start)
-    //         const periodEnd = new Date(period_end)
-    //         var status = periodStart > currentDate ? 'unpublished' : 'published'
-    //         var status = periodEnd < currentDate ? 'Survey Done' : status
-    //         const container = status === 'unpublished' ? unpublishedContainer : publishedContainer;
-    //         const isUnpublished = status === 'unpublished';
-    //         const action = isUnpublished ? 'Edit' : 'Details';
-    //
-    //         const surveyItem = document.createElement('div');
-    //         const href = isUnpublished ? `/admin/surveys/edit?survey_id=${survey_id}` : `/admin/dashboard/survey`;
-    //
-    //         surveyItem.className = 'survey-item';
-    //         surveyItem.innerHTML = `
-    //             <span class="survey-title">${survey_title}</span>
-    //             <span class="survey-respondents">(${total_responded}/${total_responders})</span>
-    //             <div class="status ${status}">
-    //                 <span class="survey-status">${capitalize(status)}</span>
-    //             </div>
-    //             <a id="temp" class="${isUnpublished ? 'edit-btn' : 'details-btn'}">
-    //                 <button data-id="${survey_id}">
-    //                     <img src="/static/images/${action}.png" alt="${action} Icon" />
-    //                 </button>
-    //             </a>
-    //         `;
-    //
-    //         surveyItem.querySelector('#temp').addEventListener('click', (function(survey_id) {
-    //             return function(event) {
-    //                 event.preventDefault();
-    //                 fetch(`http://localhost:2020/api/survey-service/questions/${survey_id}`)
-    //                 .then(response => response.json())
-    //                 .then(surveyData => {
-    //                     console.log(JSON.stringify(surveyData));
-    //                     sessionStorage.setItem('questionnaireData', JSON.stringify(surveyData));
-    //                     sessionStorage.setItem('surveyId', survey_id);
-    //                     window.location.href = href;
-    //                 })
-    //                 .catch(error => console.error("Fetch error: ", error));
-    //             };
-    //         })(survey_id));
-    //
-    //         container.appendChild(surveyItem);
-    //     });
-    // }
-    // document.body.addEventListener('click', event => {
-    //     const button = event.target.closest('button');
-    //     if (!button) return;  // Exit if not a button
-    //
-    //     const surveyId = button.dataset.id;
-    //
-    //     if (button.classList.contains('details-btn')) {
-    //         showPreview(surveyId);
-    //     }
-    // });
+    // Function to render surveys based on the filtered data
+    function renderSurveys(data) {
+        unpublishedContainer.innerHTML = '';
+        publishedContainer.innerHTML = '';
+        const currentDate = new Date()
+        data.forEach(({ survey_id, survey_title, total_responded, total_responders, period_start, period_end }) => {
+            const periodStart = new Date(period_start)
+            const periodEnd = new Date(period_end)
+            var status = periodStart > currentDate ? 'unpublished' : 'published'
+            var status = periodEnd < currentDate ? 'Survey Done' : status
+            const container = status === 'unpublished' ? unpublishedContainer : publishedContainer;
+            const isUnpublished = status === 'unpublished';
+            const action = isUnpublished ? 'Edit' : 'Details';
+
+            const surveyItem = document.createElement('div');
+            const href = isUnpublished ? `/admin/surveys/edit?survey_id=${survey_id}` : `/admin/dashboard/survey`;
+
+            surveyItem.className = 'survey-item';
+            surveyItem.innerHTML = `
+                <span class="survey-title">${survey_title}</span>
+                <span class="survey-respondents">(${total_responded}/${total_responders})</span>
+                <div class="status ${status}">
+                    <span class="survey-status">${capitalize(status)}</span>
+                </div>
+                <a id="temp" class="${isUnpublished ? 'edit-btn' : 'details-btn'}">
+                    <button data-id="${survey_id}">
+                        <img src="/static/images/${action}.png" alt="${action} Icon" />
+                    </button>
+                </a>
+            `;
+
+            surveyItem.querySelector('#temp').addEventListener('click', (function(survey_id) {
+                return function(event) {
+                    event.preventDefault();
+                    fetch(`http://localhost:2020/api/survey-service/questions/${survey_id}`)
+                    .then(response => response.json())
+                    .then(surveyData => {
+                        console.log(JSON.stringify(surveyData));
+                        sessionStorage.setItem('questionnaireData', JSON.stringify(surveyData));
+                        sessionStorage.setItem('surveyId', survey_id);
+                        window.location.href = href;
+                    })
+                    .catch(error => console.error("Fetch error: ", error));
+                };
+            })(survey_id));
+
+            container.appendChild(surveyItem);
+        });
+    }
+    document.body.addEventListener('click', event => {
+        const button = event.target.closest('button');
+        if (!button) return;  // Exit if not a button
+
+        const surveyId = button.dataset.id;
+
+        if (button.classList.contains('details-btn')) {
+            showPreview(surveyId);
+        }
+    });
 
 
     // Debounced search function to filter surveys based on user input
