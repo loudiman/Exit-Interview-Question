@@ -8,73 +8,33 @@
     <link rel="stylesheet" href="/static/css/admin-view-responses.css">
     <link rel="stylesheet" href="/static/css/nav-bar.css">
     <link rel="stylesheet" href="/static/css/side-bar.css">
+     <!--Load the AJAX API-->
+     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 </head>
 <body>
-
-<!-- Navbar -->
-<div class="navbar">
-    <button onclick="toggleSidebar()">☰</button>
-    <img src="/static/images/male_user.png" alt="Profile" width="30" height="30">
-</div>
-
-<!-- Sidebar and main content container -->
-<div class="sidebar-container">
-    <!-- Sidebar -->
-    <nav class="sidebar" id="sidebar">
-        <a href="/admin" class="active">
-            <img src="/static/images/home_icon.png" alt="Home Icon"> Home
-        </a>
-        <a href="/admin/create">
-            <img src="/static/images/create_icon.png" alt="Create Icon"> Create
-        </a>
-        <a href="/admin/surveys">
-            <img src="/static/images/view_icon.png" alt="View Icon"> View
-        </a>
-        <a href="/admin/respondents">
-            <img src="/static/images/respondents_icon.png" alt="Respondents Icon"> Respondents
-        </a>
-        <a href="/admin/profile">
-            <img src="/static/images/male_user.png" alt="Profile Icon"> Profile
-        </a>
-    </nav>
     <!-- Main Content -->
     <main>
-        <div class="tab-container">
-            <ul class="tabs">
-                <a id="questionsTab" onclick="openTab('questions')">Questions</a>
-                <a id="responsesTab" class="active"onclick="openTab('responses')">Responses</a>
-            </ul>
-        </div>
-        <div class="summary-section">
-            <h1>Survey Responses Summary</h1>
-
-            <!-- Satisfaction Rating -->
-            <div class="chart">
-                <h2>On a scale of 1-5, how satisfied are you with the MMA program overall?</h2>
-                <img src="/static/images/Scale-img.png" alt="Satisfaction Chart">
+        <!-- Sidebar and main content container -->
+        <div class="sidebar-container">
+            <div class="tab-container">
+                <ul class="tabs">
+                    <a id="questionsTab" onclick="openTab('questions')">Questions</a>
+                    <a id="responsesTab" class="active"onclick="openTab('responses')">Responses</a>
+                </ul>
             </div>
-
-            <!-- Beneficial Aspects -->
-            <div class="graph">
-                <h2>Which aspects of the MMA program were most beneficial to your learning experience?</h2>
-                <img src="/static/images/Graph-img.png" alt="Beneficial Aspects Chart">
-            </div>
-
-            <!-- Testimonials -->
-            <div class="responses-text">
-                <h2>Share your experience on how the program prepared you for a career in multimedia arts:</h2>
-                <p>The program provided a comprehensive foundation in multimedia arts by combining theoretical knowledge with hands-on practice.</p>
-                <p>The program introduced me to various media platforms, from traditional print to digital and interactive media.</p>
-                <p>The program offered mentorship from experienced professors and industry professionals who shared valuable insights and career advice.</p>
-                <p>The program nurtured my creativity and problem-solving skills by encouraging innovative thinking.</p>
-            </div>
-        </div>
-        <div class="button-container">
-            <button class="back-button" id="back_button">Back</button>
-            <button class="dl-button" id="dl-button">Download</button>
+            <div class="x">
+              <div class="form-closed-container">
+                  <div class="form-closed-container-content">
+                      <h1>responses data and etc</h1>
+                      <p>You can fill out this form only once.</p>
+                      <p>Try contacting the owner of the form if you think this is a mistake.</p>
+                  </div>
+              </div>
+              <!--Div that will hold the pie chart-->
+              <div id="charts-container"></div> 
+          </div>
         </div>
     </main>
-</div>
-<script src="/static/js/admin-view-responses.js"></script>
 </body>
+<script src="/static/js/admin-view-responses.js"></script>
 </html>
