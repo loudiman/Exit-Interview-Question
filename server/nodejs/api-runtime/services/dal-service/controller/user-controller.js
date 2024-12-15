@@ -58,7 +58,7 @@ class UserController{
                 if(!jsonObject.item){
                     return
                 }
-                var filters = jsonObject.not[item].map((filter) => (typeof filter === "string" ? `'${filter}'` : filter)).join(",")
+                var filters = jsonObject.not[item].map((filter) => (typeof filter === "string" ? `'${filter}'` : filter)).join(",")//lestat made this fiz(i found the bug)
                 console.log(filters)
                 var statement = `s.${item} NOT IN (${filters})` // This should be made dynamic later on, for now lets keep it this way the `s.`
                 output.push(statement)
@@ -71,7 +71,7 @@ class UserController{
             // item would be the column in the database to filter by
             for(let item in jsonObject.equal){
                 console.log(jsonObject.equal)
-                var filters = jsonObject.equal[item].map((filter) => (typeof filter === "string" ? `'${filter}'` : filter)).join(",")
+                var filters = jsonObject.equal[item].map((filter) => (typeof filter === "string" ? `'${filter}'` : filter)).join(",")//lestat made this fix(i found it)
                 var statement = `s.${item} IN (${filters})`
                 output.push(statement)
             }
