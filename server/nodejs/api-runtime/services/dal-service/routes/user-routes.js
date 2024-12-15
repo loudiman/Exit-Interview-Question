@@ -24,7 +24,9 @@ userRoutes.get('/users', UserController.handleGetAllUsers)
 
 userRoutes.put('/users/filtered', UserController.handleGetFilteredUsers)
 
-userRoutes.get('/user/:username',checkPerm("admin") ,UserController.handleGetByUsername)
+userRoutes.get('/user/:username' ,UserController.handleGetByUsername)
+
+userRoutes.get('/student/:username', UserController.handleStudentGetByUsername)
 
 userRoutes.post('/user/:username', UserController.handlePostNewPass)
 

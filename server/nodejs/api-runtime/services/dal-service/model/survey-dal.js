@@ -52,7 +52,7 @@ class SurveyDAL{
     }
 
     static async getRespondents(surveyID){
-        var query = "SELECT u.username, u.given_name, u.last_name FROM responders AS r LEFT JOIN user AS u ON r.username = u.username WHERE r.survey_id = ?"
+        var query = "SELECT u.username, u.given_name, u.last_name, r.responded FROM responders AS r LEFT JOIN user AS u ON r.username = u.username WHERE r.survey_id = ?";
 
         try{
             const [result] = await pool.query(query, surveyID)
@@ -87,23 +87,33 @@ class SurveyDAL{
         }
     }
 
-    static async insertSurvey(surveyDAO){
-        var surveyTitle = surveyDAO.survey_title
-        var surveyDescription =surveyDAO.survey_description
-        var programID = surveyDAO.program_id
-        var periodStart = surveyDAO.period_start
-        var periodEnd = surveyDAO.period_end
+    static async insertSurvey(surveyDAO) {
+        var surveyTitle = surveyDAO.survey_title;
+        var surveyDescription = surveyDAO.survey_description;
+        var programID = surveyDAO.program_id;
+        var periodStart = surveyDAO.period_start;
+        var periodEnd = surveyDAO.period_end;
 
-        console.log(surveyDAO)
+        try {
+            var programIDObject = { program_id: programID.program_id };
 
-        try{
-            var query = "INSERT INTO survey(survey_title, survey_description, program_id, period_start, period_end) VALUES(?,?,?,?,?,?)"
-            const[result] = await pool.execute(query,[surveyTitle, surveyDescription,  programID, periodStart, periodEnd])
-            return result.insertId
-        }catch(error){
-            throw new Error(error.message)
+            var query = "INSERT INTO survey(survey_title, survey_description, program_id, period_start, period_end) VALUES(?,?,?,?,?)";
+
+            const [result] = await pool.execute(query, [
+                surveyTitle,
+                surveyDescription,
+                JSON.stringify(programIDObject),
+                periodStart,
+                periodEnd
+            ]);
+
+            return result.insertId;
+        } catch (error) {
+            console.log(error);
+            throw new Error(error.message);
         }
     }
+
 
     static async insertQuestion(question){
         var questionType = question.question_type
@@ -192,48 +202,45 @@ class SurveyDAL{
         }
     }
 
-    static async getSurveySummary(survey_id){
-        console.log("Getting summary")
+    static async getSurveySummary(survey_id) {
+        console.log("Getting summary");
         var query = `
-        SELECT s.survey_id, s.survey_title,s.survey_description, s.program_id, s.period_start, s.period_end,
-        COUNT(CASE WHEN r.responded = TRUE THEN 1 END) AS total_responded,
-        COUNT(*) AS total_responders
-        FROM survey s
-        LEFT JOIN responders r ON s.survey_id = r.survey_id
-        GROUP BY s.survey_id LIMIT 100;
-    `;
+            SELECT s.survey_id, s.survey_title, s.survey_description, s.program_id, s.period_start, s.period_end,
+                   COUNT(CASE WHEN r.responded = TRUE THEN 1 END) AS total_responded,
+                   COUNT(*) AS total_responders
+            FROM survey s
+                     LEFT JOIN responders r ON s.survey_id = r.survey_id
+            GROUP BY s.survey_id LIMIT 100;
+        `;
 
-    if(survey_id){
-        var query = `
-        SELECT s.survey_id, s.survey_title,s.survey_description, s.program_id, s.period_start, s.period_end,
-        COUNT(CASE WHEN r.responded = TRUE THEN 1 END) AS total_responded,
-        COUNT(*) AS total_responders
-        FROM survey s
-        LEFT JOIN responders r ON s.survey_id = r.survey_id
-        WHERE s.survey_id = ${survey_id}
-        GROUP BY s.survey_id LIMIT 100;
-    `;
-    }
-    
-        
-        try{
-            const[result] = await pool.execute(query)
+        if (survey_id) {
+            var query = `
+                SELECT s.survey_id, s.survey_title, s.survey_description, s.program_id, s.period_start, s.period_end,
+                       COUNT(CASE WHEN r.responded = TRUE THEN 1 END) AS total_responded,
+                       COUNT(*) AS total_responders
+                FROM survey s
+                         LEFT JOIN responders r ON s.survey_id = r.survey_id
+                WHERE s.survey_id = ${survey_id}
+                GROUP BY s.survey_id LIMIT 100;
+            `;
+        }
 
-            return result
-        }catch(error){
-            throw new Error(error.message)
+        try {
+            const [result] = await pool.query(query);
+            return result;
+        } catch (error) {
+            throw new Error(error.message);
         }
     }
 
-    static async putNewSurveyData(survey_id, survey_title, survey_description, program_id, period_start, period_end) {
-        const query = "UPDATE survey SET survey_title = ?, survey_description = ?, program_id = ?, period_start = ?, period_end = ? WHERE survey_id = ? AND period_start > CURDATE();";
-        console.log(survey_id, survey_title, survey_description, program_id, period_start, period_end)
-        survey_description = !survey_description ? null : survey_description
+
+    static async putNewSurveyData(survey_id, survey_title, survey_description,status, program_id, period_start, period_end) {
+        const query = "UPDATE survey SET survey_title = ?, survey_description = ?,status = ?, program_id = ?, period_start = ?, period_end = ? WHERE survey_id = ? AND period_start > CURDATE();";
+
         try {
             // Await the query execution and handle the result
-            const [results] = await pool.execute(query, [survey_title, survey_description, program_id, period_start, period_end, survey_id]);
+            const [results] = await pool.execute(query, [survey_title, survey_description,status, program_id, period_start, period_end, survey_id]);
             console.log('Query executed successfully:', results);
-            return results
         } catch (error) {
             // Log and throw the error with a helpful message
             console.error('Error executing query:', error.message);
@@ -242,10 +249,10 @@ class SurveyDAL{
     }
 
     static async putNewQuestion(surveyID, questionJSON, questionType,operationType, questionID){
-        // console.log(await this.isSurveyPublishedHelper(surveyID))
-        // if(await this.isSurveyPublishedHelper(surveyID)){
-        //     throw new Error("Survey is already published")
-        // }
+        console.log(await this.isSurveyPublishedHelper(surveyID))
+        if(await this.isSurveyPublishedHelper(surveyID)){
+            throw new Error("Survey is already published")
+        }
 
         try{
             switch(operationType){
@@ -288,7 +295,6 @@ class SurveyDAL{
     }
 
     static async isSurveyPublishedHelper(surveyID){
-        console.log("Survey ID: "+surveyID)
         var query = `SELECT * FROM survey WHERE survey_id = ? AND period_start > CURDATE()`
         try{
             const [result] = await pool.query(query, surveyID)

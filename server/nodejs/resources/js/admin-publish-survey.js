@@ -1,7 +1,6 @@
-
-document.addEventListener("DOMContentLoaded", async() => {
+document.addEventListener("DOMContentLoaded", async () => {
     const surveyData = JSON.parse(sessionStorage.getItem('surveyData'))
-
+    sessionStorage.clear()
     // const programDropdownToggle = document.querySelector('.dropdown-toggle[onclick*="program-dropdown"]');
     // const studentDropdownToggle = document.querySelector('.dropdown-toggle[onclick*="student-dropdown"]');
     // const batchDropdownToggle = document.querySelector('.dropdown-toggle[onclick*="batch-dropdown"]');
@@ -18,6 +17,7 @@ document.addEventListener("DOMContentLoaded", async() => {
 
     const surveyTitleElement = document.getElementById('survey-title');
     const surveyDescriptionElement = document.getElementById('survey-description');
+    setCurrentDateAndTime()
 
     if (surveyTitleElement && surveyDescriptionElement) {
         surveyTitleElement.textContent = surveyData.surveyReq.survey_title;
@@ -25,15 +25,13 @@ document.addEventListener("DOMContentLoaded", async() => {
     }
 
     fetchAllUsers().then(data => {
-        addStudentsDropdown(data,"student-dropdown"); // Add options for responders
+        addStudentsDropdown(data, "student-dropdown"); // Add options for responders
     })
 
     fetchFromServer().then(data => {
         addOptions(data.availability, "program-dropdown"); // Add options for programs
+        // addOptions({["BSCS 3-1", "BSIT 2-2", "BSBA 1-1"]}, "batch-dropdown"); // Add options for batches
     });
-
-    addYear("year-dropdown", 1911); // Add options for year
-    addSemester("semester-dropdown"); // Add options for semester
 
     const publishButton = document.getElementById("publishButton"); // Second button for 'Publish'
     if (publishButton) {
@@ -43,12 +41,12 @@ document.addEventListener("DOMContentLoaded", async() => {
             const programFilters = getSelectedValues("program-dropdown");
             const studentFilters = getSelectedValues("student-dropdown");
 
-            var filters = {
-                "filters": [
+            let filters =
+                {"filters": [
                     {
                         "not":
                             {
-                                "username": studentFilters //this is the not allowed users
+                                "username": studentFilters //this is the restricted users
                             }
                     },
                     {
@@ -57,22 +55,24 @@ document.addEventListener("DOMContentLoaded", async() => {
                                 "program_id": programFilters //this is the allowed programs
                             }
                     }
-
                 ]
             }
 
-            console.log(JSON.stringify(filters))
+            let programsSelected = {
+                "program_id": programFilters
+            }
 
             var result = await fetchAllowedUsers(filters)
             var userArray = []
-            for(item in result){
-                console.log(item)
+            for (item in result) {
+                console.log(JSON.stringify(item))
                 let jsonObject = {}
                 jsonObject.username = result[item].username
                 userArray.push(jsonObject)
             }
 
             console.log(userArray)
+            console.log("Programs restricted: " + programFilters)
 
             const fromDate = document.querySelector('input[type="date"]').value;
             const startTime = document.querySelector('input[type="time"]').value;
@@ -80,12 +80,11 @@ document.addEventListener("DOMContentLoaded", async() => {
             const endTime = document.querySelectorAll('input[type="time"]')[1].value;
             surveyData.surveyReq.period_start = `${fromDate} ${startTime}`;
             surveyData.surveyReq.period_end = `${untilDate} ${endTime}`;
+            surveyData.surveyReq.program_id = programsSelected
             surveyData.users = userArray
 
-            // Prepare and print the JSON data that will be sent to the server
             console.log(`Survey Data to send: ${JSON.stringify(surveyData)}`);
 
-            // Step 4: Publish button logic to send data (commented for now)
             fetch('http://localhost:2020/api/survey-service/survey', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
@@ -95,9 +94,8 @@ document.addEventListener("DOMContentLoaded", async() => {
                 .then(data => console.log('Success:', data))
                 .catch(error => console.error('Error:', error));
 
-            // Redirect to survey creation page
-            //sessionStorage.clear()
-            //window.location.href = "/admin/create";
+            // sessionStorage.clear()
+            // window.location.href = "/admin/create";
         });
     } else {
         console.error("Publish button not found.");
@@ -117,7 +115,7 @@ async function fetchAllowedUsers(filters) {
     try {
         const response = await fetch(url, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(filters)
         });
 
@@ -135,7 +133,7 @@ async function fetchAllowedUsers(filters) {
     }
 }
 
-async function fetchAllUsers(){
+async function fetchAllUsers() {
     const url = "http://localhost:2020/api/user-service/users";
 
     try {
@@ -168,13 +166,15 @@ function addStudentsDropdown(data, containerId) {
     const container = document.getElementById(containerId);
     container.innerHTML = '';
     data.users.forEach(user => {
-        const label = document.createElement('label');
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.value = user.username; // Use username as the value
-        label.appendChild(checkbox);
-        label.appendChild(document.createTextNode(`${user.given_name} ${user.last_name}`));
-        container.appendChild(label);
+        if (user.type == 1) {
+            const checkbox = document.createElement('input');
+            const label = document.createElement('label');
+            checkbox.type = 'checkbox';
+            checkbox.value = user.username; // Use username as the value
+            label.appendChild(checkbox);
+            label.appendChild(document.createTextNode(`${user.given_name} ${user.last_name}`));
+            container.appendChild(label);
+        }
     });
 }
 
@@ -192,62 +192,6 @@ function addOptions(data, containerId) {
     });
 }
 
-<<<<<<< HEAD
-function addSemester(containerId) {
-    const container = document.getElementById(containerId);
-    container.innerHTML = ''; // Clear existing options
-
-    const sems = [
-        { semester: "first" },
-        { semester: "second" }
-    ];
-
-    sems.forEach(item => {
-        const label = document.createElement('label');
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.value = item.semester;
-        label.appendChild(checkbox);
-        label.appendChild(document.createTextNode(item.semester));
-        container.appendChild(label);
-    });
-}
-
-function addYear(containerId, startYear) {
-    const container = document.getElementById(containerId);
-    container.innerHTML = '';
-
-    const now = new Date();
-    const currentYear = now.getFullYear();
-
-    // Create an array of all the years from the start year to the current year + 100
-    const allYears = [];
-    for (let year = startYear; year <= currentYear + 100; year++) {
-        allYears.push(year);
-    }
-
-    for (const year of allYears) {
-        const label = document.createElement('label');
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.value = year;
-        checkbox.checked = year === currentYear; // Set the current year as checked by default
-        label.appendChild(checkbox);
-        label.appendChild(document.createTextNode(year));
-        container.appendChild(label);
-    }
-
-    const dropdown = container.closest('.dropdown-checkbox'); // Find the closest dropdown container
-    const dropdownOptions = dropdown.querySelector('.dropdown-checkbox-options');
-
-    dropdown.addEventListener('click', () => {
-        const currentYearCheckbox = container.querySelector(`input[value="${currentYear}"]`);
-        if (currentYearCheckbox && dropdownOptions) {
-            dropdownOptions.scrollTop = currentYearCheckbox.offsetTop - dropdownOptions.offsetTop;
-        }
-    });
-}
-
 function setCurrentDateAndTime() {
     const now = new Date();
 
@@ -261,8 +205,6 @@ function setCurrentDateAndTime() {
     document.getElementById('periodEndTime').value = formattedTime;
 }
 
-=======
->>>>>>> development
 function getSelectedValues(containerId) {
     const container = document.getElementById(containerId);
     const checkboxes = container.querySelectorAll('input[type="checkbox"]:checked');

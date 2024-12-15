@@ -263,10 +263,9 @@ document.addEventListener("DOMContentLoaded", function() {
                 surveyReq: {
                     survey_title: surveyTitle || "",
                     survey_description: surveyDescription || "",
-                    program_id: "",
+                    program_id: {"program_id": []},
                     period_start: "",
-                    period_end: "",
-                    status: ""
+                    period_end: ""
                 },
                 questions: questions,
                 users: []

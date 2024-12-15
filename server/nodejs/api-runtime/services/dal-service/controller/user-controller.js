@@ -43,6 +43,9 @@ class UserController{
 
     // Helper function for handleGetFilteredUsers
     static async createStatement(type , jsonObject, output){
+        if(!jsonObject){
+            return
+        }
         console.log("creating")
         console.log(jsonObject)
         let filterStatements = []
@@ -52,6 +55,9 @@ class UserController{
             // item would be the column in the database to filter by
             for(let item in jsonObject.not){
                 console.log(item)
+                if(!jsonObject.item){
+                    return
+                }
                 var filters = jsonObject.not[item].map((filter) => `${filter}`).join(",")
                 var statement = `s.${item} NOT IN (${filters})` // This should be made dynamic later on, for now lets keep it this way the `s.`
                 output.push(statement)
@@ -62,12 +68,27 @@ class UserController{
         // Guard clause for equal filter type
         if(type == "equal"){
             // item would be the column in the database to filter by
-            for(let item in jsonObject.equal){
+            for(let item in jsonObject){
+                console.log(jsonObject.equal)
                 var filters = jsonObject.equal[item].map((filter) => `${filter}`).join(",")
                 var statement = `s.${item} IN (${filters})`
                 output.push(statement)
             }
             return
+        }
+    }
+
+    //For GET '/student/:username'
+    static async handleStudentGetByUsername(req,res){
+        const {username} = req.params
+        console.log(username)
+        try{
+            const [rows] = await UserDAL.getStudentByUsername(username)
+            console.log(rows)
+            res.status(200).json(rows)
+        }catch(error){
+            console.log(error)
+            res.status(500).json({error: 'Failed to retrieve student'})
         }
     }
 
