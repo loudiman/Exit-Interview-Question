@@ -94,8 +94,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                 .then(data => console.log('Success:', data))
                 .catch(error => console.error('Error:', error));
 
-            // sessionStorage.clear()
-            // window.location.href = "/admin/create";
+            sessionStorage.clear()
+            window.location.href = "/admin/create";
         });
     } else {
         console.error("Publish button not found.");
