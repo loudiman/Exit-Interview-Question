@@ -160,7 +160,7 @@ header {
     color: white;
 }
 
-.hide-button, .action-link{
+.action-link{
     background-color: #3F5989;
     color: #fff;
     border: none;
@@ -174,21 +174,11 @@ header {
     box-sizing: border-box;
 }
 
-.hide-button{
-    margin-right: 10px;
-}
-
-
-
-.action-link:hover, .hide-button:hover, .search-button:hover {
+.action-link:hover, .search-button:hover {
     background-color: #2980b9;
 }
 
 .search-icon-img {
     width: 18px;
     height: auto;
-}
-
-.hidden-survey{
-    display: none;
 }

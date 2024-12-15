@@ -2,39 +2,10 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('welcome-message').textContent = `Welcome, ${sessionStorage.getItem('fname')}!`;
 
     let surveyData = [];
-    let hiddenSurveys = []; // Array to track hidden survey IDs
 
     // Fetch surveys data from the server
     async function fetchSurveys() {
         try {
-            // const jsonString = {
-            //     "surveys": [
-            //         {
-            //             "survey_id": 4,
-            //             "survey_title": "Test 1",
-            //             "responded": 1,
-            //             "period-end": "2024-11-17 18:24:58"
-            //         },
-            //         {
-            //             "survey_id": 2,
-            //             "survey_title": "IT Department Evaluation 2024",
-            //             "responded": 1,
-            //             "period-end": "2024-11-18 23:00:00"
-            //         },
-            //         {
-            //             "survey_id": 3,
-            //             "survey_title": "CS Department Evaluation 2024",
-            //             "responded": 0,
-            //             "period-end": "2024-11-18 23:00:00"
-            //         },
-            //         {
-            //             "survey_id": 5,  // Updated ID for example hidden survey
-            //             "survey_title": "BMMA Department Evaluation 2024",
-            //             "responded": 0,
-            //             "period-end": "2024-12-18 23:00:00"
-            //         }
-            //     ]
-            // };
             const response = await fetch('http://localhost:8888/student');
             const jsonString = await response.json();
             console.log(jsonString);
@@ -54,7 +25,6 @@ document.addEventListener('DOMContentLoaded', function () {
         surveys.forEach(survey => {
             const surveyElement = document.createElement('div');
             surveyElement.classList.add('survey-item');
-            if (hiddenSurveys.includes(survey.survey_id)) surveyElement.classList.add('hidden-survey'); // If survey is hidden, add class
 
             const periodEndFormatted = formatDateToStandardTime(survey.period_end);
             const submittedAtFormatted = survey.responded == 1 ? formatDateToStandardTime(survey.submitted_at) : '';
@@ -80,7 +50,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     </div>
                 </div>
                 <div class="survey-actions">
-                    <button class="hide-button">Hide Survey</button>
                     <button class="action-link">
                         ${survey.responded == 1 ? 'Check Details 📄' : survey.responded == 0 && new Date() < new Date(survey.period_end) ? 'Take Survey 📝' : 'Check Details 📄'}
                     </button>
@@ -91,61 +60,17 @@ document.addEventListener('DOMContentLoaded', function () {
             surveyElement.querySelector('.action-link').addEventListener('click', (function(survey) {
                 return function(event) {
                     event.preventDefault();
-
                     sessionStorage.setItem('surveyId', survey.survey_id);
 
-                    // This is a workaround solution to handle in frontend an expired survey
+                    // This is a workaround solution to handle an expired survey
                     if (survey.responded == 1 || new Date(survey.period_end) < new Date()) {
                         window.location.href = '/student/survey/closedsurvey';
                     }
 
                     window.location.href = '/student/survey/viewsurvey?id=' + survey.survey_id;
-
-                    // fetch(`/student/survey/viewsurvey?id=${survey.survey_id}`)
-                    //     .then(response => {
-                    //         // This is another solution handling an expired survey but with backend processing
-                    //         if (!response.ok) {
-                    //             window.location.href = '/student/survey/closedsurvey';
-                    //             throw new Error('Survey expired');
-                    //         }
-                    //         return response.json();
-                    //     })
-                    //     .then(surveyData => {
-                    //         sessionStorage.setItem('questionnaireData', JSON.stringify(surveyData));
-                    //         window.location.href = '/student/survey/questionnaires';
-                    //     })
-                        // .catch(error => console.error("Fetch error: ", error));  
                 };
-            })(survey)
-                // function(event) {
-                // event.preventDefault();
-                // fetch(`/student/survey?id=${survey.survey_id}`)
-                //     .then(response => response.json())
-                //     .then(surveyData => {
-                //         sessionStorage.setItem('questionaireData', JSON.stringify(surveyData));
-                //         // window.location.href = `/student/survey/questionaire?id=${surveyData.question_id}`;
-                //         window.location.href = '/student/survey/questionnaires';
-                //     })
-                //     .catch(error => console.error("Fetch error: ", error));}
-            );
+            })(survey));
 
-            // Hide button functionality
-            surveyElement.querySelector('.hide-button').addEventListener('click', () => {
-                if (hiddenSurveys.includes(survey.survey_id)) {
-                    // Unhide survey
-                    hiddenSurveys = hiddenSurveys.filter(id => id !== survey.survey_id);
-                    sessionStorage.setItem('hiddenSurveys', JSON.stringify(hiddenSurveys)); // Save to sessionStorage
-                    surveyElement.classList.remove('hidden-survey');
-                    surveyElement.querySelector('.hide-button').textContent = 'Hide Survey';
-                } else {
-                    // Hide survey
-                    hiddenSurveys.push(survey.survey_id);
-                    sessionStorage.setItem('hiddenSurveys', JSON.stringify(hiddenSurveys)); // Save to sessionStorage
-                    surveyElement.classList.add('hidden-survey');
-                    surveyElement.querySelector('.hide-button').textContent = 'Unhide Survey';
-                }
-                filterSurveys(); // Reapply filters after hiding/unhiding
-            });
             surveyList.appendChild(surveyElement);
         });
     }
@@ -183,8 +108,6 @@ document.addEventListener('DOMContentLoaded', function () {
             filteredSurveys = surveyData.filter(survey => survey.responded);
         } else if (filterType === 'missed') {
             filteredSurveys = surveyData.filter(survey => !survey.responded && new Date() > new Date(survey.period_end));
-        } else if (filterType === 'hidden') {
-            filteredSurveys = surveyData.filter(survey => hiddenSurveys.includes(survey.survey_id));
         }
 
         renderSurveys(filteredSurveys);
@@ -197,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function () {
 function formatDateToStandardTime(dateInput) {
     // Handle both Date objects and date strings
     const dateToFormat = dateInput instanceof Date ? dateInput : new Date(dateInput);
-    
+
     // Check if date is valid
     return !isNaN(dateToFormat.getTime())
         ? dateToFormat.toLocaleString('en-US', {
@@ -211,18 +134,3 @@ function formatDateToStandardTime(dateInput) {
         })
         : 'Invalid Date';
 }
-
-// Another way to logout
-// function logout() {
-//     fetch('http://localhost:8888/session/logout', {
-//         method: 'POST',
-//         headers: { 'Content-Type': 'application/json' },
-//         body: JSON.stringify({ '_method': 'DELETE' })
-//     })
-//         .then(response => response.text())
-//         .then(data => {
-//             console.log("Logout response:", data);
-//             // window.location.href = 'http://localhost:8888/';
-//         })
-//         .catch(error => console.error("Logout error:", error));
-// }
