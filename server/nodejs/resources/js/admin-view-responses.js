@@ -100,7 +100,7 @@ async function createCharts(processedData) {
         chartDiv.style.marginBottom = '12px'; 
         chartDiv.style.borderRadius = '8px';
         chartDiv.style.width = '100%';
-        chartDiv.style.maxWidth = '600px';
+        chartDiv.style.maxWidth = '770px';
         chartDiv.style.backgroundColor = 'white';
         chartDiv.style.display = 'flex';
         chartDiv.style.justifyContent = 'center';

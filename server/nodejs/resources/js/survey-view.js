@@ -4,31 +4,105 @@ document.addEventListener('DOMContentLoaded', () => {
     const unpublishedContainer = document.querySelector('#unpublishedSurveys');
     const publishedContainer = document.querySelector('#publishedSurveys');
 
-
-
     // Improved Render Surveys Function
     // Global variables to store surveys and current survey for deletion
     let surveys = [];
     let currentSurveyToDelete = null;
 
     function renderSurveys(data) {
+        console.log("Rendering surveys:", data);
         // Clear containers more efficiently
         unpublishedContainer.innerHTML = '';
         publishedContainer.innerHTML = '';
         const currentDate = new Date()
         data.forEach(survey => {
+            console.log("Survey:", survey);
             const surveyPeriodStart = new Date(survey.period_start)
             const status = surveyPeriodStart < currentDate ? 'published' : 'unpublished'
+            console.log("Status:", status);
             const container = status === 'unpublished' ? unpublishedContainer : publishedContainer;
+            const href = status === 'unpublished' ? `/admin/surveys/edit?survey_id=${survey.survey_id}` : `/admin/dashboard/survey?id=${survey.survey_id}`;
             const surveyItem = document.createElement('div');
             surveyItem.className = 'survey-item';
 
-            // Simplified button HTML generation
-            const buttonsHtml = status === 'unpublished'
-                ? createUnpublishedSurveyHTML(survey)
-                : createPublishedSurveyHTML(survey);
+            if (status === 'published') {
+                surveyItem.innerHTML = `
+                    <span>${survey.survey_title}</span>
+                    <a id="temp1" class="view-btn">
+                        <img src="/static/images/Eye.png" alt="View" />
+                    </a>
+                    <a href="/admin/dashboard/survey?survey_id=${survey.survey_id}">
+                        <button data-id="${survey.survey_id}" class="delete-btn">
+                            <img src="/static/images/Delete.png" alt="Delete" />
+                        </button>
+                    </a>    
+                `;
+                // Add verification after setting sessionStorage
+surveyItem.querySelector('#temp1').addEventListener('click', (function(survey) {
+    return function(event) {
+        event.preventDefault();
+        fetch(`http://localhost:2020/api/survey-service/questions/${survey.survey_id}`)
+            .then(response => response.json())
+            .then(surveyData => {
+                console.log('Fetched survey data:', surveyData);
+                sessionStorage.setItem('questionnaireData', JSON.stringify(surveyData));
+                sessionStorage.setItem('surveyId', survey.survey_id);
+                const stored = sessionStorage.getItem('questionnaireData');
+                console.log('Stored questionnaire data:', JSON.parse(stored));
+                window.location.href = `/admin/dashboard/survey?survey_id=${survey.survey_id}`;
+            })
+            .catch(error => {
+                console.error("Fetch error:", error);
+                alert('Failed to load survey data');
+            });
+    };
+})(survey));
+            }
 
-            surveyItem.innerHTML = buttonsHtml;
+            if (status === 'unpublished') {
+                surveyItem.innerHTML = `
+                <span>${survey.survey_title}</span>
+                <a id="temp2" >
+                    <button data-id="${survey.survey_id}" class="edit-btn">
+                        <img src="/static/images/Edit.png" alt="Edit" />
+                    </button>              
+                </a>
+                <a href="/admin/surveys/edit?survey_id=${survey.survey_id}">
+                    <button data-id="${survey.survey_id}" class="delete-btn">
+                        <img src="/static/images/Delete.png" alt="Delete" />
+                    </button>
+                </a>
+                `;
+
+                // Add verification after setting sessionStorage
+surveyItem.querySelector('#temp2').addEventListener('click', (function(survey) {
+    return function(event) {
+        event.preventDefault();
+        fetch(`http://localhost:2020/api/survey-service/questions/${survey.survey_id}`)
+            .then(response => response.json())
+            .then(surveyData => {
+                console.log('Fetched survey data:', surveyData); // Verify data received
+                
+                // Store the data
+                sessionStorage.setItem('questionnaireData', JSON.stringify(surveyData));
+                sessionStorage.setItem('surveyId', survey.survey_id);
+                
+                // Verify storage worked
+                const stored = sessionStorage.getItem('questionnaireData');
+                console.log('Stored questionnaire data:', JSON.parse(stored));
+                
+                // Optional: Add a success indicator
+                if (stored) {
+                    console.log('Storage successful');
+                }
+            })
+            .catch(error => {
+                console.error("Fetch error:", error);
+                alert('Failed to load survey data');
+            });
+    };
+})(survey));
+            }
             container.appendChild(surveyItem);
         });
     }
@@ -51,14 +125,18 @@ document.addEventListener('DOMContentLoaded', () => {
     function createPublishedSurveyHTML(survey) {
         return `
             <span>${survey.survey_title}</span>
-            <button data-id="${survey.survey_id}" class="view-btn">
+            <a href="/admin/dashboard/survey?survey_id=${survey.survey_id} class="view-btn">
                 <img src="/static/images/Eye.png" alt="View" />
-            </button>
-            <button data-id="${survey.survey_id}" class="delete-btn">
-                <img src="/static/images/Delete.png" alt="Delete" />
-            </button>
+            </a>
+            <a id="temp">
+                <button data-id="${survey.survey_id}" class="delete-btn">
+                    <img src="/static/images/Delete.png" alt="Delete" />
+                </button>
+            </a>    
         `;
     }
+
+
 
     // Optimized Search Function
     function searchSurveys(surveys) {
@@ -161,10 +239,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (button.classList.contains('details-btn')) {
                     showPreview(surveyId, surveys);
-                } else if (button.classList.contains('view-btn')) {
-                    window.location.href = `/admin/dashboard/survey`;
-                } else if (button.classList.contains('edit-btn')) {
-                    window.location.href = `/admin/dashboard/survey`;
+                // } else if (button.classList.contains('view-btn')) {
+                //     window.location.href = `/admin/dashboard/survey`;
+                // } else if (button.classList.contains('edit-btn')) {
+                //     window.location.href = `/admin/dashboard/survey`;
                 } else if (button.classList.contains('delete-btn')) {
                     showDeleteModal(surveyId, surveys);
                 }

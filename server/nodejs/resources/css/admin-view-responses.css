@@ -18,7 +18,7 @@ body {
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    max-width: 600px;
+    max-width: 770px;
     width: 100%;
     height: 20vh;
     text-align: center;
@@ -38,9 +38,8 @@ body {
     justify-content: center;
     align-items: center;
     margin-top: 20px;
-    max-width: 600px;
+    max-width: 770px;
     width: 100%;
-    background-color: black;
 }
 
 /* General Styles */
