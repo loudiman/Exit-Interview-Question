@@ -48,10 +48,10 @@
         <div class="survey-details-container">
             <!-- Date Range -->
             <div class="date-time-row">
-                <label>From: <input type="date" value="2024-11-04"></label>
-                <label>Start: <input type="time" value="23:59"></label>
-                <label>Until: <input type="date" value="2024-11-12"></label>
-                <label>End: <input type="time" value="23:59"></label>
+                <label>From: <input id="from-date" type="date" value=" "></label>
+                <label>Start: <input id="start-time" type="time" value=""></label>
+                <label>Until: <input id="until-date" type="date" value=" "></label>
+                <label>End: <input id="until-time" type="time" value=" "></label>
             </div>
 
             <!-- Restrictions -->
@@ -92,8 +92,6 @@
                 <div class="dropdown-multiselect">
                     <button class="dropdown-toggle" onclick="toggleDropdown('gender-dropdown')">Gender Restricted</button>
                     <div id="gender-dropdown" class="dropdown-options">
-                    <button class="dropdown-toggle" onclick="toggleRestrictionsDropdown('batch-dropdown')">Class Restricted</button>
-                    <div id="batch-dropdown" class="dropdown-options">
                         <!-- Options will be dynamically added here -->
                     </div>
                 </div>
@@ -101,13 +99,8 @@
 
             <!-- Publish Buttons -->
             <div class="button-container">
-
-                    <button  class="back-button" onclick=window.history.back();>Back</button>
-
-                    <button class="publish-button" id = "publishButton">Publish</button>
-
-
-
+                <button class="back-button" onclick="window.history.back();">Back</button>
+                <button class="publish-button" id="publishButton">Publish</button>
             </div>
         </div>
     </div>

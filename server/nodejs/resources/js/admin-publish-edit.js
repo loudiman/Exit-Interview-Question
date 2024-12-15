@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    const surveyData = JSON.parse(sessionStorage.getItem('surveyData'));
-    console.log(surveyData);
-    console.dir(surveyData, { depth: null });
+    const surveyData = JSON.parse(sessionStorage.getItem('surveyData2'));
+    console.log("Ito and tunay na survey data: ",surveyData);
+    console.dir(surveyData, {depth: null});
 
     const surveyTitleElement = document.getElementById('survey-title');
     const surveyDescriptionElement = document.getElementById('survey-description');
@@ -11,24 +11,70 @@ document.addEventListener("DOMContentLoaded", async () => {
         surveyDescriptionElement.textContent = surveyData.survey.survey_description;
     }
 
-
-    // Step 2: Fetch the data from the server
-
-    fetchAllUsers().then(data => {
+    // Fetch data for dropdowns
+    await fetchAllUsers().then(data => {
         addStudentsDropdown(data, "student-dropdown"); // Add options for responders
     });
 
-    fetchFromServer().then(data => {
+    await fetchFromServer().then(data => {
         addOptions(data.availability, "program-dropdown"); // Add options for programs
     });
+
+    const programIDS = surveyData.survey.program_id.program_id;
+    console.log("Program IDS: ",programIDS);
+    importAllowedPrograms(programIDS);
+    await importDateAndTime(surveyData.survey);
 
     addYear("year-dropdown", 1911); // Add options for year
     addSemester("semester-dropdown"); // Add options for semester
 
-    const publishButton = document.getElementById("publishButton");
+    // Instant validation for date and time inputs
+    const fromDateInput = document.querySelector('input[type="date"]');
+    const startTimeInput = document.querySelector('input[type="time"]');
+    const untilDateInput = document.querySelectorAll('input[type="date"]')[1];
+    const endTimeInput = document.querySelectorAll('input[type="time"]')[1];
 
+    function validateDateTime() {
+        const currentDate = new Date().toISOString().split("T")[0];
+        const startDate = fromDateInput.value;
+        const endDate = untilDateInput.value;
+
+        if (startDate && startDate < currentDate) {
+            alert("The start date cannot be earlier than the current date.");
+            fromDateInput.value = "";
+            startTimeInput.value = "";
+        } else if (startDate && endDate && startDate > endDate) {
+            alert("The start date cannot be later than the end date.");
+            if (document.activeElement === fromDateInput) {
+                fromDateInput.value = "";
+                startTimeInput.value = "";
+            }
+        } else if (startDate && endDate && endDate < startDate) {
+            alert("The end date cannot be earlier than the start date.");
+            if (document.activeElement === untilDateInput) {
+                untilDateInput.value = "";
+                endTimeInput.value = "";
+            }
+        }
+    }
+
+    fromDateInput.addEventListener("change", validateDateTime);
+    startTimeInput.addEventListener("change", validateDateTime);
+    untilDateInput.addEventListener("change", validateDateTime);
+    endTimeInput.addEventListener("change", validateDateTime);
+
+    // Publish button logic
+    const publishButton = document.getElementById("publishButton");
     if (publishButton) {
         publishButton.addEventListener("click", async () => {
+            // Check if at least one program is selected
+            const selectedPrograms = getSelectedValues("program-dropdown");
+            if (selectedPrograms.length === 0) {
+                alert("Please select at least one program before publishing the survey.");
+                return; // Exit the function if no program is selected
+            }
+
+            // Proceed with publishing the survey if a program is selected
             await publishSurvey(surveyData).then(r => console.log("Survey published:", r));
             window.location.href = 'http://localhost:2021/admin/surveys';
         });
@@ -36,6 +82,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         console.error("Publish button not found.");
     }
 });
+
+
+
 
 // Survey Publishing Functions
 async function publishSurvey(currentData) {
@@ -52,33 +101,22 @@ async function publishSurvey(currentData) {
     const startTime = document.querySelector('input[type="time"]').value;
     const untilDate = document.querySelectorAll('input[type="date"]')[1].value;
     const endTime = document.querySelectorAll('input[type="time"]')[1].value;
-    console.log (fromDate);
-    console.log (startTime);
-    console.log (untilDate);
-    console.log (endTime);
-    
+
     currentData.survey.period_start = `${fromDate} ${startTime}:00`;
     currentData.survey.period_end = `${untilDate} ${endTime}:00`;
     currentData.survey.users = userArray;
 
-    console.log("JSON TANGINA MO: ", JSON.stringify(currentData.json))
-    console.log("Survey Title:", currentData.survey.survey_title);
-    console.log("Survey Description:", currentData.survey.survey_description);
-    console.log("Survey ID: ",currentData.survey.survey_id)
-    console.log ("Period start: ",currentData.survey.period_start)
-    console.log ("Period end:", currentData.survey.period_end)
-    console.log(" Programs that are selected: " , filters.filters[1].equal.program_id)
-    console.log("Pwede na users: ", filters.filters[0].not.username)
-
-
-
     const updateSurveyJSON = {
         "survey_id": currentData.survey.survey_id,
         "survey_title": currentData.survey.survey_title,
-        "survey_description": currentData.survey_description,
-        "program_id": 1,
+        "survey_description": currentData.survey.survey_description,
+        "program_id": filters.filters[1].equal.program_id,
+        // "program_id": {
+        //     "program_id": filters.filters[1].equal.program_id
+        // },
         "period_start": currentData.survey.period_start,
-        "period_end": currentData.survey.period_end
+        "period_end": currentData.survey.period_end,
+        "responders": await fetchAllowedUsers(filters)
     }
 
 
@@ -86,12 +124,12 @@ async function publishSurvey(currentData) {
 
     const oldSurveyData = JSON.parse(sessionStorage.getItem('oldSurveyData'));
     surveyDifferences(oldSurveyData, currentData);
-    updateSurvey (currentData,filters)
-    console.log("Survey Data to send:", JSON.stringify(currentData));
+    await updateSurvey (updateSurveyJSON,filters)
+    console.log("Survey Data to send:", JSON.stringify(updateSurveyJSON));
 }
 
 function filtersAPI() {
-    const programFilters = getSelectedValue("program-dropdown");
+    const programFilters = getSelectedValues("program-dropdown");
     const studentFilters = getSelectedValues("student-dropdown");
 
     const filters = {
@@ -129,7 +167,7 @@ async function fetchAllowedUsers(filters) {
         }
 
         const data = await response.json();
-        console.log("Fetched allowed users:", data);
+        console.log("Fetched allowed users:", JSON.stringify(data));
         return data;
 
     } catch (error) {
@@ -265,6 +303,51 @@ function getSelectedValue(containerId) {
     return checkedCheckbox ? parseInt(checkedCheckbox.value, 10) : null;
 }
 
+async function importDateAndTime(surveyData) {
+    const startTimeAndDate = removeLetters(surveyData.period_start);
+    const endTimeAndDate = removeLetters(surveyData.period_end);
+
+    const [startDate, startTimeWithSeconds] = startTimeAndDate.split('T');
+    const [endDate, endTimeWithSeconds] = endTimeAndDate.split('T');
+    const startTime = startTimeWithSeconds.split(':').slice(0, 2).join(':');
+    const endTime = endTimeWithSeconds.split(':').slice(0, 2).join(':');
+
+    console.log(`Start date: ${startDate}, start time: ${startTime}`);
+    console.log(`End date: ${endDate}, end time: ${endTime}`);
+
+    const fromDate = document.getElementById("from-date");
+    fromDate.value = startDate;
+
+    const fromTime = document.getElementById("start-time");
+    fromTime.value = startTime;
+
+    const untilDate = document.getElementById("until-date");
+    untilDate.value = endDate;
+
+    const untilTime = document.getElementById("until-time");
+    untilTime.value = endTime;
+}
+
+function removeLetters(string) {
+    return string.replace('Z', ' '); // Removes 'Z', replaces with space for clarity
+}
+
+function importAllowedPrograms(programs) {
+    console.log(`Programs to import: ${programs}`)
+    const container = document.getElementById('program-dropdown');
+    console.log(`Container: ${container}`)
+    for (const id of programs) {
+        console.log(`Importing program ID ${id}`)
+        // Select the checkbox with a matching value attribute
+        const checkbox = container.querySelector(`input[type="checkbox"][value="${id}"]`);
+        console.log(`Checkbox: ${checkbox}`)
+        if (checkbox) {
+            // Set the checkbox as checked
+            checkbox.checked = true;
+        }
+    }
+}
+
 
 function getSelectedValues(containerId) {
     const container = document.getElementById(containerId);
@@ -287,6 +370,9 @@ function surveyDifferences(oldSurveyData, surveyData) {
 
     const oldQuestions = new Map(oldSurveyData.questions.map(q => [q.question_id, q]));
     const newQuestions = new Map(surveyData.questions.map(q => [q.question_id, q]));
+    console.log("Old questions:", oldQuestions);
+    console.log("New questions:", newQuestions);
+
 
     deleteQuestion(newQuestions, oldQuestions);
     updateQuestion(newQuestions, oldQuestions, surveyID);
@@ -323,19 +409,26 @@ function deleteQuestion(newQuestions, oldQuestions) {
 //Survey API
 async function updateSurvey(surveyData, filteredData) {
     const url = "http://localhost:2020/api/survey-service/survey"
+    console.log("Error to sige!!!!!:", surveyData);
+    console.log("Error to hinde:", surveyData.survey_id);
+    console.log("Eto yung program ID kase:", JSON.stringify(surveyData.program_id));
+
     try {
 
         const response = await fetch(url, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                "survey_id": surveyData.survey.survey_id,
-                "survey_title": surveyData.survey.survey_title,
-                "survey_description": surveyData.survey.survey_description,
-                // "program_id": filteredData.filters[1].equal.program_id,
-                "program_id": filteredData.filters[1].equal.program_id,
-                "period_start": surveyData.survey.period_start,
-                "period_end": surveyData.survey.period_end
+                "survey_id": surveyData.survey_id,
+                "survey_title": surveyData.survey_title,
+                "survey_description": surveyData.survey_description,
+                "program_id": surveyData.program_id.map((id) => parseInt(id)),
+                // "program_id": {
+                //
+                // },
+                "period_start": surveyData.period_start,
+                "period_end": surveyData.period_end,
+                "responders": await fetchAllowedUsers(filteredData)
             })
         });
 

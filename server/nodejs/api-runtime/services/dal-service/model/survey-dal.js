@@ -160,10 +160,10 @@ class SurveyDAL{
         }
     }
 
-    static async deleteSurvey(surveyID){
+    static async deleteResponders(surveyID){
         var query = `DELETE FROM responders WHERE survey_id = ?`
         try{
-            const [result] = pool.execute(query, surveyID)
+            const [result] = await pool.execute(query, [surveyID])
             return result.affectedRows
         }catch(error){
             throw new Error(error.message)
@@ -246,11 +246,17 @@ class SurveyDAL{
 
     static async putNewSurveyData(survey_id, survey_title, survey_description, program_id, period_start, period_end) {
         const query = "UPDATE survey SET survey_title = ?, survey_description = ?, program_id = ?, period_start = ?, period_end = ? WHERE survey_id = ? AND period_start > CURDATE();";
-
         try {
+            console.log("this id ",survey_id)
+            const programIDJSON = {
+                "program_id": {program_id}
+            }
+
+            console.log(programIDJSON.program_id)
             // Await the query execution and handle the result
-            const [results] = await pool.execute(query, [survey_title, survey_description, program_id, period_start, period_end, survey_id]);
+            const [results] = await pool.execute(query, [survey_title, survey_description, JSON.stringify(programIDJSON.program_id), period_start, period_end, survey_id]);
             console.log('Query executed successfully:', results);
+            return results
         } catch (error) {
             // Log and throw the error with a helpful message
             console.error('Error executing query:', error.message);
@@ -259,6 +265,7 @@ class SurveyDAL{
     }
 
     static async putNewQuestion(surveyID, questionJSON, questionType,operationType, questionID){
+        console.log("CHECKING IF SURVEY IS PUBLISHED")
         console.log(await this.isSurveyPublishedHelper(surveyID))
         if(await this.isSurveyPublishedHelper(surveyID)){
             throw new Error("Survey is already published")
@@ -305,9 +312,12 @@ class SurveyDAL{
     }
 
     static async isSurveyPublishedHelper(surveyID){
+        console.log("GETTING IS PUBLISHED")
         var query = `SELECT * FROM survey WHERE survey_id = ? AND period_start > CURDATE()`
+        console.log(`Survey ID: ${surveyID}`)
         try{
             const [result] = await pool.query(query, surveyID)
+            console.log(result.length)
             if(result.length == 0){
                 return true
             }

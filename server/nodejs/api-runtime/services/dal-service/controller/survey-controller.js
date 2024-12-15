@@ -123,41 +123,56 @@ class SurveyController{
     }
 
     static async handlePutSurvey(req, res){
+        console.log("UPDATING SURVEY -------------------------------------")
         try{
-            const {survey_id, survey_title, survey_description, program_id, period_start, period_end, responders} = req.body
+
+            const {survey_id, survey_title, survey_description, program_id , period_start, period_end, responders} = req.body
             if(!responders){
                 res.status(400).json({message:"responders missing"})
+                return
             }
 
             if(!survey_id){
                 res.status(400).json({message:"survey_id missing"})
+                return
             }
 
-            await SurveyDAL.deleteSurvey(survey_id)
-
             try{
+                console.log("INVOKING DAL SURVEY -------------------------------------")
                 const { affectedRows } = await SurveyDAL.putNewSurveyData(survey_id, survey_title, survey_description, program_id, period_start, period_end)
                 if(affectedRows == 0){
                     res.status(400).json({message:"Survey is already published cannot edit"})
+                    return
                 }
+                console.log("UPDATED")
 
+                await SurveyDAL.deleteResponders(survey_id)
+                console.log("PREVIOUS RESPONDERS DELETED")
                 const result = await SurveyDAL.insertResponders(responders,survey_id)
                 if(!result){
                     res.status(400).json({message:"something failed hehe"})
+                    return
                 }
+                console.log("NEW RESPONDERS INSERTED")
                 res.status(200).json({message:"success"})
+                return
             }catch(Error){
                 console.log(Error.message)
                 res.status(500).json({message:"server error"})
+
+                    return
             }
+
         }catch(Error){
             res.status(400).json({message:"JSON has missing data"})
+            return
         }
     }
        
     static async handlePutQuestion(req,res){
         const {surveyID, questionJSON,questionType,operation, questionID} = req.body
         try{
+            console.log("Updatingg question")
             const result = await SurveyDAL.putNewQuestion(surveyID,questionJSON,questionType,operation,questionID)
             res.status(200).json({message:"success"})
         }catch(Error){
