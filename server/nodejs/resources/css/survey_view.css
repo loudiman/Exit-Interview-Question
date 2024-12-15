@@ -124,16 +124,19 @@ body {
 }
 
 .modal {
-    display: none; /* hidden by default */
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 450px; /* Increased width */
+    width: 450px;
     padding: 20px;
     background-color: white;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     z-index: 1000;
+}
+
+.modal:not([open]) {
+    display: none;
 }
 
 .modal-content {
@@ -144,10 +147,6 @@ body {
 .button-group {
     display: flex;
     justify-content: center;
-}
-
-.modal[open] {
-    display: block;
 }
 
 /* Optional overlay styling */
