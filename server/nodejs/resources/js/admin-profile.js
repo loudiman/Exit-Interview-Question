@@ -28,15 +28,38 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Handle Image Upload
-    uploadForm.addEventListener('submit', (event) => {
-        event.preventDefault();
+    uploadForm.addEventListener('submit', async (event) => {
+        event.preventDefault(); // Prevent default form submission
+
         const imageUpload = document.querySelector('#imageUpload').files[0];
-
+    
         if (!imageUpload) return alert('Please select an image to upload.');
-
-        // Upload logic goes here (you can replace with actual API call)
-        alert('Image uploaded successfully!');
-
+    
+        // Create FormData object to hold the file
+        const formData = new FormData();
+        formData.append('file', imageUpload);
+    
+        try {
+            // Make the API call
+            const response = await fetch(uploadForm.action, {
+                method: 'POST',
+                body: formData,
+            });
+    
+            if (response.ok) {
+                // Handle successful upload
+                alert('Image uploaded successfully!');
+            } else {
+                // Handle server errors
+                const errorData = await response.json();
+                alert(`Failed to upload image: ${errorData.message || 'Unknown error'}`);
+            }
+        } catch (error) {
+            // Handle network or unexpected errors
+            console.error('Error uploading image:', error);
+            alert('An error occurred while uploading the image. Please try again.');
+        }
+    
         // Close the modal after uploading
         uploadModal.style.display = 'none';
     });
