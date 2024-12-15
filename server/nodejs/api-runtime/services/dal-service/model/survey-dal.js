@@ -160,6 +160,16 @@ class SurveyDAL{
         }
     }
 
+    static async deleteSurvey(surveyID){
+        var query = `DELETE FROM responders WHERE survey_id = ?`
+        try{
+            const [result] = pool.execute(query, surveyID)
+            return result.affectedRows
+        }catch(error){
+            throw new Error(error.message)
+        }
+    }
+
     static async insertResponders(responders, surveyID) {
         // If no responders, return early
         if (responders.length === 0) return true;
@@ -234,12 +244,12 @@ class SurveyDAL{
     }
 
 
-    static async putNewSurveyData(survey_id, survey_title, survey_description,status, program_id, period_start, period_end) {
-        const query = "UPDATE survey SET survey_title = ?, survey_description = ?,status = ?, program_id = ?, period_start = ?, period_end = ? WHERE survey_id = ? AND period_start > CURDATE();";
+    static async putNewSurveyData(survey_id, survey_title, survey_description, program_id, period_start, period_end) {
+        const query = "UPDATE survey SET survey_title = ?, survey_description = ?, program_id = ?, period_start = ?, period_end = ? WHERE survey_id = ? AND period_start > CURDATE();";
 
         try {
             // Await the query execution and handle the result
-            const [results] = await pool.execute(query, [survey_title, survey_description,status, program_id, period_start, period_end, survey_id]);
+            const [results] = await pool.execute(query, [survey_title, survey_description, program_id, period_start, period_end, survey_id]);
             console.log('Query executed successfully:', results);
         } catch (error) {
             // Log and throw the error with a helpful message
