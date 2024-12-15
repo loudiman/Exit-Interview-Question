@@ -112,8 +112,6 @@ async function fetchSurveys() {
         }
 
         const json = await response.json();
-        console.log("All Surveys:");
-        console.log(json);
         return json;
     } catch (error) {
         console.error(error.message);
@@ -154,7 +152,6 @@ async function fetchRespondents(surveyId) {
         }
 
         const result = await response.json();
-        console.log(`Response for survey_id ${surveyId}:`, result);
         return result;
     } catch (error) {
         console.error(`Error for survey_id ${surveyId}:`, error);
@@ -177,7 +174,6 @@ async function fetchStudent(username) {
         }
 
         const result = await response.json();
-        console.log(`Response for username ${username}:`, result);
         return result;
     } catch (error) {
         console.error(`Error for username ${username}:`, error);
@@ -215,7 +211,6 @@ async function fetchPrograms(){
         }
 
         const result = await response.json();
-        console.log(`All programs`+result);
         return result;
     } catch (error) {
         console.error(`Error fetching Programs:`);
@@ -297,7 +292,5 @@ async function processSurveyData() {
 
         surveyData.push(surveyDataItem);
     }
-
-    console.log('Processed Survey Data:', JSON.stringify(surveyData, null, 2));
     return surveyData;
 }
