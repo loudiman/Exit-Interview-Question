@@ -12,9 +12,13 @@ class ProgramDAL{
         }
     }
 
-    static async getAllPrograms(){
+    static async getAllPrograms(program_id){
         try{
-            const [result] = await pool.query("SELECT * FROM program")
+            if(!program_id){
+                const [result] = await pool.query("SELECT * FROM program")
+                return result
+            }
+            const [result] = await pool.query(`SELECT * FROM program WHERE program_id = ${program_id}`)
             return result
         } catch (error) {
             throw new Error(error.message)

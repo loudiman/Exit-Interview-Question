@@ -210,7 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Show survey preview in the modal
-    function showPreview(surveyId) {
+    async function showPreview(surveyId) {
         const surveysSummaryData = JSON.parse(sessionStorage.getItem('surveysSummaryData') || '[]');
         const survey = surveysSummaryData.find(survey => survey.survey_id === parseInt(surveyId));
 
@@ -220,13 +220,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         document.getElementById('previewSurveyTitle').textContent = survey.survey_title;
-        document.getElementById('previewSurveyStatus').textContent = survey.status;
-        document.getElementById('previewProgramId').textContent = survey.program_id;
+        document.getElementById('previewProgramId').textContent = await getProgram(survey.program_id);
         document.getElementById('previewPeriodStart').textContent = survey.period_start;
         document.getElementById('previewPeriodEnd').textContent = survey.period_end;
 
         document.getElementById('previewModal').showModal();
 
+    }
+
+    async function getProgram(program_id){
+        const response = await fetch(`http://localhost:2020/api/program-service/programs?program_id=${program_id}`)
+        if(response.ok){
+            var responseJson = await response.json()
+            console.log(`Program: ${responseJson}`)
+            var programsArray = []
+            for(let program of responseJson.availability){
+                console.log(program)
+                programsArray.push(program.program_name)
+            }
+            console.log(programsArray)
+            return programsArray
+        }
     }
 
     // Close Modals and Overlay

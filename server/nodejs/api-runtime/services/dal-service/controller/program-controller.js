@@ -15,8 +15,9 @@ class ProgramController {
     }
 
     static async handleGetAllPrograms(req,res){
+        const program_id = req.param.program_id
         try{
-            const rows = await ProgramDAL.getAllPrograms()
+            const rows = await ProgramDAL.getAllPrograms(program_id)
             res.status(200).json({
                 availability: rows,
             });
