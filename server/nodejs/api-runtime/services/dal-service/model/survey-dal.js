@@ -62,19 +62,19 @@ class SurveyDAL{
         }
     }
 
-
-    static async updateSurveyStatus(surveyDAO){
-        var status = surveyDAO.status
-        var surveyID = survveyDAO.survey_id
-
-        try{
-            var query = "UPDATE survey SET status = ? WHERE survey_id = ?"
-            const [result] = await pool.execute(query,[status, surveyID])
-            return result
-        }catch(error){
-            throw new Error(error.message)
-        }
-    }
+    //No longer supported by the database
+    // static async updateSurveyStatus(surveyDAO){
+    //     var status = surveyDAO.status
+    //     var surveyID = survveyDAO.survey_id
+    //
+    //     try{
+    //         var query = "UPDATE survey SET status = ? WHERE survey_id = ?"
+    //         const [result] = await pool.execute(query,[status, surveyID])
+    //         return result
+    //     }catch(error){
+    //         throw new Error(error.message)
+    //     }
+    // }
 
     static async updateResponder(username, responded){
         var query = "UPDATE responders SET responded = ? WHERE username = ?"
@@ -195,7 +195,7 @@ class SurveyDAL{
             } catch (error) {
                 console.error('Error inserting responders batch:', error);
                 results = false;
-                break;
+                throw new Error("Error inserting into responders: "+error.message);
             }
         }
 
@@ -246,6 +246,7 @@ class SurveyDAL{
 
     static async putNewSurveyData(survey_id, survey_title, survey_description, program_id, period_start, period_end) {
         const query = "UPDATE survey SET survey_title = ?, survey_description = ?, program_id = ?, period_start = ?, period_end = ? WHERE survey_id = ? AND period_start > CURDATE();";
+
         try {
             console.log("this id ",survey_id)
             const programIDJSON = {
@@ -265,7 +266,6 @@ class SurveyDAL{
     }
 
     static async putNewQuestion(surveyID, questionJSON, questionType,operationType, questionID){
-        console.log("CHECKING IF SURVEY IS PUBLISHED")
         console.log(await this.isSurveyPublishedHelper(surveyID))
         if(await this.isSurveyPublishedHelper(surveyID)){
             throw new Error("Survey is already published")
@@ -312,12 +312,9 @@ class SurveyDAL{
     }
 
     static async isSurveyPublishedHelper(surveyID){
-        console.log("GETTING IS PUBLISHED")
         var query = `SELECT * FROM survey WHERE survey_id = ? AND period_start > CURDATE()`
-        console.log(`Survey ID: ${surveyID}`)
         try{
             const [result] = await pool.query(query, surveyID)
-            console.log(result.length)
             if(result.length == 0){
                 return true
             }

@@ -141,7 +141,9 @@ h1 {
 
 /* Survey List Styles */
 .survey-view {
+    height: 40vw;
     font-size: 28px;
+    overflow-y:auto;
 }
 
 /* Survey Item Styles */

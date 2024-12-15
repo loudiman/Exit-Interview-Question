@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <a id="temp" class="${isUnpublished ? 'edit-btn' : 'details-btn'}">
                     <button data-id="${survey_id}">
                         <img src="/static/images/${action}.png" alt="${action} Icon" />
-                    </button>  
+                    </button>
                 </a>
             `;
 
@@ -186,9 +186,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to render dashboard cards with summarized data
     function renderCards(data) {
+        const currentDate = new Date();
+
+        const deployedSurveys = data.filter(survey => {
+            const periodStartDate = new Date(survey.period_start);
+            const periodEndDate = new Date(survey.period_end);
+
+            return periodStartDate <= currentDate && periodEndDate >= currentDate;
+        });
+
         const totalRespondedRatio = data.reduce((acc, survey) => acc + (survey.total_responded / survey.total_responders), 0) / data.length;
         const totalMissedSurveys = data.reduce((acc, survey) => acc + (survey.total_responders - survey.total_responded), 0);
-        const publishedSurveysCount = data.filter(survey => survey.status === 'published').length;
+        const publishedSurveysCount = deployedSurveys.length;
 
         const cardData = [
             { title: 'Overall Respondents for <br> Surveys Deployed', data: `${(totalRespondedRatio * 100).toFixed(1)}%` },
@@ -197,11 +206,11 @@ document.addEventListener('DOMContentLoaded', () => {
         ];
 
         cardDashboard.innerHTML = cardData.map(card => `
-            <div class="card">
-                <div class="card-data">${card.data}</div>
-                <h3 class="card-title">${card.title}</h3>
-            </div>
-        `).join('');
+        <div class="card">
+            <div class="card-data">${card.data}</div>
+            <h3 class="card-title">${card.title}</h3>
+        </div>
+    `).join('');
     }
 
     // Capitalize the first letter of a string

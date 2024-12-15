@@ -72,7 +72,7 @@ class SurveyController{
             const questionIDS = await SurveyDAL.insertQuestions(questions)
             const questionnaireResult = await SurveyDAL.insertQuestionnaire(questionIDS, surveyID)
             const respondersResult = await SurveyDAL.insertResponders(users, surveyID)
-            
+
             res.status(200).json({message:"success"})
         }catch(error){
             console.log(error)
