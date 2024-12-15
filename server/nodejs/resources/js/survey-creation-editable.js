@@ -52,7 +52,7 @@ function addQuestion(event) {
             <div class="question-header">
                 <input type="text" placeholder="Untitled Question">
                 <select onchange="updateQuestionContent(this)">
-                    <option value="multiple-choice">Multiple Choice</option>
+                    <option value="multiple_choice">Multiple Choice</option>
                     <option value="checkbox">Checkbox</option>
                     <option value="essay">Essay</option>
                     <option value="rating">Rating</option>
@@ -110,7 +110,7 @@ function updateQuestionContent(selectElement) {
     buttonContainer.style.display = 'none'; // Default to hide buttons
 
     switch (questionType) {
-        case 'multiple-choice':
+        case 'multiple_choice':
         case 'checkbox':
             buttonContainer.style.display = 'block';
             addOption(buttonContainer.querySelector(".option-button"));
@@ -237,7 +237,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 const questionType = container.querySelector(".question-header select")?.value.trim() || "";
 
                 let options = [];
-                if (questionType === "multiple-choice" || questionType === "checkbox") {
+                if (questionType === "multiple_choice" || questionType === "checkbox") {
                     const optionInputs = container.querySelectorAll(".options input");
                     options = Array.from(optionInputs).map(input => input.value.trim());
                 }
