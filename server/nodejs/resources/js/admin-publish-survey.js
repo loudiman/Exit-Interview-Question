@@ -30,7 +30,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     fetchFromServer().then(data => {
         addOptions(data.availability, "program-dropdown"); // Add options for programs
-        // addOptions({["BSCS 3-1", "BSIT 2-2", "BSBA 1-1"]}, "batch-dropdown"); // Add options for batches
     });
 
     const publishButton = document.getElementById("publishButton"); // Second button for 'Publish'
