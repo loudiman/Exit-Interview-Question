@@ -28,6 +28,7 @@ class UserController{
         try {
             await UserController.createStatement("not", notJSON, filterStatements)
             await UserController.createStatement("equal", equalJSON, filterStatements)
+            console.log(filterStatements)
         }catch(error){
             console.log(error)
         }
@@ -52,10 +53,11 @@ class UserController{
 
         //Guard Clause for not filter type
         if(type == "not"){
+            console.log("creating not")
             // item would be the column in the database to filter by
             for(let item in jsonObject.not){
                 console.log(item)
-                if(!jsonObject.item){
+                if(!jsonObject.not[item]){
                     return
                 }
                 var filters = jsonObject.not[item].map((filter) => (typeof filter === "string" ? `'${filter}'` : filter)).join(",")//lestat made this fiz(i found the bug)
@@ -68,6 +70,7 @@ class UserController{
 
         // Guard clause for equal filter type
         if(type == "equal"){
+            console.log("creating equal")
             // item would be the column in the database to filter by
             for(let item in jsonObject.equal){
                 console.log(jsonObject.equal)
