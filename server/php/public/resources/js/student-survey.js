@@ -420,7 +420,6 @@ function gatherResponses(surveyId) {
     }
 
     const responseJson = [];
-    // const surveyId = new URLSearchParams(window.location.search).get("id");
     const username = sessionStorage.getItem('username');
 
     if (!username || !surveyId) {
@@ -452,13 +451,13 @@ function gatherResponses(surveyId) {
                     hasUnansweredQuestions = true;
                     return;
                 }
-                response.answer = selectedChoice.value;
+                response.multiple_choice_ans = selectedChoice.value;
                 break;
 
             case "checkbox":
                 const selectedOptions = Array.from(questionDiv.querySelectorAll("input[type='checkbox']:checked"))
                     .map(option => option.value);
-                response.answer = selectedOptions;
+                response.checkbox_ans = selectedOptions;
                 break;
 
             case "essay":
@@ -468,7 +467,7 @@ function gatherResponses(surveyId) {
                     hasUnansweredQuestions = true;
                     return;
                 }
-                response.answer = essayValue;
+                response.essay_ans = essayValue;
                 break;
 
             case "rating":
@@ -477,11 +476,18 @@ function gatherResponses(surveyId) {
                     hasUnansweredQuestions = true;
                     return;
                 }
-                response.rating = parseInt(selectedRating.value, 10);
+                response.rating_ans = parseInt(selectedRating.value, 10);
                 break;
         }
 
-        if (response.answer !== undefined || response.rating !== undefined) {
+        const hasValidAnswer = (response) => {
+            return response.multiple_choice_ans !== undefined ||
+                   response.checkbox_ans !== undefined ||
+                   response.essay_ans !== undefined ||
+                   response.rating_ans !== undefined;
+        };
+
+        if (hasValidAnswer(response)) {
             responseJson.push(response);
         }
     });
@@ -496,7 +502,9 @@ function gatherResponses(surveyId) {
         return;
     }
 
-    console.log("Gathered responses:", responseJson);
+    console.log("Response JSON:");
+    console.table(responseJson);
+    console.dir(responseJson, { depth: null, colors: true });
 
     const payload = {
         username: numericUsername,

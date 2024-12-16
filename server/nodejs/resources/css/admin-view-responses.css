@@ -20,8 +20,6 @@ body {
 }
 /* Main Content */
 main {
-    flex: 1;
-    padding: 1.5rem;
     background-color: #ffffff;
     overflow-y: auto;
 }

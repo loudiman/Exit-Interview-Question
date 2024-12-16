@@ -30,11 +30,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (publishButton) {
         publishButton.addEventListener("click", async () => {
             await publishSurvey(surveyData).then(r => console.log("Survey published:", r));
-            window.location.href = 'http://localhost:2021/admin/surveys';
         });
     } else {
         console.error("Publish button not found.");
     }
+});
+
+//Listener for the Publishing
+publishButton.addEventListener("click", async () => {
+    await publishSurvey(surveyData).then(r => console.log("Survey published:", r));
+    window.location.href = 'http://localhost:2021/admin/surveys';
 });
 
 // Survey Publishing Functions
@@ -48,46 +53,66 @@ async function publishSurvey(currentData) {
     }));
 
     console.log(userArray);
+
     const fromDate = document.querySelector('input[type="date"]').value;
     const startTime = document.querySelector('input[type="time"]').value;
     const untilDate = document.querySelectorAll('input[type="date"]')[1].value;
     const endTime = document.querySelectorAll('input[type="time"]')[1].value;
-    console.log (fromDate);
-    console.log (startTime);
-    console.log (untilDate);
-    console.log (endTime);
-    
+
+    console.log(fromDate);
+    console.log(startTime);
+    console.log(untilDate);
+    console.log(endTime);
+
+        // Validate date and time
+    const startDateValid = new Date(`${fromDate} ${startTime}`) <= new Date(`${untilDate} ${endTime}`);
+    const endDateValid = new Date(`${fromDate} ${startTime}`) >= new Date(`${untilDate} ${endTime}`);
+    if (!startDateValid) {
+        alert("The 'Start' date/time cannot be later than the 'End' date/time. Please adjust them appropriately.");
+        return false; // Return false to indicate failure
+    } if (!endDateValid) {
+        alert("The 'End' date/time cannot be earlier than the 'Start' date/time. Please adjust them appropriately.");
+        return false; // Return false to indicate failure
+    } 
+
+    // Assign values to survey object
     currentData.survey.period_start = `${fromDate} ${startTime}:00`;
     currentData.survey.period_end = `${untilDate} ${endTime}:00`;
     currentData.survey.users = userArray;
 
-    console.log("JSON TANGINA MO: ", JSON.stringify(currentData.json))
+    // Log survey details
+    console.log("JSON: ", JSON.stringify(currentData.json));
     console.log("Survey Title:", currentData.survey.survey_title);
     console.log("Survey Description:", currentData.survey.survey_description);
-    console.log("Survey ID: ",currentData.survey.survey_id)
-    console.log ("Period start: ",currentData.survey.period_start)
-    console.log ("Period end:", currentData.survey.period_end)
-    console.log(" Programs that are selected: " , filters.filters[1].equal.program_id)
-    console.log("Pwede na users: ", filters.filters[0].not.username)
+    console.log("Survey ID: ", currentData.survey.survey_id);
+    console.log("Period start: ", currentData.survey.period_start);
+    console.log("Period end:", currentData.survey.period_end);
+    console.log("Programs that are selected: ", filters.filters[1].equal.program_id);
+    console.log("Pwede na users: ", filters.filters[0].not.username);
 
-
-
+    // Prepare the survey JSON payload for update
     const updateSurveyJSON = {
         "survey_id": currentData.survey.survey_id,
         "survey_title": currentData.survey.survey_title,
         "survey_description": currentData.survey_description,
-        "program_id": 1,
+        "program_id": 1, // Default program ID provided
         "period_start": currentData.survey.period_start,
         "period_end": currentData.survey.period_end
-    }
+    };
 
+    console.log(JSON.stringify(updateSurveyJSON.json));
 
-    console.log("TANGINA TALGAG PAG ITO MALI",JSON.stringify(updateSurveyJSON))
-
+    // Fetch the old survey data for comparison
     const oldSurveyData = JSON.parse(sessionStorage.getItem('oldSurveyData'));
     surveyDifferences(oldSurveyData, currentData);
-    updateSurvey (currentData,filters)
+
+    // Update the survey
+    await updateSurvey(currentData, filters);
+
     console.log("Survey Data to send:", JSON.stringify(currentData));
+
+    // Return true to indicate success
+    return true;
 }
 
 function filtersAPI() {
