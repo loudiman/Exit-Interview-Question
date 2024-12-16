@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
 
             let programsSelected = {
-                "program_id": programFilters
+                "program_id": programFilters.map((program) => parseInt(program))
             }
 
             var result = await fetchAllowedUsers(filters)
