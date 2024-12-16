@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.log(typeof matchedData);
 
             // Set a callback to run when the Google Visualization API is loaded.
-            google.charts.setOnLoadCallback(createCharts(preprocessor(matchedData)));
+            await google.charts.setOnLoadCallback(createCharts(preprocessor(matchedData)));
         }
     } catch (error) {
         console.error('Failed to load resources:', error);

@@ -57,7 +57,7 @@ class UserController{
             // item would be the column in the database to filter by
             for(let item in jsonObject.not){
                 console.log(item)
-                if(!jsonObject.not[item]){
+                if(!jsonObject.not[item][0]){
                     return
                 }
                 var filters = jsonObject.not[item].map((filter) => (typeof filter === "string" ? `'${filter}'` : filter)).join(",")//lestat made this fiz(i found the bug)
