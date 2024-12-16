@@ -252,7 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 title: 'Overall Respondents for <br> Surveys Deployed',
                 data: `${(totalRespondedRatio * 100).toFixed(1)}%`
             },
-            {title: 'Overall Missed <br> Surveys Deployed', data: totalMissedSurveys},
+            {title: ' Total Missed<br>Survey Responses', data: totalMissedSurveys},
             {title: 'Surveys Deployed', data: publishedSurveysCount}
         ];
 
