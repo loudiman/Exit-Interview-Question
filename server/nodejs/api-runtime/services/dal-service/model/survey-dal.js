@@ -171,7 +171,7 @@ class SurveyDAL{
     }
 
     static async insertResponders(responders, surveyID) {
-
+        // If no responders, return early
         if (responders.length === 0) return true;
 
         // Batch the inserts to prevent packet size issues

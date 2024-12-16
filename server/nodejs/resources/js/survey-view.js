@@ -62,12 +62,12 @@ surveyItem.querySelector('#temp1').addEventListener('click', (function(survey) {
             if (status === 'unpublished') {
                 surveyItem.innerHTML = `
                 <span>${survey.survey_title}</span>
-                <a id="temp2" >
+                <a href="/admin/surveys/edit?survey_id=${survey.survey_id}" >
                     <button data-id="${survey.survey_id}" class="edit-btn">
                         <img src="/static/images/Edit.png" alt="Edit" />
                     </button>              
                 </a>
-                <a href="/admin/surveys/edit?survey_id=${survey.survey_id}">
+                <a id="temp2">
                     <button data-id="${survey.survey_id}" class="delete-btn">
                         <img src="/static/images/Delete.png" alt="Delete" />
                     </button>

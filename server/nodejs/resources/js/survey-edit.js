@@ -1,8 +1,8 @@
 async function saveOldData() {
     try {
         console.log("saving old data");
-        console.log(sessionStorage.getItem("surveyData"));
-        const oldSurveyData = sessionStorage.getItem("surveyData");
+        console.log(sessionStorage.getItem("surveyData2"));
+        const oldSurveyData = sessionStorage.getItem("surveyData2");
         sessionStorage.setItem("oldSurveyData", oldSurveyData);
     } catch (error) {
         console.log(error);
@@ -421,20 +421,28 @@ function createQuestionElement(item, index) {
     return questionContainer;
 }
 
-function attachEventListeners() {
+async function attachEventListeners() {
     const publishButton = document.querySelector(".publish-button");
     if (publishButton) {
-        publishButton.addEventListener("click", () => this.saveSurveyToJSON());
+        const urlParams = new URLSearchParams(window.location.search);
+        const [surveyDetails] = await fetchSurveyDetails(urlParams.get('survey_id'));
+        // Ensure 'this' refers to the correct context of the class.
+        publishButton.addEventListener("click", async () => {
+            // Call saveSurveyToJSON method with the correct instance ('this').
+            await this.saveCurrentSurvey(surveyDetails);
+            window.location.href = "/admin/surveys/publish";
+        });
     }
 
     document.getElementById('formTitle').addEventListener('click', () => this.makeEditable('formTitle'));
     document.getElementById('formDescription').addEventListener('click', () => this.makeEditable('formDescription'));
 }
 
-function saveSurveyToJSON() {
+function saveCurrentSurvey(surveyDetails) {
     const urlParams = new URLSearchParams(window.location.search);
     const surveyID = urlParams.get('survey_id');
     const surveyTitle = document.getElementById("formTitle").textContent.trim();
+    console.log("Surv title", surveyTitle);
     const surveyDescription = document.getElementById("formDescription").textContent.trim();
     const questionContainers = document.querySelectorAll(".question-container");
 
@@ -454,7 +462,7 @@ function saveSurveyToJSON() {
                 const scaleSelect = container.querySelector(".max-rating-select");
                 if (scaleSelect) {
                     const maxScale = parseInt(scaleSelect.value, 10);
-                    scale = Array.from({length: maxScale}, (_, i) => i + 1);
+                    scale = Array.from({ length: maxScale }, (_, i) => i + 1);
                 }
                 break;
         }
@@ -472,111 +480,62 @@ function saveSurveyToJSON() {
         };
     });
 
-    const surveyData = {
-        survey: {
-            survey_title: surveyTitle || "Untitled Survey",
-            survey_description: surveyDescription || "",
-            survey_id: surveyID,
-            program_id: "",
-            period_start: "",
-            period_end: "",
-            status: "Draft"
-        },
-        questions: questions,
-        users: ""
-    };
-
-    sessionStorage.setItem("surveyData", JSON.stringify(surveyData));
-    console.log("Survey data saved:", JSON.stringify(surveyData));
-    window.location.href = "/admin/surveys/publish";
-}
-
-function saveCurrentSurvey() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const surveyID = urlParams.get('survey_id');
-    const surveyTitle = document.getElementById("formTitle").textContent.trim();
-    const surveyDescription = document.getElementById("formDescription").textContent.trim();
-    const questionContainers = document.querySelectorAll(".question-container");
-
-    const questions = Array.from(questionContainers).map((container, index) => {
-        const questionText = container.querySelector(".question-header input").value.trim();
-        const questionType = container.querySelector(".question-header select").value;
-
-        let options = [];
-        let scale = [];
-
-        switch (questionType) {
-            case "multiple_choice":
-            case "checkbox":
-                options = Array.from(container.querySelectorAll(".options input"))
-                    .map(input => input.value.trim());
-                break;
-            case "rating":
-                const scaleSelect = container.querySelector(".max-rating-select");
-                if (scaleSelect) {
-                    const maxScale = parseInt(scaleSelect.value, 10);
-                    scale = Array.from({length: maxScale}, (_, i) => i + 1);
-                }
-                break;
+    // Parse and handle program_id correctly
+    let programId = { "program_id": [] };
+    try {
+        if (surveyDetails.program_id) {
+            programId = JSON.parse(surveyDetails.program_id);
+            console.log("Parsed program_id:", programId);
         }
-
-        const questionId = this.surveyData?.questions?.[index]?.question_id;
-
-        return {
-            question_id: questionId,
-            question_json: {
-                question: questionText,
-                options: options,
-                scale: scale,
-            },
-            question_type: questionType,
-        };
-    });
+    } catch (error) {
+        console.error("Error parsing program_id:", surveyDetails.program_id, error);
+    }
 
     const surveyData = {
         survey: {
             survey_title: surveyTitle || "Untitled Survey",
             survey_description: surveyDescription || "",
             survey_id: surveyID,
-            program_id: "",
-            period_start: "",
-            period_end: "",
+            program_id: programId, // Use parsed program_id
+            period_start: surveyDetails.period_start || "",
+            period_end: surveyDetails.period_end || "",
             status: "Draft"
         },
         questions: questions,
         users: []
     };
 
-    sessionStorage.setItem("surveyData", JSON.stringify(surveyData));
-    console.log("Survey data saved:", JSON.stringify(surveyData));
+    sessionStorage.setItem("surveyData2", JSON.stringify(surveyData));
+    console.log("Masarap ka number 2:", JSON.stringify(surveyData));
 }
 
 class SurveyEditor {
     constructor() {
         this.surveyData = null;
         this.surveyId = null;
-        this.initializePage();
+        this.initializePage().then(r => console.log('Survey editor initialized'));
     }
 
     async initializePage() {
         const urlParams = new URLSearchParams(window.location.search);
-        const surveyDetails = await fetchSurveyDetails(urlParams.get('survey_id'));
-        this.surveyId = urlParams.get('survey_id');
+        const surveyDetailsArray = await fetchSurveyDetails(urlParams.get('survey_id'));
 
-        console.log('Stored survey details:', surveyDetails);
-        document.getElementById('formTitle').textContent = surveyDetails.survey_title || 'Untitled Survey';
-        document.getElementById('formDescription').textContent = surveyDetails.survey_description || 'No description';
-        if (surveyDetails) {
-            var [surveyDetailsJson] = surveyDetails;
-            document.getElementById('formTitle').textContent = surveyDetailsJson.survey_title || 'Untitled Survey';
-            document.getElementById('formDescription').textContent = surveyDetailsJson.survey_description || 'No description';
+        if (Array.isArray(surveyDetailsArray) && surveyDetailsArray.length > 0) {
+            const surveyDetails = surveyDetailsArray[0]; // Extract the first object
+            this.surveyId = surveyDetails.survey_id;
+
+            console.log('Stored survey details:', JSON.stringify(surveyDetails));
+            document.getElementById('formTitle').textContent = surveyDetails.survey_title || 'Untitled Survey';
+            document.getElementById('formDescription').textContent = surveyDetails.survey_description || 'No description';
+
+            await fetchSurveyQuestions(surveyDetails.survey_id); // Fetch questions based on surveyId
+
+            await attachEventListeners();
+            await saveCurrentSurvey(surveyDetails); // Pass fully parsed object
+            await saveOldData(this.surveyId);
+        } else {
+            console.error('Invalid or missing survey details');
         }
-
-        await fetchSurveyQuestions(urlParams.get('survey_id'));
-        attachEventListeners();
-
-        saveCurrentSurvey(this.surveyId);
-        saveOldData(this.surveyId);
     }
 }
 
