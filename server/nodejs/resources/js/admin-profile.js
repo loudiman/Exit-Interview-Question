@@ -87,32 +87,4 @@ document.addEventListener('DOMContentLoaded', () => {
             logoutPrompt.style.display = 'none';
         }
     });
-
-    // Fetch User's Name by Username
-    async function fetchUserName() {
-        const username = 'MarkLestatAgustin';  // Replace this with the actual logged-in username or session username
-
-        try {
-            const response = await fetch(`http://localhost:2020/api/user-service/user:2234244${username}`);  // Call the endpoint with the username in the URL
-            if (!response.ok) {
-                throw new Error(`Response status: ${response.status}`);
-            }
-
-            const userData = await response.json();
-            console.log('User Data:', userData);
-
-            // Assuming the API returns an object with a name property
-            if (userData && userData.name) {
-                userNameElement.textContent = userData.name;  // Display the user's name in the h2 element
-            } else {
-                console.error('Name not found in the user data.');
-            }
-        } catch (error) {
-            console.error('Failed to fetch user name:', error.message);
-            userNameElement.textContent = 'username unavailable';  // Fallback message in case of error
-        }
-    }
-
-    // Call the function to fetch the user's name when the page is loaded
-    fetchUserName();
 });

@@ -44,9 +44,10 @@ main {
 }
 
 #profile-icon {
-    width: 50px;
-    height: 50px;
-    margin-right: 10px; /* Spacing between icon and name */
+    width: 80px;
+    height: 80px;
+    margin-right: 10px;
+    border-radius: 100%/* Spacing between icon and name */
 }
 
 .flex-container row h2{
@@ -92,10 +93,10 @@ main {
     padding: 10px;
     border-radius: 5px;
     cursor: pointer;
-    width: auto;
+    width: 10%;
     font-size: 20px;
     margin-top: 10px;
-    margin-left: 920px;
+    margin-left: 860px;
 }
 
 .create-button:hover {

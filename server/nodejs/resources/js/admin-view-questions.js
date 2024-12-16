@@ -1,9 +1,12 @@
 // JavaScript for handling admin-view-questions and inserting questions dynamically
 document.addEventListener("DOMContentLoaded", () => {
     const surveySummary = getSurveySummary();
+    console.log("Survey Summary:", surveySummary);
     document.getElementById('survey-publish-date').innerHTML = `<strong>Publish Date: ${surveySummary.period_start.toLocaleDateString()}</strong>`;
     document.getElementById('survey-expiration-date').innerHTML = `<strong>Available Until: ${surveySummary.period_end.toLocaleDateString()}</strong>`;
     document.getElementById('survey-respondents').innerHTML = `<strong>Respondents: ${surveySummary.total_responded}</strong>`;
+    document.getElementById('questionsTab').setAttribute('href', `/admin/dashboard/survey?id=${surveySummary.survey_id}`);
+    document.getElementById('responsesTab').setAttribute('href', `/admin/dashboard/survey/responses?id=${surveySummary.survey_id}`);
 
     // Get the title container
     const titleContainer = document.getElementById('title');
@@ -44,10 +47,18 @@ document.addEventListener("DOMContentLoaded", () => {
     generateQuestionDoms();
 });
 
+function getSurveyIdFromURL() {
+    console.log("Getting survey ID from URL");
+    const params = new URLSearchParams(window.location.search);
+    console.log("Params: ", params.get("survey_id"));
+    return params.get("survey_id"); 
+}
+
 function getSurveySummary() {
+    console.log("Getting survey summary data from sessionStorage");
     try {
         const surveys = JSON.parse(sessionStorage.getItem('surveysSummaryData'));
-        const surveyId = sessionStorage.getItem('surveyId');
+        const surveyId = getSurveyIdFromURL();
         const survey = surveys.find(s => s.survey_id === parseInt(surveyId));
 
         if (!survey) {
@@ -70,7 +81,6 @@ function getSurveySummary() {
         return null;
     }
 }
-
 
 function generateQuestionDoms(){
     const storedQuestionnaireData = sessionStorage.getItem('questionnaireData');
