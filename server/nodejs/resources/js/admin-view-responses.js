@@ -1,5 +1,4 @@
-// Load the Visualization API and the corechart package.
-google.charts.load('current', {'packages':['corechart']});
+
 
 function getSurveyIdFromURL() {
     console.log("Getting survey ID from URL");
@@ -9,6 +8,9 @@ function getSurveyIdFromURL() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
+    // Load the Visualization API and the corechart package.
+    google.charts.load('current', {'packages':['corechart']});
+
     const surveyId = getSurveyIdFromURL();
     console.log("Survey ID", surveyId);
     document.getElementById('questionsTab').setAttribute('href', `/admin/dashboard/survey/?survey_id=${surveyId}`);
@@ -214,14 +216,15 @@ function drawMultipleChoiceChart(questionData, containerId) {
     // Count responses for each option
     const responseCounts = {};
     questionData.responses.forEach(response => {
+        console.log("Response option", response);
         responseCounts[response] = (responseCounts[response] || 0) + 1;
     });
 
     console.log("Response Counts", responseCounts);
 
     // Add rows for each option
-    Object.entries(responseCounts).forEach(([option, count]) => {
-        data.addRow([option, count]);
+    questionData.options.forEach(option => {
+        data.addRow([option, responseCounts[option] || 0]);
     });
 
     const options = {

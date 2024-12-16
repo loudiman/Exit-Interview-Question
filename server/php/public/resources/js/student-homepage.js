@@ -57,7 +57,6 @@ document.addEventListener('DOMContentLoaded', function () {
             if (hiddenSurveys.includes(survey.survey_id)) surveyElement.classList.add('hidden-survey'); // If survey is hidden, add class
 
             const periodEndFormatted = formatDateToStandardTime(survey.period_end);
-            const submittedAtFormatted = survey.responded == 1 ? formatDateToStandardTime(survey.submitted_at) : '';
 
             // Set different colors based on survey status and period end
             if (survey.responded == 1) {
@@ -76,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 <div>
                     <div class="survey-title">${survey.survey_title}</div>
                     <div class="survey-info">
-                        ${survey.responded == 1? `Time Submitted: ${submittedAtFormatted}` : survey.responded == 0 && new Date() < new Date(survey.period_end) ? `Valid Until: ${periodEndFormatted}` : `Submission Closed: ${periodEndFormatted}` }
+                        ${survey.responded == 1? `You've already responded on this survey` : survey.responded == 0 && new Date() < new Date(survey.period_end) ? `Valid Until: ${periodEndFormatted}` : `Submission Closed: ${periodEndFormatted}` }
                     </div>
                 </div>
                 <div class="survey-actions">

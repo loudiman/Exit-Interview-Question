@@ -12,17 +12,42 @@
      <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 </head>
 <body>
+
+  <!-- Navbar -->
+<header class="navbar">
+  <button aria-label="Toggle Sidebar" id="sidebarToggle">☰</button>
+  <img alt="Profile" height="30" src="/static/images/male_user.png" width="30">
+</header>
+
+<!-- Sidebar and main content container -->
+<div class="sidebar-container">
+  <!-- Sidebar -->
+  <nav class="sidebar" id="sidebar">
+      <a href="/admin">
+          <img src="/static/images/home_icon.png" alt="Home Icon"> Home
+      </a>
+      <a href="/admin/create">
+          <img src="/static/images/create_icon.png" alt="Create Icon"> Create
+      </a>
+      <a href="/admin/surveys" class="active">
+          <img src="/static/images/view_icon.png" alt="View Icon"> View
+      </a>
+      <a href="/admin/respondents">
+          <img src="/static/images/respondents_icon.png" alt="Respondents Icon"> Respondents
+      </a>
+      <a href="/admin/profile">
+          <img src="/static/images/male_user.png" alt="Profile Icon"> Profile
+      </a>
+  </nav>
     <!-- Main Content -->
     <main>
-        <!-- Sidebar and main content container -->
-        <div class="sidebar-container">
-            <div class="tab-container">
-                <ul class="tabs">
-                    <a id="questionsTab" onclick="openTab('questions')">Questions</a>
-                    <a id="responsesTab" class="active"onclick="openTab('responses')">Responses</a>
-                </ul>
-            </div>
-            <div class="x">
+        <div class="tab-container">
+            <ul class="tabs">
+                <a id="questionsTab" onclick="openTab('questions')">Questions</a>
+                <a id="responsesTab" class="active"onclick="openTab('responses')">Responses</a>
+            </ul>
+        </div>
+          <div class="x">
               <div class="form-closed-container">
                   <div class="form-closed-container-content">
                       <h1>responses data and etc</h1>
@@ -33,8 +58,8 @@
               <!--Div that will hold the pie chart-->
               <div id="charts-container"></div> 
           </div>
-        </div>
     </main>
+  </div>
 </body>
 <script src="/static/js/admin-view-responses.js"></script>
 </html>
