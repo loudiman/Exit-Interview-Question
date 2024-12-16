@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", async () => {
     const surveyData = JSON.parse(sessionStorage.getItem('surveyData2'));
-    // console.log("Ito and tunay na survey data: ",surveyData);
     console.dir(surveyData, {depth: null});
 
     const surveyTitleElement = document.getElementById('survey-title');
