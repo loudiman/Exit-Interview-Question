@@ -26,8 +26,8 @@ body {
     padding: 20px;
     background-color: #FFFFFF;
     transition: all 0.3s ease;
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow-y: scroll;
+    height: 100vh;
 }
 
 .main-content.full-width {
