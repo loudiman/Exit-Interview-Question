@@ -118,8 +118,6 @@ async function publishSurvey(currentData) {
     }
 
 
-    console.log("TANGINA TALGAG PAG ITO MALI",JSON.stringify(updateSurveyJSON))
-
     const oldSurveyData = JSON.parse(sessionStorage.getItem('oldSurveyData'));
     surveyDifferences(oldSurveyData, currentData);
     await updateSurvey (updateSurveyJSON,filters)
@@ -513,9 +511,7 @@ function deleteQuestion(newQuestions, oldQuestions) {
 //Survey API
 async function updateSurvey(surveyData, filteredData) {
     const url = "http://localhost:2020/api/survey-service/survey"
-    // console.log("Error to sige!!!!!:", surveyData);
-    // console.log("Error to hinde:", surveyData.survey_id);
-    // console.log("Eto yung program ID kase:", JSON.stringify(surveyData.program_id));
+  
 
     try {
 
