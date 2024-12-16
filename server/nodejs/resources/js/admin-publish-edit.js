@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", async () => {
     const surveyData = JSON.parse(sessionStorage.getItem('surveyData2'));
-    console.log("Ito and tunay na survey data: ",surveyData);
+    // console.log("Ito and tunay na survey data: ",surveyData);
     console.dir(surveyData, {depth: null});
 
     const surveyTitleElement = document.getElementById('survey-title');
@@ -20,13 +20,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         addOptions(data.availability, "program-dropdown"); // Add options for programs
     });
 
+    await importExcludedUsers(surveyData.survey.survey_id);
+
     const programIDS = surveyData.survey.program_id.program_id;
     console.log("Program IDS: ",programIDS);
     importAllowedPrograms(programIDS);
     await importDateAndTime(surveyData.survey);
-
-    addYear("year-dropdown", 1911); // Add options for year
-    addSemester("semester-dropdown"); // Add options for semester
 
     // Instant validation for date and time inputs
     const fromDateInput = document.querySelector('input[type="date"]');
@@ -147,7 +146,7 @@ function filtersAPI() {
         ]
     };
 
-    console.log(JSON.stringify(filters));
+    console.log("Filters API: "+JSON.stringify(filters));
     return filters;
 }
 
@@ -220,62 +219,62 @@ function addStudentsDropdown(data, containerId) {
     });
 }
 
-function addSemester(containerId) {
-    const container = document.getElementById(containerId);
-    container.innerHTML = ''; // Clear existing options
+// function addSemester(containerId) {
+//     const container = document.getElementById(containerId);
+//     container.innerHTML = ''; // Clear existing options
+//
+//     const sems = [
+//         { semester: "first" },
+//         { semester: "second" }
+//     ];
+//
+//     sems.forEach(item => {
+//         const label = document.createElement('label');
+//         const checkbox = document.createElement('input');
+//         checkbox.type = 'checkbox';
+//         checkbox.value = item.semester;
+//         label.appendChild(checkbox);
+//         label.appendChild(document.createTextNode(item.semester));
+//         container.appendChild(label);
+//     });
+// }
 
-    const sems = [
-        { semester: "first" },
-        { semester: "second" }
-    ];
-
-    sems.forEach(item => {
-        const label = document.createElement('label');
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.value = item.semester;
-        label.appendChild(checkbox);
-        label.appendChild(document.createTextNode(item.semester));
-        container.appendChild(label);
-    });
-}
-
-function addYear(containerId, startYear) {
-    const container = document.getElementById(containerId);
-    container.innerHTML = '';
-
-    const now = new Date();
-    const currentYear = now.getFullYear();
-
-    // Create an array of all the years from the start year to the current year + 100
-    const allYears = [];
-    for (let year = startYear; year <= currentYear + 100; year++) {
-        allYears.push(year);
-    }
-
-    for (const year of allYears) {
-        const label = document.createElement('label');
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.value = year;
-        checkbox.checked = year === currentYear; // Set the current year as checked by default
-        label.appendChild(checkbox);
-        label.appendChild(document.createTextNode(year));
-        container.appendChild(label);
-    }
-
-    const dropdown = container.closest('.dropdown-checkbox'); // Find the closest dropdown container
-    console.log(dropdown)
-    const dropdownOptions = dropdown.querySelector('.dropdown-checkbox-options');
-
-    dropdown.addEventListener('click', () => {
-        console.log("hit")
-        const currentYearCheckbox = container.querySelector(`input[value="${currentYear}"]`);
-        if (currentYearCheckbox && dropdownOptions) {
-            dropdownOptions.scrollTop = currentYearCheckbox.offsetTop - dropdownOptions.offsetTop;
-        }
-    });
-}
+// function addYear(containerId, startYear) {
+//     const container = document.getElementById(containerId);
+//     container.innerHTML = '';
+//
+//     const now = new Date();
+//     const currentYear = now.getFullYear();
+//
+//     // Create an array of all the years from the start year to the current year + 100
+//     const allYears = [];
+//     for (let year = startYear; year <= currentYear + 100; year++) {
+//         allYears.push(year);
+//     }
+//
+//     for (const year of allYears) {
+//         const label = document.createElement('label');
+//         const checkbox = document.createElement('input');
+//         checkbox.type = 'checkbox';
+//         checkbox.value = year;
+//         checkbox.checked = year === currentYear; // Set the current year as checked by default
+//         label.appendChild(checkbox);
+//         label.appendChild(document.createTextNode(year));
+//         container.appendChild(label);
+//     }
+//
+//     const dropdown = container.closest('.dropdown-checkbox'); // Find the closest dropdown container
+//     console.log(dropdown)
+//     const dropdownOptions = dropdown.querySelector('.dropdown-checkbox-options');
+//
+//     dropdown.addEventListener('click', () => {
+//         console.log("hit")
+//         const currentYearCheckbox = container.querySelector(`input[value="${currentYear}"]`);
+//         if (currentYearCheckbox && dropdownOptions) {
+//             dropdownOptions.scrollTop = currentYearCheckbox.offsetTop - dropdownOptions.offsetTop;
+//         }
+//     });
+// }
 
 function toggleDropdown(containerId) {
     const dropdown = document.getElementById(containerId);
@@ -332,6 +331,112 @@ function removeLetters(string) {
     return string.replace('Z', ' '); // Removes 'Z', replaces with space for clarity
 }
 
+async function fetchRespondentsForEdit(surveyId) {
+    console.log("Trying to fetch respondents");
+    const url = 'http://localhost:2020/api/survey-service/respondents';
+    const data = { survey_id: surveyId };
+
+    try {
+        const response = await fetch(url, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        // Ensure the result is an array
+        if (!Array.isArray(result)) {
+            console.error("Unexpected response format:", result);
+            return [];
+        }
+
+        console.log("Respondents result:", result);
+        return result;
+    } catch (error) {
+        console.error(`Error for survey_id ${surveyId}:`, error);
+        return [];
+    }
+}
+
+async function fetchExcludedUsers(surveyID) {
+    console.log("Fetching excluded users...");
+    try {
+        // Fetch respondents
+        const respondents = await fetchRespondentsForEdit(surveyID);
+
+        // Ensure respondents is an array
+        if (!Array.isArray(respondents)) {
+            console.error("Error: Respondents is not an array", respondents);
+            throw new Error("Respondents must be an array");
+        }
+
+        // Map usernames from respondents
+        const respondentUsernames = respondents.map(respondent => {
+            if (typeof respondent.username === "undefined") {
+                console.error("Error: Respondent object missing 'username'", respondent);
+                throw new Error("Respondent object missing 'username'");
+            }
+            return respondent.username;
+        });
+
+        // Construct filters
+        const filters = {
+            "filters": [
+                { "not": {"username": respondentUsernames } },
+                { "equal": {} }
+            ]
+        };
+
+        // Fetch allowed users
+        const allowedUsers = await fetchAllowedUsers(filters);
+
+        // Ensure allowedUsers is an array
+        if (!Array.isArray(allowedUsers)) {
+            console.error("Invalid response from fetchAllowedUsers:", allowedUsers);
+            throw new Error("fetchAllowedUsers did not return an array");
+        }
+
+        // Extract allowed usernames from the allowedUsers array
+        const allowedUsernames = allowedUsers.map(user => user.username);
+
+        // Filter respondents to get those who are not in allowedUsers
+        const excludedUsers = respondents.filter(respondent => !allowedUsernames.includes(respondent.username));
+
+        console.log("Excluded users:", excludedUsers);
+
+        return allowedUsers; // Return the list of excluded users
+    } catch (error) {
+        console.error("Error fetching excluded users:", error);
+        return []; // Return an empty array in case of error
+    }
+}
+
+
+async function importExcludedUsers(surveyID) {
+    const container = document.getElementById('student-dropdown');
+    if (!container) {
+        console.error("Error: #student-dropdown element not found.");
+        return;
+    }
+
+    const users = await fetchExcludedUsers(surveyID);
+    // console.log(`Users to import: ${JSON.stringify(users)}`);
+
+    for (const user of users) {
+        // console.log(`Importing user: ${user.username}`);
+        const checkbox = container.querySelector(`input[type="checkbox"][value="${user.username}"]`);
+        // console.log(`Checkbox: ${checkbox}`);
+        if (checkbox) {
+            checkbox.checked = true;
+        }
+    }
+}
+
 function importAllowedPrograms(programs) {
     console.log(`Programs to import: ${programs}`)
     const container = document.getElementById('program-dropdown');
@@ -363,8 +468,8 @@ function toggleRestrictionsDropdown(containerId) {
 
 // Survey Modifications and Differences
 function surveyDifferences(oldSurveyData, surveyData) {
-    console.log("Checking for differences in survey data...");
-    console.log("Old survey data:", oldSurveyData);
+    // console.log("Checking for differences in survey data...");
+    // console.log("Old survey data:", oldSurveyData);
     const surveyID = surveyData.survey.survey_id;
     console.log("Survey ID:", surveyID);
 
@@ -409,9 +514,9 @@ function deleteQuestion(newQuestions, oldQuestions) {
 //Survey API
 async function updateSurvey(surveyData, filteredData) {
     const url = "http://localhost:2020/api/survey-service/survey"
-    console.log("Error to sige!!!!!:", surveyData);
-    console.log("Error to hinde:", surveyData.survey_id);
-    console.log("Eto yung program ID kase:", JSON.stringify(surveyData.program_id));
+    // console.log("Error to sige!!!!!:", surveyData);
+    // console.log("Error to hinde:", surveyData.survey_id);
+    // console.log("Eto yung program ID kase:", JSON.stringify(surveyData.program_id));
 
     try {
 
