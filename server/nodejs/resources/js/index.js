@@ -6,9 +6,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Survey Data Example (Replace with data from API if necessary)
     const surveyData = [
-        { survey_id: 1, survey_title: 'Sample Survey 1', status: 'unpublished', program_id: 1, period_start: '2023-12-31T16:00:00.000Z', period_end: '2024-12-30T16:00:00.000Z', total_responded: 1, total_responders: 2 },
-        { survey_id: 2, survey_title: 'Sample Survey 2', status: 'unpublished', program_id: 2, period_start: '2024-01-01T08:00:00.000Z', period_end: '2024-01-31T17:00:00.000Z', total_responded: 10, total_responders: 50 },
-        { survey_id: 3, survey_title: 'Sample Survey 3', status: 'published', program_id: 2, period_start: '2023-02-03T08:00:00.000Z', period_end: '2024-01-31T17:00:00.000Z', total_responded: 20, total_responders: 40 }
+        {
+            survey_id: 1,
+            survey_title: 'Sample Survey 1',
+            status: 'unpublished',
+            program_id: 1,
+            period_start: '2023-12-31T16:00:00.000Z',
+            period_end: '2024-12-30T16:00:00.000Z',
+            total_responded: 1,
+            total_responders: 2
+        },
+        {
+            survey_id: 2,
+            survey_title: 'Sample Survey 2',
+            status: 'unpublished',
+            program_id: 2,
+            period_start: '2024-01-01T08:00:00.000Z',
+            period_end: '2024-01-31T17:00:00.000Z',
+            total_responded: 10,
+            total_responders: 50
+        },
+        {
+            survey_id: 3,
+            survey_title: 'Sample Survey 3',
+            status: 'published',
+            program_id: 2,
+            period_start: '2023-02-03T08:00:00.000Z',
+            period_end: '2024-01-31T17:00:00.000Z',
+            total_responded: 20,
+            total_responders: 40
+        }
     ];
 
     // Initialize app on DOM load
@@ -51,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
         unpublishedContainer.innerHTML = '';
         publishedContainer.innerHTML = '';
         const currentDate = new Date()
-        data.forEach(({ survey_id, survey_title, total_responded, total_responders, period_start, period_end }) => {
+        data.forEach(({survey_id, survey_title, total_responded, total_responders, period_start, period_end}) => {
             const periodStart = new Date(period_start)
             const periodEnd = new Date(period_end)
             var status = periodStart > currentDate ? 'unpublished' : 'published'
@@ -77,24 +104,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 </a>
             `;
 
-            surveyItem.querySelector('#temp').addEventListener('click', (function(survey_id) {
-                return function(event) {
+            surveyItem.querySelector('#temp').addEventListener('click', (function (survey_id) {
+                return function (event) {
                     event.preventDefault();
                     fetch(`http://localhost:2020/api/survey-service/questions/${survey_id}`)
-                    .then(response => response.json())
-                    .then(surveyData => {
-                        console.log(JSON.stringify(surveyData));
-                        sessionStorage.setItem('questionnaireData', JSON.stringify(surveyData));
-                        sessionStorage.setItem('surveyId', survey_id);
-                        window.location.href = href;
-                    })
-                    .catch(error => console.error("Fetch error: ", error));
+                        .then(response => response.json())
+                        .then(surveyData => {
+                            console.log(JSON.stringify(surveyData));
+                            sessionStorage.setItem('questionnaireData', JSON.stringify(surveyData));
+                            sessionStorage.setItem('surveyId', survey_id);
+                            window.location.href = href;
+                        })
+                        .catch(error => console.error("Fetch error: ", error));
                 };
             })(survey_id));
 
             container.appendChild(surveyItem);
         });
     }
+
     document.body.addEventListener('click', event => {
         const button = event.target.closest('button');
         if (!button) return;  // Exit if not a button
@@ -116,15 +144,27 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // Search function to filter surveys based on multiple criteria
+    // Search function to filter surveys
     function searchSurveys(surveyData) {
         const query = searchInput.value.trim().toLowerCase();
         const filteredSurveys = query ? surveyData.filter(survey => {
             const matchesTitle = survey.survey_title.toLowerCase().includes(query);
-            const matchesStatus = survey.status.toLowerCase().includes(query);
+            const matchesDescription = survey.survey_description.toLowerCase().includes(query);
+            const matchesStatus = (survey.status ? survey.status.toLowerCase() : '').includes(query);
             const matchesResponderCount = `${survey.total_responded}/${survey.total_responders}`.includes(query);
             const matchesProgramId = survey.program_id.toString().includes(query);
-            return matchesTitle || matchesStatus || matchesResponderCount || matchesProgramId;
+            const matchesPeriodStart = survey.period_start.toLowerCase().includes(query);
+            const matchesPeriodEnd = survey.period_end.toLowerCase().includes(query);
+
+            return (
+                matchesTitle ||
+                matchesDescription ||
+                matchesStatus ||
+                matchesResponderCount ||
+                matchesProgramId ||
+                matchesPeriodStart ||
+                matchesPeriodEnd
+            );
         }) : surveyData;
 
         renderSurveys(filteredSurveys);
@@ -136,7 +176,15 @@ document.addEventListener('DOMContentLoaded', () => {
         publishedContainer.innerHTML = '';
         const currentDate = new Date();
 
-        data.forEach(({survey_id, survey_title, status, total_responded, total_responders, period_start, period_end}) => {
+        data.forEach(({
+                          survey_id,
+                          survey_title,
+                          status,
+                          total_responded,
+                          total_responders,
+                          period_start,
+                          period_end
+                      }) => {
             const periodStartDate = new Date(period_start);
             const periodEndDate = new Date(period_end);
             let actualStatus = (periodStartDate > currentDate) ? 'unpublished' : 'published';
@@ -162,8 +210,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     </button>
                 </a>
             `;
-            surveyItem.querySelector('#temp').addEventListener('click', (function(survey_id) {
-                return function(event) {
+            surveyItem.querySelector('#temp').addEventListener('click', (function (survey_id) {
+                return function (event) {
                     event.preventDefault();
                     fetch(`http://localhost:2020/api/survey-service/questions/${survey_id}`)
                         .then(response => response.json())
@@ -200,9 +248,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const publishedSurveysCount = deployedSurveys.length;
 
         const cardData = [
-            { title: 'Overall Respondents for <br> Surveys Deployed', data: `${(totalRespondedRatio * 100).toFixed(1)}%` },
-            { title: 'Overall Missed <br> Surveys Deployed', data: totalMissedSurveys },
-            { title: 'Surveys Deployed', data: publishedSurveysCount }
+            {
+                title: 'Overall Respondents for <br> Surveys Deployed',
+                data: `${(totalRespondedRatio * 100).toFixed(1)}%`
+            },
+            {title: 'Overall Missed <br> Surveys Deployed', data: totalMissedSurveys},
+            {title: 'Surveys Deployed', data: publishedSurveysCount}
         ];
 
         cardDashboard.innerHTML = cardData.map(card => `
@@ -237,13 +288,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     }
 
-    async function getProgram(program_id){
+    async function getProgram(program_id) {
         const response = await fetch(`http://localhost:2020/api/program-service/programs?program_id=${program_id}`)
-        if(response.ok){
+        if (response.ok) {
             var responseJson = await response.json()
             console.log(`Program: ${responseJson}`)
             var programsArray = []
-            for(let program of responseJson.availability){
+            for (let program of responseJson.availability) {
                 console.log(program)
                 programsArray.push(program.program_name)
             }
