@@ -11,7 +11,7 @@ function getSurveyIdFromURL() {
 document.addEventListener('DOMContentLoaded', async () => {
     const surveyId = getSurveyIdFromURL();
     console.log("Survey ID", surveyId);
-    document.getElementById('questionsTab').setAttribute('href', `/admin/dashboard/survey/?id=${surveyId}`);
+    document.getElementById('questionsTab').setAttribute('href', `/admin/dashboard/survey/?survey_id=${surveyId}`);
     document.getElementById('responsesTab').setAttribute('href', `/admin/dashboard/survey/responses?id=${surveyId}`);
 
     try {
