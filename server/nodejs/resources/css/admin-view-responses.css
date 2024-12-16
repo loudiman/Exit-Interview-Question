@@ -1,23 +1,111 @@
-/* Reset default margin and padding */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
-
-html, body {
-    height: 100%;
-}
-
 body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+.x {
     display: flex;
+    align-items: center;
+    background-color: #f4f4f4;
     flex-direction: column;
 }
-
-/* Container for Sidebar and Content */
-.container {
-    display: flex;
+.form-closed-container {
+    margin-top: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 770px;
+    width: 100%;
+    height: 20vh;
+    text-align: center;
 }
+.form-closed-container-header {
+    background-color: #223C6B;
+    height: 10px;
+    border-radius: 8px 8px 0 0;
+}
+.form-closed-container-content {
+    padding: 20px;
+}
+
+#charts-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    max-width: 770px;
+    width: 100%;
+}
+
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+}
+
+/* Navbar Styles */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #2c3e50;
+    color: white;
+    padding: 10px 20px;
+}
+
+.navbar button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.navbar img {
+    border-radius: 50%;
+}
+
+/* Sidebar */
+.sidebar-container {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #34495e;
+    color: white;
+    padding-top: 1rem;
+    flex-shrink: 0;
+}
+
+.sidebar a {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    color: white;
+    font-weight: bold;
+}
+
+.sidebar a img {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+.sidebar a.active {
+    background-color: #2c3e50;
+}
+
 /* Main Content */
 main {
     background-color: #ffffff;
@@ -32,6 +120,7 @@ main {
     margin: 20px auto;
     border: 1px solid #ddd;
     border-radius: 10px;
+    overflow: hidden;
 }
 .tab-container a.active {
     background-color: #2c3e50;
