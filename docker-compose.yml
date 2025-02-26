@@ -4,6 +4,7 @@ services:
       context: ./server/nodejs/
     ports:
       - 2020:2020
+      - 2021:2021
     environment:
       NODE_ENV: production
       DB_HOST: host.docker.internal
@@ -26,6 +27,8 @@ services:
       - ./server/php:/var/www/html
     depends_on:
       - mysql      
+    networks:
+      - amalgam-network
 
   mysql:
     image: mariadb:10.6
@@ -37,20 +40,21 @@ services:
       MYSQL_ROOT_PASSWORD: secret
     volumes:
       - mysql_data:/var/lib/mysql
+      - ./database:/docker-entrypoint-initdb.d
     networks:
       - amalgam-network
 
-  # nginx:
-  #   image: nginx:latest
-  #   ports:
-  #     - 80:80
-  #   volumes:
-  #     - ./server/nginx.conf:/etc/nginx/nginx.conf:ro
-  #   depends_on:
-  #     - php-apache
-  #     - node-js-server
-  #   networks:
-  #     - amalgam-network
+  nginx:
+    image: nginx:latest
+    ports:
+      - 80:80
+    volumes:
+      - ./server/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - php-apache
+      - node-js-server
+    networks:
+      - amalgam-network
       
 volumes:
   mysql_data:
