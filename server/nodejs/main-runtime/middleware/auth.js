@@ -1,3 +1,5 @@
+
+
 async function authorize(req,res, next){
     const token = req.params.token
     console.log(`Middleware ${token}`)
