@@ -14,8 +14,9 @@ RUN npm install
 COPY . .
 
 # Expose the port the app runs on
-EXPOSE 2020
 EXPOSE 2021
+EXPOSE 2020
+
 
 # Command to run the application
 CMD ["npm", "start"]
