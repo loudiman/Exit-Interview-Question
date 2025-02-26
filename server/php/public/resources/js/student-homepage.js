@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
             //         }
             //     ]
             // };
-            const response = await fetch('http://localhost:8888/student');
+            const response = await fetch('http://localhost/student');
             const jsonString = await response.json();
             console.log(jsonString);
             surveyData = jsonString.surveys;

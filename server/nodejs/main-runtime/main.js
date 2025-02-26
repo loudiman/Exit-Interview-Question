@@ -16,7 +16,7 @@ main.use('/static/js', express.static(path.join(publicDir, 'js')));
 main.use(adminRoutes)
 
 
-main.get('/admin', (req, res) => {
+main.get('/', (req, res) => {
     const htmlPath = path.join(publicDir, "index.html")
     res.sendFile(htmlPath)
 })

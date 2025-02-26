@@ -1,4 +1,4 @@
 export const config = {
-    STUDENT_SERVER_URL: 'http://localhost:8888',
-    ADMIN_SERVER_URL: 'http://localhost:8000'
+    STUDENT_SERVER_URL: 'http://localhost',
+    ADMIN_SERVER_URL: 'http://localhost/admin'
   };
