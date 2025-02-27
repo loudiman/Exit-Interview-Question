@@ -1,3 +1,6 @@
+import config from './config.js';
+const API = config.API_URL
+
 document.addEventListener('DOMContentLoaded', () => {
     // DOM Element Caching
     const searchInput = document.querySelector('#searchInput');
