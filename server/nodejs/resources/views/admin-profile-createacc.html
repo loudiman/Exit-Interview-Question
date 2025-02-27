@@ -40,7 +40,7 @@
 
     <main>
         <div class="flex-container row">
-            <img src="http://localhost:2020/upload-download/image/2233915" alt="Profile Icon" id="profile-icon">
+            <img src="" alt="Profile Icon" id="profile-icon">
             <h2>Hello, Admin! </h2>
         </div>
         <div class="flex-container">
@@ -69,5 +69,9 @@
     </main>
 </div>
 <script src="/static/js/admin-profile-createacc.js"></script>
+<script type="module">
+    import { config } from '/static/js/config.js';
+    document.getElementById('profile-icon').src = `${config.API_URL}/upload-download/image/2233915`;
+</script>
 </body>
 </html>
