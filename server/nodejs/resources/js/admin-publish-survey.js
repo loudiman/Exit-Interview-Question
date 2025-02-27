@@ -1,3 +1,6 @@
+const config = require('./config.js');
+const API = config.API_URL
+
 document.addEventListener("DOMContentLoaded", async () => {
     const surveyData = JSON.parse(sessionStorage.getItem('surveyData'))
     sessionStorage.clear()
@@ -84,7 +87,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             console.log(`Survey Data to send: ${JSON.stringify(surveyData)}`);
 
-            fetch('http://localhost:2020/api/survey-service/survey', {
+            fetch(`${API}/survey-service/survey`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(surveyData)
@@ -109,7 +112,7 @@ function toggleRestrictionsDropdown(containerId) {
 }
 
 async function fetchAllowedUsers(filters) {
-    const url = "http://localhost:2020/api/user-service/users/filtered";
+    const url = `${API}/user-service/users/filtered`;
 
     try {
         const response = await fetch(url, {
@@ -133,7 +136,7 @@ async function fetchAllowedUsers(filters) {
 }
 
 async function fetchAllUsers() {
-    const url = "http://localhost:2020/api/user-service/users";
+    const url = `${API}/user-service/users`;
 
     try {
         const response = await fetch(url);
@@ -148,7 +151,7 @@ async function fetchAllUsers() {
 }
 
 async function fetchFromServer() {
-    const url = "http://localhost:2020/api/program-service/programs"
+    const url = `${API}/program-service/programs`
     try {
         const response = await fetch(url);
         if (!response.ok) {

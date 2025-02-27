@@ -1,3 +1,6 @@
+const config = require('./config.js');
+const API = config.API_URL
+
 async function saveOldData() {
     try {
         console.log("saving old data");
@@ -317,7 +320,7 @@ function renderOptions(type, options, scale, index) {
 }
 
 async function fetchSurveyDetails(survey_ID) {
-    const url = `http://localhost:2020/api/survey-service/survey-summary?survey_id=${survey_ID}`;
+    const url = `${API}/survey-service/survey-summary?survey_id=${survey_ID}`;
 
     try {
         const response = await fetch(url);
@@ -335,7 +338,7 @@ async function fetchSurveyDetails(survey_ID) {
 
 async function fetchSurveyQuestions(surveyID) {
     try {
-        this.surveyData = await fetch(`http://localhost:2020/api/survey-service/questions/${surveyID}`);
+        this.surveyData = await fetch(`${API}/survey-service/questions/${surveyID}`);
         if (!this.surveyData.ok) {
             throw new Error(`HTTP error! Status: ${this.surveyData.status}`);
         }

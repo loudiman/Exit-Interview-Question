@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
 surveyItem.querySelector('#temp1').addEventListener('click', (function(survey) {
     return function(event) {
         event.preventDefault();
-        fetch(`http://localhost:2020/api/survey-service/questions/${survey.survey_id}`)
+        fetch(`${API}/survey-service/questions/${survey.survey_id}`)
             .then(response => response.json())
             .then(surveyData => {
                 console.log('Fetched survey data:', surveyData);
@@ -78,7 +78,7 @@ surveyItem.querySelector('#temp1').addEventListener('click', (function(survey) {
 surveyItem.querySelector('#temp2').addEventListener('click', (function(survey) {
     return function(event) {
         event.preventDefault();
-        fetch(`http://localhost:2020/api/survey-service/questions/${survey.survey_id}`)
+        fetch(`${API}/survey-service/questions/${survey.survey_id}`)
             .then(response => response.json())
             .then(surveyData => {
                 console.log('Fetched survey data:', surveyData); // Verify data received
@@ -185,7 +185,7 @@ surveyItem.querySelector('#temp2').addEventListener('click', (function(survey) {
 
     async function deleteSurvey(surveyId, surveys) {
         try {
-            const response = await fetch(`http://localhost:2020/api/survey-service/survey/${surveyId}`, {
+            const response = await fetch(`${API}/survey-service/survey/${surveyId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'
@@ -209,7 +209,7 @@ surveyItem.querySelector('#temp2').addEventListener('click', (function(survey) {
     }
 
     async function fetchSurveys() {
-        const url = "http://localhost:2020/api/survey-service/survey-summary";
+        const url = `${API}/survey-service/survey-summary`;
         try {
             const response = await fetch(url);
             if (!response.ok) {

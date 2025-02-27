@@ -1,3 +1,6 @@
+const config = require('./config.js');
+const API = config.API_URL
+
 document.addEventListener('DOMContentLoaded', () => {
     // DOM Element Caching
     const sidebarToggle = document.querySelector('#sidebarToggle');

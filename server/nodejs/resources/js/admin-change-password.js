@@ -1,3 +1,6 @@
+const config = require('./config.js');
+const API = config.API_URL
+
 async function callAPI(){
 
     //This is for debug purposes please uncomment this later on
@@ -16,7 +19,7 @@ async function callAPI(){
 
     const localUsername = sessionStorage.getItem("username")
     //This makes a POST request to the api
-    const response = await fetch(`http://localhost:2020/api/user-service/user/${localUsername}`,{
+    const response = await fetch(`${API}/user-service/user/${localUsername}`,{
         method: "POST",
         headers: {
             "Content-Type": "application/json"

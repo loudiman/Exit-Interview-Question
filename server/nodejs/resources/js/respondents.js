@@ -1,3 +1,6 @@
+const config = require('./config.js');
+const API = config.API_URL
+
 document.addEventListener('DOMContentLoaded', async () => {
     await createSurveyAnalyticsHTML()
 
@@ -139,7 +142,7 @@ Sample response:
  ]
  */
 async function fetchSurveys() {
-    const url = "http://localhost:2020/api/survey-service/survey-summary";
+    const url = `${API}/survey-service/survey-summary`;
     try {
         const response = await fetch(url);
         if (!response.ok) {
@@ -168,7 +171,7 @@ Sample response:
  */
 async function fetchRespondents(surveyId) {
     console.log("Trying to fetch respondents");
-    const url = 'http://localhost:2020/api/survey-service/respondents';
+    const url = `${API}/survey-service/respondents`;
     const data = {
         survey_id: surveyId
     };
@@ -199,7 +202,7 @@ Fetch a user's program by username
 Sample response:
  */
 async function fetchStudent(username) {
-    const url = `http://localhost:2020/api/user-service/student/${username}`;
+    const url = `${API}/user-service/student/${username}`;
 
     try {
         const response = await fetch(url);
@@ -237,7 +240,7 @@ Sample response:
 }
  */
 async function fetchPrograms(){
-    const url = "http://localhost:2020/api/program-service/programs"
+    const url = `${API}/program-service/programs`
     try {
         const response = await fetch(url);
 
