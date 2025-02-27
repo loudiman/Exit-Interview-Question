@@ -29,7 +29,7 @@ export function login() {
 
       if (data.userType === 0) { // Admin
         console.log("Admin");
-        window.location.href = `${ADMIN_URL}/admin`;
+        window.location.href = `${ADMIN_URL}`;
         return;
       }
 

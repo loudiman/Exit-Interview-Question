@@ -1,4 +1,4 @@
-const config = require('./config.js');
+import config from './config.js';
 const API = config.API_URL
 
 // JavaScript for handling admin-view-questions and inserting questions dynamically

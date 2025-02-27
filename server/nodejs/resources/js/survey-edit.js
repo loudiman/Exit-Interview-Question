@@ -1,4 +1,4 @@
-const config = require('./config.js');
+import config from './config.js';
 const API = config.API_URL
 
 async function saveOldData() {
