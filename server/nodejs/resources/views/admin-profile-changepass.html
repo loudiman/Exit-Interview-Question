@@ -62,12 +62,13 @@
         </div>
     </main>
 </div>
-<script src="/static/js/admin-change-password.js" defer></script>
+<script src="/static/js/admin-change-password.js" defer type="module"></script>
 <script src="/static/js/survey-navbar.js"></script>
 <script type="module">
     import { config } from '/static/js/config.js';
     // TODO: change the id at the end to represent the actual user
     document.getElementById('profile-icon').src = `${config.API_URL}/upload-download/image/2233915`; 
 </script>
+<script defer src="/static/js/config.js" type="module"></script>
 </body>
 </html>
