@@ -9,7 +9,8 @@
     <link href="/static/css/admin-profile.css" rel="stylesheet">
     <link href="/static/css/side-bar.css" rel="stylesheet">
     <script defer src="/static/js/side-bar.js"></script>
-    <script src="/static/js/admin-profile.js"></script>
+    <script src="/static/js/admin-profile.js" type="module"></script>
+    <script defer src="/static/js/config.js" type="module"></script>
 </head>
 <body>
 
@@ -46,7 +47,7 @@
             <div class="flex-container row">
                 <button id="profile-icon-btn" aria-label="Profile Button">
                     <!-- This is where the profile image will be displayed -->
-                    <img src="http://localhost:2020/upload-download/image/2233915" alt="Profile Icon" id="profile-icon">
+                    <img src="http://localhost/api/upload-download/image/2233915" alt="Profile Icon" id="profile-icon">
                 </button>
 
                 <div class="modal" id="uploadModal">
@@ -54,7 +55,7 @@
                         <span class="close-btn" id="closeModal">&times;</span>
                         <h3>Upload Profile Picture</h3>
                         <form id="uploadForm" 
-                              action="http://localhost:2020/upload-download/upload/image/2233915" 
+                              action="http://localhost/api/upload-download/upload/image/2233915" 
                               method="POST" 
                               enctype="multipart/form-data">
                             <input type="file" 

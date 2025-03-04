@@ -74,7 +74,7 @@ function getQuestions(id){
 function checkIfAlreadySubmitted(surveyId) {
     const submitted = sessionStorage.getItem(`survey_${surveyId}_submitted`);
     if (submitted === 'true') {
-        window.location.href = 'http://localhost:8888/student/survey/alreadyresponded';
+        window.location.href = 'http://localhost/student/survey/alreadyresponded';
         return true;
     }
     return false;
@@ -519,7 +519,7 @@ function gatherResponses(surveyId) {
         submitButton.disabled = true;
     }
 
-    fetch(`http://localhost:8888/student/survey/questionnaires`, {
+    fetch(`http://localhost/student/survey/questionnaires`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -538,7 +538,7 @@ function gatherResponses(surveyId) {
             console.log("Response saved successfully:", data);
             sessionStorage.setItem(`survey_${numericSurveyId}_submitted`, 'true');        
             alert("Survey submitted successfully!");
-            window.location.href = 'http://localhost:8888/student/surveys';
+            window.location.href = 'http://localhost/student/surveys';
         })
         .catch((error) => {
             console.error("Error details:", error);

@@ -1,3 +1,6 @@
+import config from './config.js';
+const API = config.API_URL
+
 document.addEventListener("DOMContentLoaded", async () => {
     const surveyData = JSON.parse(sessionStorage.getItem('surveyData2'));
     console.dir(surveyData, {depth: null});
@@ -74,7 +77,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             // Proceed with publishing the survey if a program is selected
             await publishSurvey(surveyData).then(r => console.log("Survey published:", r));
-            window.location.href = 'http://localhost:2021/admin/surveys';
+            window.location.href = 'http://localhost/admin/surveys';
         });
     } else {
         console.error("Publish button not found.");
@@ -149,7 +152,7 @@ function filtersAPI() {
 
 // Fetching Functions
 async function fetchAllowedUsers(filters) {
-    const url = "http://localhost:2020/api/user-service/users/filtered";
+    const url = `${API}/user-service/users/filtered`;
 
     try {
         const response = await fetch(url, {
@@ -172,7 +175,7 @@ async function fetchAllowedUsers(filters) {
 }
 
 async function fetchAllUsers() {
-    const url = "http://localhost:2020/api/user-service/users";
+    const url = `${API}/user-service/users`;
 
     try {
         const response = await fetch(url);
@@ -187,7 +190,7 @@ async function fetchAllUsers() {
 }
 
 async function fetchFromServer() {
-    const url = "http://localhost:2020/api/program-service/programs";
+    const url = `${API}/program-service/programs`;
 
     try {
         const response = await fetch(url);
@@ -330,7 +333,7 @@ function removeLetters(string) {
 
 async function fetchRespondentsForEdit(surveyId) {
     console.log("Trying to fetch respondents");
-    const url = 'http://localhost:2020/api/survey-service/respondents';
+    const url = `${API}/survey-service/respondents`;
     const data = { survey_id: surveyId };
 
     try {
@@ -510,7 +513,7 @@ function deleteQuestion(newQuestions, oldQuestions) {
 }
 //Survey API
 async function updateSurvey(surveyData, filteredData) {
-    const url = "http://localhost:2020/api/survey-service/survey"
+    const url = `${API}/survey-service/survey`;
   
 
     try {
@@ -546,7 +549,7 @@ async function updateSurvey(surveyData, filteredData) {
 // Question APIs
 async function updateQuestionAPI(question_id, survey_id, question_json, question_type) {
     console.log("Updating question:", question_id, survey_id, question_json, question_type);
-    const url = "http://localhost:2020/api/survey-service/questions";
+    const url = `${API}/survey-service/questions`;
 
     try {
         if (question_type === 'rating' && Array.isArray(question_json.scale)) {
@@ -577,7 +580,7 @@ async function updateQuestionAPI(question_id, survey_id, question_json, question
 }
 
 async function deleteQuestionAPI(question_id) {
-    const url = "http://localhost:2020/api/survey-service/questions";
+    const url = `${API}/survey-service/questions`;
 
     try {
         const response = await fetch(url, {
@@ -601,7 +604,7 @@ async function deleteQuestionAPI(question_id) {
 }
 
 async function addQuestion(survey_id, question_json, question_type) {
-    const url = "http://localhost:2020/api/survey-service/questions";
+    const url = `${API}/survey-service/questions`;
 
     try {
         console.log('Adding question:', survey_id, question_json, question_type);

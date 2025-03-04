@@ -7,9 +7,10 @@
 
 return [
     "database" => [ 
-    "host" => "127.0.0.1",
+    "host" => "mysql",
     "port" => 3306,
     "dbname" => "amalgam",
+    "username" => "root",
     "password" => "secret",
     "charset" => "utf8mb4"
     ],

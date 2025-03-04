@@ -1,3 +1,6 @@
+import config from './config.js';
+const API = config.API_URL
+
 document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.querySelector('#searchInput');
     const unpublishedContainer = document.querySelector('#unpublishedSurveys');
@@ -50,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Fetch surveys from API or static data (for demo purposes)
     async function fetchSurveys() {
-        const url = "http://localhost:2020/api/survey-service/survey-summary";
+        const url = `${API}/survey-service/survey-summary`;
         try {
             const response = await fetch(url);
             if (!response.ok) throw new Error(`Response status: ${response.status}`);
@@ -107,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
             surveyItem.querySelector('#temp').addEventListener('click', (function (survey_id) {
                 return function (event) {
                     event.preventDefault();
-                    fetch(`http://localhost:2020/api/survey-service/questions/${survey_id}`)
+                    fetch(`${API}/survey-service/questions/${survey_id}`)
                         .then(response => response.json())
                         .then(surveyData => {
                             console.log(JSON.stringify(surveyData));
@@ -213,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
             surveyItem.querySelector('#temp').addEventListener('click', (function (survey_id) {
                 return function (event) {
                     event.preventDefault();
-                    fetch(`http://localhost:2020/api/survey-service/questions/${survey_id}`)
+                    fetch(`${API}/survey-service/questions/${survey_id}`)
                         .then(response => response.json())
                         .then(surveyData => {
                             sessionStorage.setItem('questionnaireData', JSON.stringify(surveyData));
@@ -289,7 +292,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function getProgram(program_id) {
-        const response = await fetch(`http://localhost:2020/api/program-service/programs?program_id=${program_id}`)
+        const response = await fetch(`${API}/program-service/programs?program_id=${program_id}`)
         if (response.ok) {
             var responseJson = await response.json()
             console.log(`Program: ${responseJson}`)

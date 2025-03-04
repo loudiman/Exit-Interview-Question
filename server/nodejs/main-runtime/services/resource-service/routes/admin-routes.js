@@ -10,6 +10,7 @@ const baseDir = path.join(__dirname, '../../../../resources/views');
  */
 
 router.get('/admin/surveys', (req, res) => {
+    console.log("surveys hit")
     res.sendFile(path.join(baseDir, 'survey-view.html'));
 })
 

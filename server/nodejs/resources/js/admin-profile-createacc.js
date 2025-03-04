@@ -1,3 +1,6 @@
+import config from './config.js';
+const API = config.API_URL
+
 async function callAPI() {
     console.log("Function has been called");
     const userType = 0
@@ -15,7 +18,7 @@ async function callAPI() {
 
     try {
         console.log("Triggering fetch")
-        const response = await fetch(`http://localhost:2020/api/user-service/user`, {
+        const response = await fetch(`${API}/user-service/user`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

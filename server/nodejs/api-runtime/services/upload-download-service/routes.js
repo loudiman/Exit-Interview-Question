@@ -4,6 +4,10 @@ const fs = require('fs')
 const path = require('path')
 const uploadDownloadService = express.Router()
 
+uploadDownloadService.get('/health',(req,res) => {
+    res.status(200).json({message:"Service is running"})
+})
+
 uploadDownloadService.post('/upload/image/:username',upload.single('file'), (req,res)=>{
     console.log(req.params.username)
     if(!req.file){
@@ -15,6 +19,7 @@ uploadDownloadService.post('/upload/image/:username',upload.single('file'), (req
 })
 
 uploadDownloadService.get(`/image/:filename`,(req, res) => {
+    console.log("retrieving profile image")
     const username = req.params.filename;  // Get the username from the URL parameter
     const filePath = findUserFile(username);  // Try to find the file
 

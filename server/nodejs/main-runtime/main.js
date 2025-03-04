@@ -15,15 +15,21 @@ main.use('/static/js', express.static(path.join(publicDir, 'js')));
 //Use the admin routes
 main.use(adminRoutes)
 
+// Add before other routes
+main.get('/health', (req, res) => {
+    res.json({ status: 'ok', service: 'main-runtime' })
+})
 
 main.get('/admin', (req, res) => {
+    console.log("root hit")
     const htmlPath = path.join(publicDir, "index.html")
     res.sendFile(htmlPath)
 })
 //Sample use of middleware
-main.use('/:token',authorize, async(req,res)=>{
-    res.status(200).json({message:"success"})
-})
+// TODO: This below is buggy, needs fixing regarding the fetch
+// main.use('/:token',authorize, async(req,res)=>{
+//     res.status(200).json({message:"success"})
+// })
 
 
 module.exports = main

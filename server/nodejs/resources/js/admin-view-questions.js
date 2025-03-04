@@ -1,3 +1,6 @@
+import config from './config.js';
+const API = config.API_URL
+
 // JavaScript for handling admin-view-questions and inserting questions dynamically
 document.addEventListener("DOMContentLoaded", () => {
     const surveySummary = getSurveySummary();
@@ -408,7 +411,7 @@ async function insertQuestion(question) {
 // Function to fetch a question using the DAL
 async function fetchQuestion() {
     try {
-        const response = await fetch("localhost:2019/api/survey-service/questions/:survey_id", {
+        const response = await fetch(`${API}/api/survey-service/questions/:survey_id`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"

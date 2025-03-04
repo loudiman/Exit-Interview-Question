@@ -1,4 +1,5 @@
-
+import config from './config.js';
+const API = config.API_URL
 
 function getSurveyIdFromURL() {
     console.log("Getting survey ID from URL");
@@ -260,7 +261,7 @@ async function loadMultipleResources(surveyId) {
 }
 
 async function loadQuestions(surveyID) {
-    const url = `http://localhost:2020/api/survey-service/questions/${surveyID}/`;
+    const url = `${API}/survey-service/questions/${surveyID}/`;
     try {
         const response = await fetch (url ,{
             method: "GET",
@@ -280,7 +281,7 @@ async function loadQuestions(surveyID) {
 }
 
 async function loadResponses(surveyID){
-    const url = "http://localhost:2020/api/survey-service/responses";
+    const url = `${API}survey-service/responses`;
     try {
         const response = await fetch(url, {
             method: 'PUT',
