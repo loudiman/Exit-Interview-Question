@@ -14,7 +14,7 @@ This Exit Interview web application was developed to facilitate the surveys for 
 There ar two ways to run the application, you may utilize docker or run the individual backends independently, the former however is more recommended since the configurations are more optimized to be ran this way. NOTE: PHP and NodeJS handle each of the roles that are available in this web application, PHP handles the Alumnis while NodeJS handles the Admin. However the login for both the Alumni and the Admins are handled by the PHP part of the source code.
 
 ### via Docker
-You may use `docker compose up --build` at the root directory to run the entire web application using docker 
+You may use `docker compose up --build` at the root directory to run the entire web application using docker
 
 ### Run Independently
 
@@ -44,6 +44,57 @@ Users are presented with a singular login page, meaning this is the login used f
 #### Answering Surveys
 
 ## Architecture
+
+### Server File Structure
+```
+server/
+├── nodejs/
+│   ├── api-runtime/
+│   │   ├── services/
+│   │   │   ├── auth-service/
+│   │   │   │   ├── controller/
+│   │   │   │   ├── routes.js
+│   │   │   │   └── index.js
+│   │   │   ├── dal-service/
+│   │   │   │   ├── controller/
+│   │   │   │   ├── model/
+│   │   │   │   ├── routes/
+│   │   │   │   ├── util/
+│   │   │   │   └── index.js
+│   │   │   ├── upload-download-service/
+│   │   │   │   ├── routes.js
+│   │   │   │   ├── util.js
+│   │   │   │   └── index.js
+│   │   │   └── index.js
+│   │   ├── api.js
+│   │   └── .env
+│   ├── main-runtime/
+│   │   ├── middleware/
+│   │   │   └── auth.js
+│   │   ├── services/
+│   │   │   ├── resource-service/
+│   │   │   │   ├── routes/
+│   │   │   │   └── index.js
+│   │   │   └── index.js
+│   │   ├── main.js
+│   │   └── index.js
+│   ├── resources/
+│   │   ├── css/
+│   │   ├── fonts/
+│   │   ├── images/
+│   │   ├── js/
+│   │   ├── views/
+│   ├── Dockerfile
+│   ├── package.json
+│   ├── server.js
+│   └── .env
+```
+
+`/server/php` and `/server/nodejs` houses the php and nodejs backend respectively, each of which handles specific parts of the web application. As discussed earlier php handles everything that the alumnis interact with and the log-in page, while nodejs handles everything the admin interacts with. To which will be discussed further.
+
+### NodeJS
+
+### PHP
 
 ### Database Schema
 
