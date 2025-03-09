@@ -14,9 +14,13 @@ This Exit Interview web application was developed to facilitate the surveys for 
 There ar two ways to run the application, you may utilize docker or run the individual backends independently, the former however is more recommended since the configurations are more optimized to be ran this way. NOTE: PHP and NodeJS handle each of the roles that are available in this web application, PHP handles the Alumnis while NodeJS handles the Admin. However the login for both the Alumni and the Admins are handled by the PHP part of the source code.
 
 ### via Docker
-
+You may use `docker compose up --build` at the root directory to run the entire web application using docker 
 
 ### Run Independently
+
+#### Prerequisite
+You must have **nginx** installed and configure it to act as a reverse proxy for both the PHP and Nodejs backend
+
 #### NodeJS
 To run the nodejs, you would need to be under the `server/nodejs` directory, once you are there you may run the command `npm install` to install the necessary packages,after which you may run `npm start` to start the server, or you may use `npm run dev` to run the server in **development mode**.
 
@@ -29,8 +33,10 @@ Users are presented with a singular login page, meaning this is the login used f
 *Insert Pic Here*
 
 ### Admin
+
 #### Dashboard
-#### 
+#### Survey Creation
+#### Limit Survey Visibility / Accessibility
 
 ### Alumnis
 
@@ -48,9 +54,9 @@ Users are presented with a singular login page, meaning this is the login used f
 ### API Endpoints
 
 ## Credits
-- Agustin, Mark Lestat C : 
-- Domingo, Lenar : 
-- Luis, Marven : 
-- Morados, Lou Diamond : 
-- Nuarin, Georcelle : 
-- Rabang, Gebreyl : 
+- Agustin, Mark Lestat C : Co-Lead, Fullstack Developer
+- Domingo, Lenar : Frontend Developer
+- Luis, Marven : Fullstack Developer
+- Morados, Lou Diamond : Lead, Backend Developer
+- Nuarin, Georcelle : UI/UX Designer
+- Rabang, Gebreyl : Fullstack Developer
