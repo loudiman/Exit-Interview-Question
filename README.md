@@ -93,6 +93,39 @@ server/
 `/server/php` and `/server/nodejs` houses the php and nodejs backend respectively, each of which handles specific parts of the web application. As discussed earlier php handles everything that the alumnis interact with and the log-in page, while nodejs handles everything the admin interacts with. To which will be discussed further.
 
 ### NodeJS
+The `/server/nodejs` is split in two components `main-runtime` and `api-runtime`. `main-runtime` handles the serving of the frontend components, you may think of this component as the one responsible for serving both the `View` and `Controller` in an MVC architecture.
+
+The `api-runtime` component is a REST API that provides various microservices for Data Access Layer (DAL), Authentication, and upload/download of images. This component is responsible for interacting with the database and handling the backend logic for the application.
+
+**Features of the `api-runtime` component:**
+
+- **Data Access Layer (DAL) Service:**
+  - Manages database interactions for users, surveys, and programs.
+  - Provides endpoints to create, read, update, and delete (CRUD) operations on the database.
+  - Example endpoints:
+    - `GET /api/user-service/users` - Retrieve all users.
+    - `POST /api/user-service/user` - Add a new user.
+    - `GET /api/survey-service/surveys` - Retrieve all surveys.
+    - `DELETE /api/survey-service/survey/:id` - Delete a survey by ID.
+
+- **Authentication Service:**
+  - Handles user authentication and authorization.
+  - Provides endpoints for token generation and validation.
+  - Example endpoints:
+    - `GET /api/auth/generate` - Generate an authentication token.
+    - `GET /api/auth/authorize` - Authorize a user based on the provided token.
+
+- **Upload/Download Service:**
+  - Manages the upload and download of images and other files.
+  - Provides endpoints to upload and retrieve files.
+  - Example endpoints:
+    - `POST /api/upload-download/upload/image/:username` - Upload an image for a specific user.
+    - `GET /api/upload-download/image/:filename` - Retrieve an image by filename.
+
+
+The goal was to achieve a loosely coupled high cohesion architecture, there are still some gaps since this was done as a university requirement which didn't need to have a robust architecture as a requirement, this however allows us to make patches and improvements easily without altering/affecting other services that are necessary for the entire business process.
+
+
 
 ### PHP
 
