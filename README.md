@@ -43,15 +43,9 @@ Users are presented with a singular login page, meaning this is the login used f
 #### Homepage
 #### Answering Surveys
 
-### Production
-
-### Development
-
 ## Architecture
 
 ### Database Schema
-
-### API Endpoints
 
 ## Credits
 - Agustin, Mark Lestat C : Co-Lead, Fullstack Developer
