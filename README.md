@@ -45,7 +45,7 @@ Users are presented with a singular login page, meaning this is the login used f
 
 ## Architecture
 
-### Server File Structure
+### NodeJS File Structure
 ```
 server/
 ├── nodejs/
@@ -90,6 +90,44 @@ server/
 │   └── .env
 ```
 
+### PHP File Structure
+```
+server/php/
+├── app/
+│   ├── Http/
+│   │   ├── controllers/
+│   │   │   ├── questionnaires/
+│   │   │   ├── session/
+│   │   │   ├── student/
+│   │   │   └── surveys/
+│   │   └── Forms/
+│   └── Models/
+├── Core/
+│   ├── Middleware/
+│   │   ├── Auth.php
+│   │   ├── Guest.php
+│   │   └── Middleware.php
+│   ├── App.php
+│   ├── Authenticator.php
+│   ├── Container.php
+│   ├── Database.php
+│   ├── functions.php
+│   ├── Router.php
+│   ├── Session.php
+│   └── ValidationException.php
+├── public/
+│   ├── resources/
+│   │   ├── css/
+│   │   ├── fonts/
+│   │   ├── images/
+│   │   ├── js/
+│   │   └── views/
+│   └── index.php
+├── bootstrap.php
+├── config.php
+└── routes.php
+```
+
 `/server/php` and `/server/nodejs` houses the php and nodejs backend respectively, each of which handles specific parts of the web application. As discussed earlier php handles everything that the alumnis interact with and the log-in page, while nodejs handles everything the admin interacts with. To which will be discussed further.
 
 ### NodeJS
@@ -128,6 +166,35 @@ The goal was to achieve a loosely coupled high cohesion architecture, there are 
 
 
 ### PHP
+
+The PHP component of the application handles the alumni user experience and authentication for both alumni and admin users. It follows a custom MVC-like architecture with a focus on routing, middleware, and database interactions.
+
+
+#### Key Components
+
+- **Core Framework**: Contains foundational components like Router, Session management, Database connections, and Authentication.
+- **Middleware**: Implements authentication checks through Auth and Guest classes to control access to routes.
+- **Controllers**: Organized by feature (Session, Student, Surveys, Questionnaires) to handle specific business logic.
+- **Views**: HTML templates in `public/resources/views/` present the UI to alumni users.
+- **Models**: Represent data structures and interact with the database.
+
+#### Application Flow
+
+1. All requests go through the entry point which bootstraps the application
+2. Routes defined in `routes.php` determine which controller handles the request
+3. Requests pass through middleware to validate access permissions
+4. Controllers handle business logic and render appropriate views
+5. Views display the UI to alumni users
+
+#### Authentication System
+
+The authentication system handles:
+- User login validation
+- Session creation and management
+- Access control through middleware
+- Authentication for both alumni and admin users
+
+This architecture separates concerns while maintaining a coherent flow between components, allowing for maintainable and extensible code.
 
 ### Database Schema
 
