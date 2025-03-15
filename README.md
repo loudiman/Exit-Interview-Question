@@ -25,6 +25,7 @@ You must have **nginx** installed and configure it to act as a reverse proxy for
 To run the nodejs, you would need to be under the `server/nodejs` directory, once you are there you may run the command `npm install` to install the necessary packages,after which you may run `npm start` to start the server, or you may use `npm run dev` to run the server in **development mode**.
 
 #### PHP
+To run the php server, specify the document root and use the built-in web server.
 
 ## Features
 
